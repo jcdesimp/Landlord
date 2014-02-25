@@ -3,14 +3,16 @@ package com.jcdesimp.landlord;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
- * Created by jcdesimp on 2/24/14.
+ *
+ * Main plugin class for Landlord
+ *
  */
 public class Landlord extends JavaPlugin {
     public void onEnable() {
-
+        getLogger().info(getDescription().getName() + " has been enabled!");
     }
 
     public void onDisable() {
-
+        getLogger().info(getDescription().getName() + " has been disabled!");
     }
 }
