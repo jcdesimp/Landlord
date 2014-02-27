@@ -2,7 +2,8 @@
 
 #Economy settings (Requires Vault)
 useEconomy: false
-price: 500
+Buy Price: 500
+Sell Price: 500
 
 #Worldguard Options (Requires Worldguard)
 

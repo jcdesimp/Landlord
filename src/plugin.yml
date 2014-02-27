@@ -1,10 +1,41 @@
 name: Landlord
 main: com.jcdesimp.landlord.Landlord
 version: 0.1
+author: Jcdesimp
+authors: []
+
+
+softdepend: [Vault]
 
 commands:
    landlord:
+      aliases: [land, ll]
       description: The base Landlord command.
       usage: /<command> [player]
-      permission: <plugin name>.basic
+      permission: <plugin name>.player.*
       permission-message: You don't have <permission>
+
+permissions:
+   landlord.*:
+     description: Gives access to all Landlord commands
+     children:
+       landlord.claim: true
+       landlord.burningdeaths: true
+       inferno.burningdeaths.others: true
+   landlord.player.*:
+        description: Gives access to all Landlord player commands
+        children:
+          landlord.claim: true
+          landlord.burningdeaths: true
+          inferno.burningdeaths.others: true
+   inferno.flagrate:
+     description: Allows you to ignite yourself
+     default: true
+   inferno.burningdeaths:
+     description: Allows you to see how many times you have burned to death
+     default: true
+   inferno.burningdeaths.others:
+     description: Allows you to see how many times others have burned to death
+     default: op
+     children:
+       inferno.burningdeaths: true
