@@ -1,7 +1,9 @@
 #Landlord Created by Jcdesimp
 
-#Economy settings (requires Vault)
+#Economy settings (Requires Vault)
 useEconomy: false
 price: 500
+
+#Worldguard Options (Requires Worldguard)
 
 

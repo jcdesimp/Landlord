@@ -3,7 +3,7 @@ main: com.jcdesimp.landlord.Landlord
 version: 0.1
 
 commands:
-   land:
+   landlord:
       description: The base Landlord command.
       usage: /<command> [player]
       permission: <plugin name>.basic

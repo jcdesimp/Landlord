@@ -17,7 +17,7 @@ public final class Landlord extends JavaPlugin {
         saveDefaultConfig();
 
         // Command Executor
-        getCommand("land").setExecutor(new LandlordCommandExecutor(this));
+        getCommand("landlord").setExecutor(new LandlordCommandExecutor(this));
 
     }
 

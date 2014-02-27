@@ -16,7 +16,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(cmd.getName().equalsIgnoreCase("land")){ // If the player typed /land then do the following...
+        if(cmd.getName().equalsIgnoreCase("landlord")){ // If the player typed /land then do the following...
             plugin.getLogger().info("/land has been executed!");
             return false;
         } //If this has happened the function will return true.
