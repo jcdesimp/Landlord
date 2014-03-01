@@ -50,10 +50,12 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
                 //landlord unclaim
                 return landlord_unclaim(sender, args);
-            } else if(args[0].equalsIgnoreCase("addfriend") || args[0].equalsIgnoreCase("sell")) {
+            } else if(args[0].equalsIgnoreCase("addfriend")) {
 
                 //landlord addfriend
                 return landlord_addfriend(sender, args);
+            } else if(args[0].equalsIgnoreCase("remfriend")) {
+                return landlord_remfriend(sender, args);
             }
 
         } //If this has happened the function will return true.
@@ -146,9 +148,10 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 player.sendMessage(ChatColor.RED + "You do not own this land.");
                 return true;
             }
+            plugin.getDatabase().delete(dbLand);
             sender.sendMessage(
                     ChatColor.YELLOW + "Successfully unclaimed chunk (" + currChunk.getX() + ", " +
-                    currChunk.getZ() + ") in world " + currChunk.getWorld().getName() + "."
+                            currChunk.getZ() + ") in world " + currChunk.getWorld().getName() + "."
             );
 
         }
@@ -181,7 +184,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
             //Does land exist, and if so does player own it
             if( land == null || !land.getOwnerName().equalsIgnoreCase(player.getName()) ){
-                player.sendMessage(ChatColor.RED + "You do not own this land!");
+                player.sendMessage(ChatColor.RED + "You do not own this land.");
                 return true;
             }
             //
@@ -196,6 +199,43 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
         }
         return true;
+    }
+
+
+    /**
+     * Removes a friend from an owned chunk
+     * Called when landlord remfriend is executed
+     * @param sender
+     * @param args
+     * @return
+     */
+    private Boolean landlord_remfriend(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
+        } else {
+            if (args.length < 2){
+                sender.sendMessage(ChatColor.RED + "usage: /land remfriend <player>");
+                return true;
+            }
+            Player player = (Player) sender;
+
+            Chunk currChunk = player.getLocation().getChunk();
+            Friend frd = Friend.friendFromName(args[1]);
+            OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
+            if( land == null || !land.getOwnerName().equalsIgnoreCase(player.getName()) ){
+                player.sendMessage(ChatColor.RED + "You do not own this land.");
+                return true;
+            }
+            if(!land.removeFriend(frd)){
+                player.sendMessage(ChatColor.YELLOW + "Player " + args[1] + " is not a friend of this land.");
+                return true;
+            }
+            plugin.getDatabase().save(land);
+            player.sendMessage(ChatColor.GREEN + "Player " + args[1] + " is no longer a friend of this land.");
+
+        }
+        return true;
+
     }
 
 }

@@ -134,7 +134,12 @@ public class OwnedLand {
      */
     public boolean removeFriend(Friend f) {
         if(isFriend(f)){
-            friends.remove(f);
+            //JavaPlugin.getPlugin(Landlord.class).getLogger().warning("Before: " + friends);
+            //friends.get(friends.indexOf(f)).getId();
+            JavaPlugin.getPlugin(Landlord.class).getLogger().warning("After: " + friends);
+            Friend frd = JavaPlugin.getPlugin(Landlord.class).getDatabase().find(Friend.class).where()
+                    .eq("id", friends.get(friends.indexOf(f)).getId()).findUnique();
+            JavaPlugin.getPlugin(Landlord.class).getDatabase().delete(frd);
             return true;
         }
         return false;
