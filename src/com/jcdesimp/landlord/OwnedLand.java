@@ -4,18 +4,19 @@ package com.jcdesimp.landlord;
  * Created by jcdesimp on 2/28/14.
  */
 
-import com.avaje.ebean.validation.Length;
-import com.avaje.ebean.validation.NotEmpty;
+import com.DarkBladee12.ParticleAPI.ParticleEffect;
 import com.avaje.ebean.validation.NotNull;
+import org.bukkit.*;
 
 import javax.persistence.*;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -155,6 +156,14 @@ public class OwnedLand {
         return friends.contains(f);
     }
 
+
+    /**
+     * Gets land from the database
+     * @param x
+     * @param z
+     * @param worldName
+     * @return
+     */
     public static OwnedLand getLandFromDatabase(int x, int z, String worldName) {
         return JavaPlugin.getPlugin(Landlord.class).getDatabase().find(OwnedLand.class)
                 .where()
@@ -162,6 +171,37 @@ public class OwnedLand {
                 .eq("z", z)
                 .eq("worldName", worldName)
                 .findUnique();
+    }
+
+
+    /**
+     * Highlights the border around the chunk with a particle effect.
+     * @param p
+     * @param e
+     */
+    public void higlightLand(Player p, ParticleEffect e){
+        higlightLand(p,e,5);
+    }
+    public void higlightLand(Player p, ParticleEffect e, int amt){
+        Chunk chunk = getChunk();
+        ArrayList<Location> edgeBlocks = new ArrayList<Location>();
+        for(int i = 0; i<16; i++){
+            for(int ii = -1; ii<=10; ii++){
+                edgeBlocks.add(chunk.getBlock(i, (int) (p.getLocation().getY())+ii, 15).getLocation());
+                edgeBlocks.add(chunk.getBlock(i, (int) (p.getLocation().getY())+ii, 0).getLocation());
+                edgeBlocks.add(chunk.getBlock(0, (int) (p.getLocation().getY())+ii, i).getLocation());
+                edgeBlocks.add(chunk.getBlock(15, (int) (p.getLocation().getY())+ii, i).getLocation());
+            }
+
+
+        }
+        //BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+
+        for(int i = 0; i < edgeBlocks.size(); i++) {
+            e.display(edgeBlocks.get(i),0.2f,0.2f,0.2f,9.2f,amt,p);
+            //p.playEffect(edgeBlocks.get(i), e, null);
+        }
+
     }
 
 }

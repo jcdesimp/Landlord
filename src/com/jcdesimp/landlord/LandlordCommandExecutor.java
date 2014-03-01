@@ -3,10 +3,12 @@ package com.jcdesimp.landlord;
 import com.avaje.ebean.Ebean;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
+import org.bukkit.Effect;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import com.DarkBladee12.ParticleAPI.ParticleEffect;
 
 import java.util.List;
 
@@ -79,9 +81,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
      * are executed with no parameters
      * @param sender who executed the command
      * @param args given with the command
-     * @return Boolean
+     * @return boolean
      */
-    private Boolean landlord(CommandSender sender, String[] args) {
+    private boolean landlord(CommandSender sender, String[] args) {
 
         sender.sendMessage(ChatColor.DARK_GREEN + "Base Landlord command executed!");
         return true;
@@ -92,9 +94,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
      * This command must be run by a player
      * @param sender who executed the command
      * @param args given with command
-     * @return Boolean
+     * @return boolean
      */
-    private Boolean landlord_claim(CommandSender sender, String[] args) {
+    private boolean landlord_claim(CommandSender sender, String[] args) {
 
 
         //is sender a player
@@ -116,7 +118,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
             };
             plugin.getDatabase().save(land);
-
+            land.higlightLand(player, ParticleEffect.HAPPY_VILLAGER);
             sender.sendMessage(
                 ChatColor.GREEN + "Successfully claimed chunk (" + currChunk.getX() + ", " +
                 currChunk.getZ() + ") in world " + currChunk.getWorld().getName() + "."
@@ -132,9 +134,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
      * This command must be run by a player
      * @param sender who executed the command
      * @param args given with command
-     * @return Boolean
+     * @return boolean
      */
-    private Boolean landlord_unclaim(CommandSender sender, String[] args) {
+    private boolean landlord_unclaim(CommandSender sender, String[] args) {
 
         //is sender a plater
         if (!(sender instanceof Player)) {
@@ -148,7 +150,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 player.sendMessage(ChatColor.RED + "You do not own this land.");
                 return true;
             }
+            dbLand.higlightLand(player, ParticleEffect.WITCH_MAGIC);
             plugin.getDatabase().delete(dbLand);
+
             sender.sendMessage(
                     ChatColor.YELLOW + "Successfully unclaimed chunk (" + currChunk.getX() + ", " +
                             currChunk.getZ() + ") in world " + currChunk.getWorld().getName() + "."
@@ -164,9 +168,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
      * This command must be run by a player
      * @param sender who executed the command
      * @param args given with command
-     * @return Boolean
+     * @return boolean
      */
-    private Boolean landlord_addfriend(CommandSender sender, String[] args) {
+    private boolean landlord_addfriend(CommandSender sender, String[] args) {
 
         //is sender a plater
         if (!(sender instanceof Player)) {
@@ -193,7 +197,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 player.sendMessage(ChatColor.YELLOW + "Player " + args[1] + " is already a friend of this land.");
                 return true;
             }
-
+            land.higlightLand(player, ParticleEffect.HEART,2);
             plugin.getDatabase().save(land);
             sender.sendMessage(ChatColor.GREEN + "Player " + args[1] +" is now a friend of this land.");
 
@@ -207,9 +211,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
      * Called when landlord remfriend is executed
      * @param sender
      * @param args
-     * @return
+     * @return boolean
      */
-    private Boolean landlord_remfriend(CommandSender sender, String[] args) {
+    private boolean landlord_remfriend(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
         } else {
@@ -230,6 +234,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 player.sendMessage(ChatColor.YELLOW + "Player " + args[1] + " is not a friend of this land.");
                 return true;
             }
+            land.higlightLand(player, ParticleEffect.ANGRY_VILLAGER,2);
             plugin.getDatabase().save(land);
             player.sendMessage(ChatColor.GREEN + "Player " + args[1] + " is no longer a friend of this land.");
 
