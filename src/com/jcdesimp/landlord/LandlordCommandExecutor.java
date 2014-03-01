@@ -1,11 +1,14 @@
 package com.jcdesimp.landlord;
 
+import com.avaje.ebean.Ebean;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 /**
  * Command Executor class for LandLord
@@ -47,6 +50,10 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
                 //landlord unclaim
                 return landlord_unclaim(sender, args);
+            } else if(args[0].equalsIgnoreCase("addfriend") || args[0].equalsIgnoreCase("sell")) {
+
+                //landlord addfriend
+                return landlord_addfriend(sender, args);
             }
 
         } //If this has happened the function will return true.
@@ -95,9 +102,22 @@ public class LandlordCommandExecutor implements CommandExecutor {
             Player player = (Player) sender;
             //sender.sendMessage(ChatColor.GOLD + "Current Location: " + player.getLocation().toString());
             Chunk currChunk = player.getLocation().getChunk();
+
+            OwnedLand land = OwnedLand.landFromProperties(player.getName(), currChunk);
+            OwnedLand dbLand = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
+            if(dbLand != null){
+                if (dbLand.getOwnerName().equalsIgnoreCase(player.getName())){
+                    player.sendMessage(ChatColor.YELLOW + "You already own this land!");
+                    return true;
+                }
+                player.sendMessage(ChatColor.YELLOW + "Someone else owns this land.");
+
+            };
+            plugin.getDatabase().save(land);
+
             sender.sendMessage(
-                ChatColor.GREEN + "Successfully claimed chunk " + currChunk.getX() + ", " +
-                currChunk.getZ() + " in world " + currChunk.getWorld().getName() + "."
+                ChatColor.GREEN + "Successfully claimed chunk (" + currChunk.getX() + ", " +
+                currChunk.getZ() + ") in world " + currChunk.getWorld().getName() + "."
             );
             //sender.sendMessage(ChatColor.DARK_GREEN + "Land claim command executed!");
         }
@@ -121,11 +141,59 @@ public class LandlordCommandExecutor implements CommandExecutor {
             Player player = (Player) sender;
             //sender.sendMessage(ChatColor.GOLD + "Current Location: " + player.getLocation().toString());
             Chunk currChunk = player.getLocation().getChunk();
+            OwnedLand dbLand = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
+            if (dbLand == null || !dbLand.getOwnerName().equalsIgnoreCase(player.getName())){
+                player.sendMessage(ChatColor.RED + "You do not own this land.");
+                return true;
+            }
             sender.sendMessage(
-                    ChatColor.YELLOW + "Successfully unclaimed chunk " + currChunk.getX() + ", " +
-                    currChunk.getZ() + " in world " + currChunk.getWorld().getName() + "."
+                    ChatColor.YELLOW + "Successfully unclaimed chunk (" + currChunk.getX() + ", " +
+                    currChunk.getZ() + ") in world " + currChunk.getWorld().getName() + "."
             );
-            //sender.sendMessage(ChatColor.DARK_GREEN + "Land claim command executed!");
+
+        }
+        return true;
+    }
+
+    /**
+     * Adds a friend to an owned chunk
+     * Called when landlord addfriend command is executed
+     * This command must be run by a player
+     * @param sender who executed the command
+     * @param args given with command
+     * @return Boolean
+     */
+    private Boolean landlord_addfriend(CommandSender sender, String[] args) {
+
+        //is sender a plater
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
+        } else {
+            if (args.length < 2){
+                sender.sendMessage(ChatColor.RED + "usage: /land addfriend <player>");
+                return true;
+            }
+            Player player = (Player) sender;
+
+            Chunk currChunk = player.getLocation().getChunk();
+
+            OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
+
+            //Does land exist, and if so does player own it
+            if( land == null || !land.getOwnerName().equalsIgnoreCase(player.getName()) ){
+                player.sendMessage(ChatColor.RED + "You do not own this land!");
+                return true;
+            }
+            //
+            Friend friend = Friend.friendFromName(args[1]);
+            if (! land.addFriend(friend)) {
+                player.sendMessage(ChatColor.YELLOW + "Player " + args[1] + " is already a friend of this land.");
+                return true;
+            }
+
+            plugin.getDatabase().save(land);
+            sender.sendMessage(ChatColor.GREEN + "Player " + args[1] +" is now a friend of this land.");
+
         }
         return true;
     }

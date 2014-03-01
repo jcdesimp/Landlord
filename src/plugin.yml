@@ -3,7 +3,7 @@ main: com.jcdesimp.landlord.Landlord
 version: 0.1
 author: Jcdesimp
 authors: []
-
+website: http://dev.bukkit.org/bukkit-plugins/landlord/
 
 softdepend: [Vault]
 
