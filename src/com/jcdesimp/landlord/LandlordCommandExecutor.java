@@ -1,6 +1,7 @@
 package com.jcdesimp.landlord;
 
 import com.avaje.ebean.Ebean;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Effect;
@@ -9,6 +10,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import com.DarkBladee12.ParticleAPI.ParticleEffect;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 
 import java.util.List;
 
@@ -57,7 +63,11 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 //landlord addfriend
                 return landlord_addfriend(sender, args);
             } else if(args[0].equalsIgnoreCase("remfriend")) {
+
                 return landlord_remfriend(sender, args);
+            } else if(args[0].equalsIgnoreCase("map")) {
+
+                return landlord_map(sender, args);
             }
 
         } //If this has happened the function will return true.
@@ -115,6 +125,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                     return true;
                 }
                 player.sendMessage(ChatColor.YELLOW + "Someone else owns this land.");
+                return true;
 
             };
             plugin.getDatabase().save(land);
@@ -238,6 +249,37 @@ public class LandlordCommandExecutor implements CommandExecutor {
             plugin.getDatabase().save(land);
             player.sendMessage(ChatColor.GREEN + "Player " + args[1] + " is no longer a friend of this land.");
 
+        }
+        return true;
+
+    }
+
+    public boolean landlord_map(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
+        } else {
+            final Player player = (Player) sender;
+            /*String[] brd = LandMap.buildMap(player);
+            for(int s = 0; s<brd.length; s++){
+                player.sendMessage(brd[s]+"\n");
+            }*/
+            //player.sendMessage(ChatColor.YELLOW + "" + "░░░▒░░░\n░░▒▒▒░░\n░▒▒▒▒▒░\n▒▒▒█▒▒▒\n▒▒░░░▒▒\n▒░░░░░▒\n░░░░░░░");
+            if(player.getScoreboard().getObjective("Land Map") != null){
+                Bukkit.getServer().getScheduler().cancelAllTasks();
+                player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+                //player.setScoreboard();
+                return true;
+            }
+            BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+            scheduler.scheduleSyncRepeatingTask(plugin, new BukkitRunnable() {
+                @Override
+                public void run() {
+                    LandMap.displayMap(player);
+                }
+            }, 0L, 10L);
+
+            LandMap.displayMap(player);
+            return  true;
         }
         return true;
 

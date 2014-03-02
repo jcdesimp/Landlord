@@ -2,6 +2,7 @@ package com.jcdesimp.landlord;
 
 import com.avaje.ebean.EbeanServer;
 import com.lennardf1989.bukkitex.MyDatabase;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import javax.persistence.PersistenceException;
 import java.util.ArrayList;
@@ -37,21 +38,14 @@ public final class Landlord extends JavaPlugin {
 
 
 
+
+
     /*
      * ***************************
      *       Database Stuff
      * ***************************
      */
-    /*private void setupDatabase() {
-        try {
-            getDatabase().find(OwnedLand.class).findRowCount();
-            getDatabase().find(Friend.class).findRowCount();
-            //getDatabase().find(OwnedLand_Friend.class).findRowCount();
-        } catch (PersistenceException ex) {
-            System.out.println("Installing database for " + getDescription().getName() + " due to first time usage");
-            installDDL();
-        }
-    }*/
+
 
     private void setupDatabase() {
         //Configuration config = getConfiguration();

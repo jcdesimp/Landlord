@@ -1,21 +1,16 @@
 package com.jcdesimp.landlord;
 
 /**
- * Created by jcdesimp on 2/28/14.
+ * File created by jcdesimp on 2/28/14.
+ * This class represents a plot of owned land.
  */
-
 import com.DarkBladee12.ParticleAPI.ParticleEffect;
 import com.avaje.ebean.validation.NotNull;
 import org.bukkit.*;
 
 import javax.persistence.*;
-
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +19,13 @@ import java.util.List;
 @Table(name="ll_land")
 public class OwnedLand {
 
+
+    /**
+     * Factory method that creates a new OwnedLand instance given an owner name and chunk
+     * @param owner The owner of the land
+     * @param c The chunk this land represents
+     * @return OwnedLand
+     */
     public static OwnedLand landFromProperties(String owner, Chunk c){
         OwnedLand lnd = new OwnedLand();
         lnd.setProperties(owner, c);
@@ -39,6 +41,8 @@ public class OwnedLand {
     @NotNull
     private String ownerName;
 
+
+
     @NotNull
     private int x;
 
@@ -51,6 +55,12 @@ public class OwnedLand {
     @OneToMany(cascade = CascadeType.ALL)
     List<Friend> friends;
 
+
+    /**
+     * Sets the properties of an OwnedLand instance
+     * @param pName name of player to be set owner
+     * @param c chunk to be represented
+     */
     public void setProperties(String pName, Chunk c) {
         ownerName = pName;
         this.setX(c.getX());
@@ -117,8 +127,8 @@ public class OwnedLand {
     /**
      * Attempt to add a friend
      * Checks to make sure player is not already a friend of and instance
-     * @param f
-     * @return
+     * @param f Friend to be added
+     * @return boolean true if success false if already a friend
      */
     public boolean addFriend(Friend f) {
         if(!isFriend(f)){
@@ -135,9 +145,6 @@ public class OwnedLand {
      */
     public boolean removeFriend(Friend f) {
         if(isFriend(f)){
-            //JavaPlugin.getPlugin(Landlord.class).getLogger().warning("Before: " + friends);
-            //friends.get(friends.indexOf(f)).getId();
-            JavaPlugin.getPlugin(Landlord.class).getLogger().warning("After: " + friends);
             Friend frd = JavaPlugin.getPlugin(Landlord.class).getDatabase().find(Friend.class).where()
                     .eq("id", friends.get(friends.indexOf(f)).getId()).findUnique();
             JavaPlugin.getPlugin(Landlord.class).getDatabase().delete(frd);
@@ -149,11 +156,15 @@ public class OwnedLand {
     /**
      * Returns whether or not a player is
      * a friend of this land
-     * @param f
+     * @param f Friend to be checked
      * @return
      */
     public boolean isFriend(Friend f) {
         return friends.contains(f);
+    }
+
+    public boolean isFriend(String f) {
+        return isFriend(Friend.friendFromName(f));
     }
 
 
