@@ -49,8 +49,6 @@ public class Friend extends Object {
     @Override
     public boolean equals(Object obj){
         if (obj instanceof Friend) {
-            //Landlord.getPlugin(Landlord.class).getLogger().warning("Friend: " + ((Friend) obj).getPlayerName());
-            //Landlord.getPlugin(Landlord.class).getLogger().warning("TheFriend: " + playerName);
             return ((Friend) obj).getPlayerName().equalsIgnoreCase(playerName);
         } else {
             return false;

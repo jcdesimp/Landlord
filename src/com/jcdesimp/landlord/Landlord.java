@@ -2,6 +2,8 @@ package com.jcdesimp.landlord;
 
 import com.avaje.ebean.EbeanServer;
 import com.lennardf1989.bukkitex.MyDatabase;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import javax.persistence.PersistenceException;
@@ -39,6 +41,11 @@ public final class Landlord extends JavaPlugin {
 
 
 
+    public static JavaPlugin getInstance() {
+        return JavaPlugin.getPlugin(Landlord.class);
+        //return Bukkit.getPluginManager().getPlugin("MyPlugin");
+    }
+
 
     /*
      * ***************************
@@ -48,7 +55,7 @@ public final class Landlord extends JavaPlugin {
 
 
     private void setupDatabase() {
-        //Configuration config = getConfiguration();
+        Configuration config = getConfig();
 
         database = new MyDatabase(this) {
             protected java.util.List<Class<?>> getDatabaseClasses() {
@@ -59,25 +66,18 @@ public final class Landlord extends JavaPlugin {
                 return list;
             };
         };
-        boolean rebuild = false;
-        /*try {
-            //getDatabase();
-            //getDatabase().find(OwnedLand_Friend.class).findRowCount();
-        } catch (PersistenceException ex) {
-            System.out.println("Installing database for " + getDescription().getName() + " due to first time usage");
-            //rebuild = true;
-        }*/
+
         database.initializeDatabase(
-                "org.sqlite.JDBC",
-                "jdbc:sqlite:{DIR}{NAME}.db",
-                "bukkit",
-                "walrus",
-                "SERIALIZABLE",
-                false,
-                rebuild
+                config.getString("database.driver","org.sqlite.JDBC"),
+                config.getString("database.url","jdbc:sqlite:{DIR}{NAME}.db"),
+                config.getString("database.username","bukkit"),
+                config.getString("database.password","walrus"),
+                config.getString("database.isolation","SERIALIZABLE"),
+                config.getBoolean("database.logging", false),
+                config.getBoolean("database.rebuild", true)
         );
 
-        //config.setProperty("database.rebuild", false);
+        config.set("database.rebuild", false);
 
     }
 

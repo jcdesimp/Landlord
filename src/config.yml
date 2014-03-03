@@ -8,3 +8,9 @@ Sell Price: 500
 #Worldguard Options (Requires Worldguard)
 
 
+
+
+#Database Options
+database:
+    #Empty dattabase on next restart/reload
+    rebuild: false

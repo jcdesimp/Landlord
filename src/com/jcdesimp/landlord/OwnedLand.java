@@ -10,6 +10,7 @@ import org.bukkit.*;
 
 import javax.persistence.*;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,9 @@ public class OwnedLand {
 
     @OneToMany(cascade = CascadeType.ALL)
     List<Friend> friends;
+
+    private String permissions;
+
 
 
     /**
@@ -117,7 +121,13 @@ public class OwnedLand {
         return z;
     }
 
+    public String getPermissions() {
+        return permissions;
+    }
 
+    public void setPermissions(String permissions) {
+        this.permissions = permissions;
+    }
 
     public Chunk getChunk() {
         World world = Bukkit.getServer().getWorld(worldName);
@@ -145,9 +155,9 @@ public class OwnedLand {
      */
     public boolean removeFriend(Friend f) {
         if(isFriend(f)){
-            Friend frd = JavaPlugin.getPlugin(Landlord.class).getDatabase().find(Friend.class).where()
+            Friend frd = Landlord.getInstance().getDatabase().find(Friend.class).where()
                     .eq("id", friends.get(friends.indexOf(f)).getId()).findUnique();
-            JavaPlugin.getPlugin(Landlord.class).getDatabase().delete(frd);
+            Landlord.getInstance().getDatabase().delete(frd);
             return true;
         }
         return false;
@@ -176,7 +186,7 @@ public class OwnedLand {
      * @return
      */
     public static OwnedLand getLandFromDatabase(int x, int z, String worldName) {
-        return JavaPlugin.getPlugin(Landlord.class).getDatabase().find(OwnedLand.class)
+        return Landlord.getInstance().getDatabase().find(OwnedLand.class)
                 .where()
                 .eq("x", x)
                 .eq("z", z)
@@ -185,13 +195,15 @@ public class OwnedLand {
     }
 
 
+
     /**
      * Highlights the border around the chunk with a particle effect.
      * @param p
      * @param e
      */
     public void higlightLand(Player p, ParticleEffect e){
-        higlightLand(p,e,5);
+        higlightLand(p, e, 5);
+
     }
     public void higlightLand(Player p, ParticleEffect e, int amt){
         Chunk chunk = getChunk();

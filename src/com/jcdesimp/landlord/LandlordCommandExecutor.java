@@ -128,7 +128,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 return true;
 
             };
-            plugin.getDatabase().save(land);
+            Landlord.getInstance().getDatabase().save(land);
             land.higlightLand(player, ParticleEffect.HAPPY_VILLAGER);
             sender.sendMessage(
                 ChatColor.GREEN + "Successfully claimed chunk (" + currChunk.getX() + ", " +
@@ -254,6 +254,13 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
     }
 
+
+    /**
+     *
+     * @param sender
+     * @param args
+     * @return
+     */
     public boolean landlord_map(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
@@ -276,7 +283,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 public void run() {
                     LandMap.displayMap(player);
                 }
-            }, 0L, 10L);
+            }, 0L, 5L);
 
             LandMap.displayMap(player);
             return  true;

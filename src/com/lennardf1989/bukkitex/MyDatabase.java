@@ -219,7 +219,8 @@ public abstract class MyDatabase {
         }
 
         //Generate a DropDDL-script
-        //gen.runScript(true, gen.generateDropDdl());
+        gen.runScript(true, gen.generateDropDdl());
+
 
         //If SQLite is being used, the database has to reloaded to release all resources
         if(usingSQLite) {
