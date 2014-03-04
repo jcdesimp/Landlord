@@ -1,3 +1,5 @@
+BukkitDev Page: http://dev.bukkit.org/bukkit-plugins/landlord/
+
 Landlord
 ========
 
