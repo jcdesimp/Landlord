@@ -4,6 +4,7 @@ import com.avaje.ebean.EbeanServer;
 import com.lennardf1989.bukkitex.MyDatabase;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import javax.persistence.PersistenceException;
@@ -19,10 +20,14 @@ public final class Landlord extends JavaPlugin {
 
     private MyDatabase database;
     private static Landlord plugin;
+    //private LandListener listner;
+
 
     @Override
     public void onEnable() {
         plugin = this;
+        //listner = new LandListener();
+        getServer().getPluginManager().registerEvents(new LandListener(this), this);
         setupDatabase();
         getLogger().info(getDescription().getName() + " has been enabled!");
 

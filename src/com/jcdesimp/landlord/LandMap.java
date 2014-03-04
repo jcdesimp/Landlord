@@ -265,15 +265,6 @@ public class LandMap {
 
 
         String[][] mapBoard = getMapDir(getPlayerDirection(p));
-        /*String[][] mapBoard = new String[][]{
-                {"▒", "▒", "▓", "▓", "▓", "▒", "▒"},
-                {"▒", "▒", "▒", "▓", "▒", "▒", "▒"},
-                {"▒", "▒", "▒", "▒", "▓", "▒", "▒"},
-                {"▒", "▒", "▒", "█", "▒", "▒", "▒"},
-                {"▒", "▒", "▒", "▓", "▓", "▒", "▒"},
-                {"▒", "▒", "▓", "▒", "▓", "▒", "▒"},
-                {"▒", "▒", "▒", "▒", "▒", "▒", "▒"}
-        };*/
 
         String[] mapRows = new String[mapBoard.length];
 

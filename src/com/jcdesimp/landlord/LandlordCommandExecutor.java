@@ -1,21 +1,23 @@
 package com.jcdesimp.landlord;
 
 import com.avaje.ebean.Ebean;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
-import org.bukkit.Effect;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import com.DarkBladee12.ParticleAPI.ParticleEffect;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,6 +70,8 @@ public class LandlordCommandExecutor implements CommandExecutor {
             } else if(args[0].equalsIgnoreCase("map")) {
 
                 return landlord_map(sender, args);
+            } else if(args[0].equalsIgnoreCase("manage")) {
+                return landlord_manage(sender, args);
             }
 
         } //If this has happened the function will return true.
@@ -261,7 +265,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
      * @param args
      * @return
      */
-    public boolean landlord_map(CommandSender sender, String[] args) {
+    private boolean landlord_map(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
         } else {
@@ -287,6 +291,28 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
             LandMap.displayMap(player);
             return  true;
+        }
+        return true;
+
+    }
+
+    private boolean landlord_manage(CommandSender sender, String[] args){
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
+        } else {
+        Player player = (Player) sender;
+
+        Inventory inv = Bukkit.createInventory(null,27,"Land Manager");
+        ItemStack is = new ItemStack(Material.SIGN);
+        ItemMeta im = is.getItemMeta();
+        im.setDisplayName("Test Button");
+        ArrayList<String> lore = new ArrayList<String>();
+        lore.add("Test1");
+        lore.add("Test2");
+        im.setLore(lore);
+        is.setItemMeta(im);
+        inv.setItem(1,is);
+        player.openInventory(inv);
         }
         return true;
 
