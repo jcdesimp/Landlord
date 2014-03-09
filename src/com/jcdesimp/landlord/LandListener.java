@@ -40,6 +40,10 @@ public class LandListener implements Listener {
     }
 
 
+    /**
+     * Event handler for animal damage
+     * @param event being triggered
+     */
     @EventHandler(priority = EventPriority.HIGH)
     public void animalKill(EntityDamageByEntityEvent event){
         String[] safeAnimals = {"OCELOT","WOLF","HORSE","COW","PIG","MUSHROOM_COW","SHEEP"};
@@ -84,10 +88,20 @@ public class LandListener implements Listener {
         }
     }
 
+
+    /**
+     * Event handler for block placements
+     * @param event
+     */
     @EventHandler(priority = EventPriority.HIGH)
     public void blockPlace(BlockPlaceEvent event){
+        Chunk loc = event.getBlock().getLocation().getChunk();
+        OwnedLand land = OwnedLand.getLandFromDatabase(loc.getX(),loc.getZ(),loc.getWorld().getName());
+        if(land == null){
+            return;
+        }
         Player p = event.getPlayer();
-        if(p.getName().equalsIgnoreCase("jonsabando")){
+        if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
             p.sendMessage(ChatColor.RED + "You are not allowed to build on this land.");
             event.setCancelled(true);
         }
@@ -95,8 +109,14 @@ public class LandListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void blockBreak(BlockBreakEvent event){
+        Chunk loc = event.getBlock().getLocation().getChunk();
+        OwnedLand land = OwnedLand.getLandFromDatabase(loc.getX(),loc.getZ(),loc.getWorld().getName());
+        if(land == null){
+            return;
+        }
         Player p = event.getPlayer();
-        if(p.getName().equalsIgnoreCase("jonsabando")){
+
+        if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
             p.sendMessage(ChatColor.RED + "You are not allowed to break on this land.");
             event.setCancelled(true);
         }
@@ -105,13 +125,21 @@ public class LandListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void storageOpen(PlayerInteractEvent event){
         String[] blockAccess = {"CHEST","TRAPPED_CHEST","BURNING_FURNACE","FURNACE","ANVIL","DROPPER","DISPENSER","HOPPER"};
-        if(event.getPlayer().getName().equalsIgnoreCase("jonsabando") && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) &&
-                Arrays.asList(blockAccess).contains(event.getClickedBlock().getType().toString())){
-
-            //System.out.println("Block Clicked: " + event.getClickedBlock().getType().toString());
+        if(!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
+            return;
+        }
+        if(!Arrays.asList(blockAccess).contains(event.getClickedBlock().getType().toString())){
+            return;
+        }
+        Chunk loc = event.getClickedBlock().getLocation().getChunk();
+        OwnedLand land = OwnedLand.getLandFromDatabase(loc.getX(),loc.getZ(),loc.getWorld().getName());
+        if(land == null){
+            return;
+        }
+        Player p = event.getPlayer();
+        if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.OPEN_CONTAINERS)){
+            p.sendMessage(ChatColor.RED + "You are not allowed to use containers on this land.");
             event.setCancelled(true);
-
-
         }
     }
 

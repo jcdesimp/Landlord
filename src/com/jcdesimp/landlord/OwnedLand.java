@@ -150,7 +150,7 @@ public class OwnedLand {
      */
 
     public enum LandAction {
-        BUILD, HARM_ANIMALS, OPEN_CHESTS
+        BUILD, HARM_ANIMALS, OPEN_CONTAINERS
     }
 
     /**
@@ -215,7 +215,7 @@ public class OwnedLand {
                   return stringToBool(subPerms[1]);
               case HARM_ANIMALS:
                   return stringToBool(subPerms[2]);
-              case OPEN_CHESTS:
+              case OPEN_CONTAINERS:
                   return stringToBool(subPerms[3]);
               default:
                   return false;
@@ -230,7 +230,7 @@ public class OwnedLand {
                 case HARM_ANIMALS:
                     //System.out.println("check harm");
                     return stringToBool(subPerms[2]);
-                case OPEN_CHESTS:
+                case OPEN_CONTAINERS:
                     return stringToBool(subPerms[3]);
                 default:
                     return false;
