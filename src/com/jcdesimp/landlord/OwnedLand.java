@@ -255,7 +255,7 @@ public class OwnedLand {
             }
 
         }
-        System.out.println(permString);
+        //System.out.println(permString);
         return permString;
 
     }

@@ -49,7 +49,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             if(args.length == 0){
 
                 //landlord
-                return landlord(sender, args);
+                return landlord(sender, args, label);
 
             } else if(args[0].equalsIgnoreCase("claim") || args[0].equalsIgnoreCase("buy")) {
 
@@ -72,6 +72,8 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 return landlord_map(sender, args);
             } else if(args[0].equalsIgnoreCase("manage")) {
                 return landlord_manage(sender, args);
+            } else {
+                return landlord(sender, args, label);
             }
 
         } //If this has happened the function will return true.
@@ -97,9 +99,14 @@ public class LandlordCommandExecutor implements CommandExecutor {
      * @param args given with the command
      * @return boolean
      */
-    private boolean landlord(CommandSender sender, String[] args) {
-
-        sender.sendMessage(ChatColor.DARK_GREEN + "Base Landlord command executed!");
+    private boolean landlord(CommandSender sender, String[] args, String label) {
+        String helpMsg = "";
+        helpMsg+=ChatColor.DARK_GREEN + "--|| Landlord v"+Landlord.getInstance().getDescription().getVersion() +
+                " Created by " + ChatColor.BLUE+"Jcdesimp "+ChatColor.DARK_GREEN +"||--\n"+
+                ChatColor.DARK_AQUA+"/"+label + " help" + ChatColor.RESET + " - Show this help message.\n"+
+                ""
+        ;
+        sender.sendMessage(helpMsg);
         return true;
     }
 

@@ -3,8 +3,10 @@ package com.jcdesimp.landlord;
 import com.avaje.ebean.EbeanServer;
 import com.lennardf1989.bukkitex.MyDatabase;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import javax.persistence.PersistenceException;
@@ -29,7 +31,8 @@ public final class Landlord extends JavaPlugin {
         //listner = new LandListener();
         getServer().getPluginManager().registerEvents(new LandListener(this), this);
         setupDatabase();
-        getLogger().info(getDescription().getName() + " has been enabled!");
+        //getLogger().info(getDescription().getName() + ": Created by Jcdesimp");
+        getLogger().info("Created by Jcdesimp!");
 
         //Generates new config file if not present
         saveDefaultConfig();
@@ -46,8 +49,8 @@ public final class Landlord extends JavaPlugin {
 
 
 
-    public static JavaPlugin getInstance() {
-        return JavaPlugin.getPlugin(Landlord.class);
+    public static Plugin getInstance() {
+        return Bukkit.getPluginManager().getPlugin("Landlord");
         //return Bukkit.getPluginManager().getPlugin("MyPlugin");
     }
 
