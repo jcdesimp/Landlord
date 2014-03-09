@@ -270,6 +270,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
         } else {
             final Player player = (Player) sender;
+
             /*String[] brd = LandMap.buildMap(player);
             for(int s = 0; s<brd.length; s++){
                 player.sendMessage(brd[s]+"\n");
@@ -300,19 +301,17 @@ public class LandlordCommandExecutor implements CommandExecutor {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
         } else {
-        Player player = (Player) sender;
+            Player player = (Player) sender;
+            Chunk currChunk = player.getLocation().getChunk();
+            OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
+            if( land == null || !land.getOwnerName().equalsIgnoreCase(player.getName()) ){
+                player.sendMessage(ChatColor.RED + "You do not own this land.");
+                return true;
+            }
+            LandManagerView ui = new LandManagerView(player, land);
+            ui.showUI();
 
-        Inventory inv = Bukkit.createInventory(null,27,"Land Manager");
-        ItemStack is = new ItemStack(Material.SIGN);
-        ItemMeta im = is.getItemMeta();
-        im.setDisplayName("Test Button");
-        ArrayList<String> lore = new ArrayList<String>();
-        lore.add("Test1");
-        lore.add("Test2");
-        im.setLore(lore);
-        is.setItemMeta(im);
-        inv.setItem(1,is);
-        player.openInventory(inv);
+
         }
         return true;
 

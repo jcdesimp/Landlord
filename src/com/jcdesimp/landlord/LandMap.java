@@ -30,10 +30,14 @@ public class LandMap {
         //objective.setDisplayName("MAP");
         String[] mapData = buildMap(p);
         for(int i = 0; i<mapData.length; i++){
-
+            if(mapData[i].length()<21){
+                for(int f = 0; f<(21-mapData[i].length()); f++){
+                    mapData[i] += ChatColor.RESET;
+                }
+            }
             OfflinePlayer ofp = Bukkit.getOfflinePlayer(mapData[i].substring(5,17));
             Score score = objective.getScore(ofp);
-            score.setScore(mapData.length-i);
+            score.setScore(mapData.length - i);
 
 
             Team t = board.registerNewTeam(i+"");
@@ -266,7 +270,7 @@ public class LandMap {
 
         String[][] mapBoard = getMapDir(getPlayerDirection(p));
 
-        String[] mapRows = new String[mapBoard.length];
+        String[] mapRows = new String[mapBoard.length + 3];
 
         Chunk pChunk = p.getLocation().getChunk();
         //OwnedLand.getLandFromDatabase(1,2,world)
@@ -296,6 +300,9 @@ public class LandMap {
             mapRows[z] = row;
 
         }
+        mapRows[mapBoard.length] = ChatColor.GREEN + "█-Yours";
+        mapRows[mapBoard.length+1] = ChatColor.YELLOW + "█-Friendly";
+        mapRows[mapBoard.length+2] = ChatColor.RED + "█-Others'";
         //mapRows[0] = "";
 
         return mapRows;

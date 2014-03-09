@@ -12,8 +12,16 @@ import javax.persistence.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Entity
@@ -133,6 +141,125 @@ public class OwnedLand {
         World world = Bukkit.getServer().getWorld(worldName);
         return world.getChunkAt(x, z);
     }
+
+
+    /*
+     *********************
+     * Permissions Stuff *
+     *********************
+     */
+
+    public enum LandAction {
+        BUILD, HARM_ANIMALS, OPEN_CHESTS
+    }
+
+    /**
+     * Get default permission string
+     * @return default permission string
+     */
+    private String[][] getDefaultPerms() {
+        return new String[][]{{"1","0","0","0","0","0","0","0","0","0"},{"1","1","1","1","1","1","0","0","0","0"}};
+    }
+
+
+    /**
+     * Helper method for boolean conversion
+     * @param s
+     * @return
+     */
+    public static boolean stringToBool(String s) {
+        if (s.equals("1"))
+            return true;
+        if (s.equals("0"))
+            return false;
+        throw new IllegalArgumentException(s+" is not a bool. Only 1 and 0 are.");
+    }
+
+    /*
+    public void changePerm(int action, String group, int perm){
+        String[][] np = getLandPerms();
+        if(group.equals("friends")){
+            np[1][action] = perm+"";
+        } else {
+            np[0][action] = perm+"";
+        }
+    }
+    */
+
+    public String[][] getLandPerms(){
+        String perms = getPermissions();
+
+        if (perms==null){
+            //System.out.println("Is null...");
+            return getDefaultPerms();
+        }
+        String[] permString = perms.split("\\|");
+        //ArrayList<String[]> permArray = new ArrayList<String[]>();
+        String[][] permArray = new String[permString.length][];
+        for(int i = 0; i<permString.length; i++){
+            //permArray.add(permString[i].split(""));
+            permArray[i]=permString[i].split("(?!^)");
+        }
+        //return permArray.toArray(new String[permArray.size()]);
+        return permArray;
+    }
+
+    public boolean hasPermTo(String playerName, LandAction action){
+        String[][] perms = getLandPerms();
+        if(getOwnerName().equalsIgnoreCase(playerName)){
+            return true;
+        } else if (isFriend(playerName)) {
+            String[] subPerms = perms[1];
+            switch (action){
+              case BUILD:
+                  return stringToBool(subPerms[1]);
+              case HARM_ANIMALS:
+                  return stringToBool(subPerms[2]);
+              case OPEN_CHESTS:
+                  return stringToBool(subPerms[3]);
+              default:
+                  return false;
+            }
+        } else {
+            String[] subPerms = perms[0];
+            //System.out.println("Is guest");
+            switch (action){
+
+                case BUILD:
+                    return stringToBool(subPerms[1]);
+                case HARM_ANIMALS:
+                    //System.out.println("check harm");
+                    return stringToBool(subPerms[2]);
+                case OPEN_CHESTS:
+                    return stringToBool(subPerms[3]);
+                default:
+                    return false;
+
+            }
+
+        }
+    }
+
+
+
+
+    public String permsToString(String[][] perms) {
+        String permString = "";
+        for(int i = 0; i<perms.length; i++){
+            for(int ii = 0; ii<perms[i].length; ii++){
+                permString += perms[i][ii];
+
+            }
+            if(i+1<perms.length){
+                permString += "|";
+            }
+
+        }
+        System.out.println(permString);
+        return permString;
+
+    }
+
 
     /**
      * Attempt to add a friend
