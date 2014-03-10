@@ -1,6 +1,7 @@
 package com.jcdesimp.landlord;
 
 import com.avaje.ebean.Ebean;
+import com.avaje.ebean.meta.MetaQueryStatistic;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -72,6 +73,10 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 return landlord_map(sender, args);
             } else if(args[0].equalsIgnoreCase("manage")) {
                 return landlord_manage(sender, args);
+
+            } else if(args[0].equalsIgnoreCase("list")) {
+                return landlord_list(sender, args);
+
             } else {
                 return landlord(sender, args, label);
             }
@@ -328,6 +333,35 @@ public class LandlordCommandExecutor implements CommandExecutor {
         }
         return true;
 
+    }
+
+    /**
+     * Display a list of all owned land to a player
+     * @param sender who executed the command
+     * @param args given with command
+     * @return boolean
+     */
+    private boolean landlord_list(CommandSender sender, String[] args){
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
+        } else {
+            Player player = (Player) sender;
+            List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getName()).findList();
+            if(myLand.size()==0){
+                player.sendMessage(ChatColor.YELLOW+"You do not own any land!");
+            } else {
+                String landList = ChatColor.DARK_GREEN+"---( X, Z )--| World Name |---\n";
+                //OwnedLand curr = myLand.get(0);
+                for(int i = 0; i<myLand.size(); i++){
+                    landList += (ChatColor.GOLD + "     (" + myLand.get(i).getX() + ", " + myLand.get(i).getZ() + ") - "
+                            + myLand.get(i).getWorldName()) +"\n"
+                            ;
+                }
+                player.sendMessage(landList);
+            }
+
+        }
+        return  true;
     }
 
 }
