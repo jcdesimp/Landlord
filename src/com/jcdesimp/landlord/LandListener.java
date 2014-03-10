@@ -138,9 +138,13 @@ public class LandListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void storageOpen(PlayerInteractEvent event){
-        String[] blockAccess = {"CHEST","TRAPPED_CHEST","BURNING_FURNACE","FURNACE","ANVIL","DROPPER","DISPENSER","HOPPER"};
-        if(!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
+    public void storageOpenCropTrample(PlayerInteractEvent event){
+        //System.out.println(event.getAction().toString());
+        //System.out.println(event.getClickedBlock().getType().toString());
+        String[] blockAccess = {"CHEST","TRAPPED_CHEST","BURNING_FURNACE","FURNACE","ANVIL","DROPPER","DISPENSER","HOPPER","BREWING_STAND","SOIL"};
+        //System.out.println(event.getClickedBlock().getType());
+
+        if(!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.PHYSICAL))){
             return;
         }
         if(!Arrays.asList(blockAccess).contains(event.getClickedBlock().getType().toString())){
@@ -152,6 +156,11 @@ public class LandListener implements Listener {
             return;
         }
         Player p = event.getPlayer();
+        if(event.getAction().equals(Action.PHYSICAL) && !land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
+            p.sendMessage(ChatColor.RED + "You are not allowed to destroy crops on this land.");
+            event.setCancelled(true);
+            return;
+        }
         if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.OPEN_CONTAINERS)){
             p.sendMessage(ChatColor.RED + "You are not allowed to use containers on this land.");
             event.setCancelled(true);
