@@ -21,6 +21,8 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.bukkit.util.NumberConversions.ceil;
+
 /**
  * Command Executor class for LandLord
  */
@@ -75,7 +77,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 return landlord_manage(sender, args);
 
             } else if(args[0].equalsIgnoreCase("list")) {
-                return landlord_list(sender, args);
+                return landlord_list(sender, args, label);
 
             } else {
                 return landlord(sender, args, label);
@@ -341,23 +343,56 @@ public class LandlordCommandExecutor implements CommandExecutor {
      * @param args given with command
      * @return boolean
      */
-    private boolean landlord_list(CommandSender sender, String[] args){
+    private boolean landlord_list(CommandSender sender, String[] args, String label){
+
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
         } else {
             Player player = (Player) sender;
+
+            //check if page number is valid
+            int pageNumber = 1;
+            if (args.length > 1){
+                try{
+                    pageNumber = Integer.parseInt(args[1]);}
+                catch (NumberFormatException e){
+                    player.sendMessage(ChatColor.RED+"That is not a valid page number.");
+                    return true;
+                }
+            }
+
             List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getName()).findList();
             if(myLand.size()==0){
                 player.sendMessage(ChatColor.YELLOW+"You do not own any land!");
             } else {
-                String landList = ChatColor.DARK_GREEN+"---( X, Z )--| World Name |---\n";
+                String header = ChatColor.DARK_GREEN+"-----( X, Z )--| World Name |-------\n";
+                ArrayList<String> landList = new ArrayList<String>();
                 //OwnedLand curr = myLand.get(0);
                 for(int i = 0; i<myLand.size(); i++){
-                    landList += (ChatColor.GOLD + "     (" + myLand.get(i).getX() + ", " + myLand.get(i).getZ() + ") - "
-                            + myLand.get(i).getWorldName()) +"\n"
+                    landList.add((ChatColor.GOLD + "     (" + myLand.get(i).getX() + ", " + myLand.get(i).getZ() + ") - "
+                            + myLand.get(i).getWorldName()) +"\n")
                             ;
                 }
-                player.sendMessage(landList);
+                final int numPerPage = 6;
+                int numPages = (int)ceil((double)landList.size()/(double)numPerPage);
+                if(pageNumber > numPages){
+                    player.sendMessage(ChatColor.RED+"That is not a valid page number.");
+                    return true;
+                }
+                String pMsg = ChatColor.DARK_GREEN+"--- Your Owned Land ---"+" Page "+pageNumber+" ---\n"+header;
+                if (pageNumber == numPages){
+                    for(int i = (numPerPage*pageNumber-numPerPage); i<landList.size(); i++){
+                        pMsg+=landList.get(i);
+                    }
+                    pMsg+=ChatColor.DARK_GREEN+"------------------------------";
+                } else {
+                    for(int i = (numPerPage*pageNumber-numPerPage); i<(numPerPage*pageNumber); i++){
+                        pMsg+=landList.get(i);
+                    }
+                    pMsg+=ChatColor.DARK_GREEN+"--- do /"+label+" list "+(pageNumber+1)+" for next page ---";
+                }
+
+                player.sendMessage(pMsg);
             }
 
         }
