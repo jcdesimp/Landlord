@@ -71,9 +71,9 @@ public class LandManagerView implements Listener {
 
     private void buildUI(){
         // Static Items Help and row/column markers
-        ui.setItem(0,makeButton(ChatColor.YELLOW+"Help", new String[]{ChatColor.RESET+"Click each wool block",
+        ui.setItem(0,makeButton(ChatColor.GOLD+"Help", new String[]{ChatColor.RESET+"Click each wool block",
                 ChatColor.RESET+"to toggle a permission for a group.",ChatColor.RESET+"Red wool means not allowed",
-                ChatColor.RESET+"and green wool means allowed.",ChatColor.RESET+"Mouseover each item for more information."}, Material.BOOK));
+                ChatColor.RESET+"and green wool means allowed.",ChatColor.RESET+"Mouseover each item for more information."}, Material.ENCHANTED_BOOK));
         ui.setItem(1,makeButton(ChatColor.YELLOW+ "Build", new String[]{ChatColor.RESET+"Gives permission to place",ChatColor.RESET+"and break blocks."}, Material.COBBLESTONE));
         ui.setItem(2,makeButton(ChatColor.YELLOW+"Harm Animals", new String[]{ChatColor.RESET+"Gives permission to hurt or kill",
                 ChatColor.RESET+"pigs, sheep, cows, mooshrooms,",ChatColor.RESET+"chickens, horses, dogs and cats."}, Material.LEATHER));

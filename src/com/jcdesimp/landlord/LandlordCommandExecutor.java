@@ -86,9 +86,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
 
     /*
-     * ****************************************************
+     * **********************************************************
      * private methods for handling each command's functionality
-     * ****************************************************
+     * **********************************************************
      */
 
 
@@ -103,9 +103,15 @@ public class LandlordCommandExecutor implements CommandExecutor {
         String helpMsg = "";
         helpMsg+=ChatColor.DARK_GREEN + "--|| Landlord v"+Landlord.getInstance().getDescription().getVersion() +
                 " Created by " + ChatColor.BLUE+"Jcdesimp "+ChatColor.DARK_GREEN +"||--\n"+
+                ChatColor.GRAY+"(Aliases: /landlord, /land, or /ll)\n"+
                 ChatColor.DARK_AQUA+"/"+label + " help" + ChatColor.RESET + " - Show this help message.\n"+
-                ""
+                ChatColor.DARK_AQUA+"/"+label + " claim (or "+"/"+label +" buy)" + ChatColor.RESET + " - Claim this chunk.\n"+
+                ChatColor.DARK_AQUA+"/"+label + " unclaim (or "+"/"+label +" sell)" + ChatColor.RESET + " - Unclaim this chunk.\n"+
+                ChatColor.DARK_AQUA+"/"+label + " addfriend <player name>" + ChatColor.RESET + " - Add a friend to this land.\n"+
+                ChatColor.DARK_AQUA+"/"+label + " remfriend <player name>" + ChatColor.RESET + " - Remove a friend from this land.\n"+
+                ChatColor.DARK_AQUA+"/"+label + " manage" + ChatColor.RESET + " - Manage permissions for this land.\n"
         ;
+        helpMsg+=ChatColor.DARK_AQUA+"/"+label + " map" + ChatColor.RESET + " - Toggle the land map.\n";
         sender.sendMessage(helpMsg);
         return true;
     }

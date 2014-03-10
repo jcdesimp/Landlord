@@ -5,7 +5,7 @@ author: Jcdesimp
 authors: []
 website: http://dev.bukkit.org/bukkit-plugins/landlord/
 
-softdepend: [Vault]
+softdepend: [Vault, WorldGuard]
 
 commands:
    landlord:

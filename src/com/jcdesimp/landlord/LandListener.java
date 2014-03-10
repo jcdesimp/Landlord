@@ -11,11 +11,11 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -46,9 +46,13 @@ public class LandListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGH)
     public void animalKill(EntityDamageByEntityEvent event){
-        String[] safeAnimals = {"OCELOT","WOLF","HORSE","COW","PIG","MUSHROOM_COW","SHEEP"};
+        String[] safeAnimals = {"OCELOT","WOLF","HORSE","COW","PIG","MUSHROOM_COW","SHEEP","CHICKEN"};
         org.bukkit.entity.Entity victim = event.getEntity();
-        if(!Arrays.asList(safeAnimals).contains(victim.getType().toString())){
+        boolean isItemFrame = false;
+        //System.out.println("Victim:"+ victim.getType());
+        if(victim.getType().toString().equalsIgnoreCase("ITEM_FRAME")){
+            isItemFrame = true;
+        } else if(!Arrays.asList(safeAnimals).contains(victim.getType().toString())){
             return;
         }
 
@@ -65,7 +69,12 @@ public class LandListener implements Listener {
         if(attacker.getType().toString().equals("PLAYER")){
             Player p = (Player)attacker;
             if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.HARM_ANIMALS)){
-                p.sendMessage(ChatColor.RED+"You cannot harm animals on this land.");
+                if(isItemFrame){
+                    p.sendMessage(ChatColor.RED+"You cannot break that on this land.");
+                } else {
+                    p.sendMessage(ChatColor.RED+"You cannot harm animals on this land.");
+                }
+
                 event.setCancelled(true);
                 return;
             }
@@ -78,7 +87,13 @@ public class LandListener implements Listener {
             if(a.getShooter() instanceof Player){
                 p = (Player)a.getShooter();
                 if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.HARM_ANIMALS)){
-                    p.sendMessage(ChatColor.RED+"You cannot harm animals on this land.");
+                    if(isItemFrame){
+                        p.sendMessage(ChatColor.RED+"You cannot break that on this land.");
+
+                    } else {
+                        p.sendMessage(ChatColor.RED+"You cannot harm animals on this land.");
+
+                    }
                     event.setCancelled(true);
                     return;
                 }
@@ -143,10 +158,92 @@ public class LandListener implements Listener {
         }
     }
 
+    @EventHandler(priority = EventPriority.HIGH)
+    public void paintingFrameBreak(HangingBreakByEntityEvent event){
+        org.bukkit.entity.Entity victim = event.getEntity();
+        org.bukkit.entity.Entity remover = event.getRemover();
+        //System.out.println("Victim: "+ victim.getType());
+        //System.out.println("Remover: "+ remover);
+        Chunk loc = victim.getLocation().getChunk();
+        OwnedLand land = OwnedLand.getLandFromDatabase(loc.getX(),loc.getZ(),loc.getWorld().getName());
+        if(land == null){
+            return;
+        }
+        if(remover.getType().toString().equals("PLAYER")){
+            Player p = (Player)remover;
+            if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
+                p.sendMessage(ChatColor.RED+"You cannot break that on this land.");
+                event.setCancelled(true);
+                return;
+            }
+            //System.out.println("Attacker Name:" + p.getName());
+
+
+        }
+
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void paintingFramePlace(HangingPlaceEvent event){
+        org.bukkit.entity.Entity victim = event.getEntity();
+        org.bukkit.entity.Entity remover = event.getPlayer();
+        //System.out.println("Victim: "+ victim.getType());
+        //System.out.println("Remover: "+ remover);
+        Chunk loc = victim.getLocation().getChunk();
+        OwnedLand land = OwnedLand.getLandFromDatabase(loc.getX(),loc.getZ(),loc.getWorld().getName());
+        if(land == null){
+            return;
+        }
+        if(remover.getType().toString().equals("PLAYER")){
+            Player p = (Player)remover;
+            if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
+                p.sendMessage(ChatColor.RED+"You cannot place that on this land.");
+                event.setCancelled(true);
+                return;
+            }
+            //System.out.println("Attacker Name:" + p.getName());
+
+
+        }
+
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void liquidEmpty(PlayerBucketEmptyEvent event){
+        Chunk loc = event.getBlockClicked().getLocation().getChunk();
+        OwnedLand land = OwnedLand.getLandFromDatabase(loc.getX(),loc.getZ(),loc.getWorld().getName());
+        if(land == null){
+            return;
+        }
+        Player p=event.getPlayer();
+        if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
+            p.sendMessage(ChatColor.RED+"You cannot place that on this land.");
+            event.setCancelled(true);
+            return;
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void liquidFill(PlayerBucketFillEvent event){
+        Chunk loc = event.getBlockClicked().getLocation().getChunk();
+        OwnedLand land = OwnedLand.getLandFromDatabase(loc.getX(),loc.getZ(),loc.getWorld().getName());
+        if(land == null){
+            return;
+        }
+        Player p=event.getPlayer();
+        if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
+            p.sendMessage(ChatColor.RED+"You cannot do that on this land.");
+            event.setCancelled(true);
+            return;
+        }
+    }
+
+    /*
     @EventHandler
     public void playerJoin(PlayerLoginEvent e){
         System.out.println("PLAYER UUID: "+e.getPlayer().getUniqueId().toString().replace("-",""));
     }
+    */
 
 
 }
