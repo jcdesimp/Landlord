@@ -1,21 +1,17 @@
 package com.jcdesimp.landlord;
 
 
-import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.*;
-
-import java.lang.reflect.Array;
-import java.util.List;
 
 /**
  * File created by jcdesimp on 3/1/14.
  */
+@SuppressWarnings("SpellCheckingInspection")
 public class LandMap {
 
 
@@ -59,7 +55,7 @@ public class LandMap {
 
 
     public static String getPlayerDirection(Player playerSelf){
-        String dir = "";
+        String dir;
         float y = playerSelf.getLocation().getYaw();
         if( y < 0 ){y += 360;}
         y %= 360;

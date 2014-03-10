@@ -1,23 +1,14 @@
 package com.jcdesimp.landlord;
 
-import com.avaje.ebean.Ebean;
-import com.avaje.ebean.meta.MetaQueryStatistic;
+
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import com.DarkBladee12.ParticleAPI.ParticleEffect;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +17,7 @@ import static org.bukkit.util.NumberConversions.ceil;
 /**
  * Command Executor class for LandLord
  */
+@SuppressWarnings("UnusedParameters")
 public class LandlordCommandExecutor implements CommandExecutor {
     private Landlord plugin; //pointer to main class
 
@@ -38,7 +30,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
      * @param sender who sent the command
      * @param label  ???
      * @param args given with command
-     * @return
+     * @return boolean
      */
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -52,7 +44,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             if(args.length == 0){
 
                 //landlord
-                return landlord(sender, args, label);
+                return landlord(sender, label);
 
             } else if(args[0].equalsIgnoreCase("claim") || args[0].equalsIgnoreCase("buy")) {
 
@@ -80,7 +72,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 return landlord_list(sender, args, label);
 
             } else {
-                return landlord(sender, args, label);
+                return landlord(sender, label);
             }
 
         } //If this has happened the function will return true.
@@ -94,7 +86,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
     /*
      * **********************************************************
-     * private methods for handling each command's functionality
+     * private methods for handling each command functionality
      * **********************************************************
      */
 
@@ -102,11 +94,11 @@ public class LandlordCommandExecutor implements CommandExecutor {
     /**
      * Called when base command /landlord or aliases (/ll /land)
      * are executed with no parameters
+     *
      * @param sender who executed the command
-     * @param args given with the command
      * @return boolean
      */
-    private boolean landlord(CommandSender sender, String[] args, String label) {
+    private boolean landlord(CommandSender sender, String label) {
         String helpMsg = "";
         helpMsg+=ChatColor.DARK_GREEN + "--|| Landlord v"+Landlord.getInstance().getDescription().getVersion() +
                 " Created by " + ChatColor.BLUE+"Jcdesimp "+ChatColor.DARK_GREEN +"||--\n"+
@@ -151,9 +143,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 player.sendMessage(ChatColor.YELLOW + "Someone else owns this land.");
                 return true;
 
-            };
+            }
             Landlord.getInstance().getDatabase().save(land);
-            land.higlightLand(player, ParticleEffect.HAPPY_VILLAGER);
+            land.highlightLand(player, ParticleEffect.HAPPY_VILLAGER);
             sender.sendMessage(
                 ChatColor.GREEN + "Successfully claimed chunk (" + currChunk.getX() + ", " +
                 currChunk.getZ() + ") in world " + currChunk.getWorld().getName() + "."
@@ -185,7 +177,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 player.sendMessage(ChatColor.RED + "You do not own this land.");
                 return true;
             }
-            dbLand.higlightLand(player, ParticleEffect.WITCH_MAGIC);
+            dbLand.highlightLand(player, ParticleEffect.WITCH_MAGIC);
             plugin.getDatabase().delete(dbLand);
 
             sender.sendMessage(
@@ -232,7 +224,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 player.sendMessage(ChatColor.YELLOW + "Player " + args[1] + " is already a friend of this land.");
                 return true;
             }
-            land.higlightLand(player, ParticleEffect.HEART,2);
+            land.highlightLand(player, ParticleEffect.HEART, 2);
             plugin.getDatabase().save(land);
             sender.sendMessage(ChatColor.GREEN + "Player " + args[1] +" is now a friend of this land.");
 
@@ -244,8 +236,8 @@ public class LandlordCommandExecutor implements CommandExecutor {
     /**
      * Removes a friend from an owned chunk
      * Called when landlord remfriend is executed
-     * @param sender
-     * @param args
+     * @param sender who executed the command
+     * @param args given with command
      * @return boolean
      */
     private boolean landlord_remfriend(CommandSender sender, String[] args) {
@@ -269,7 +261,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 player.sendMessage(ChatColor.YELLOW + "Player " + args[1] + " is not a friend of this land.");
                 return true;
             }
-            land.higlightLand(player, ParticleEffect.ANGRY_VILLAGER,2);
+            land.highlightLand(player, ParticleEffect.ANGRY_VILLAGER, 2);
             plugin.getDatabase().save(land);
             player.sendMessage(ChatColor.GREEN + "Player " + args[1] + " is no longer a friend of this land.");
 
@@ -281,9 +273,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
     /**
      *
-     * @param sender
-     * @param args
-     * @return
+     * @param sender who executed the command
+     * @param args given with command
+     * @return boolean
      */
     private boolean landlord_map(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
@@ -368,13 +360,13 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 String header = ChatColor.DARK_GREEN+"-----( X, Z )--| World Name |-------\n";
                 ArrayList<String> landList = new ArrayList<String>();
                 //OwnedLand curr = myLand.get(0);
-                for(int i = 0; i<myLand.size(); i++){
-                    landList.add((ChatColor.GOLD + "     (" + myLand.get(i).getX() + ", " + myLand.get(i).getZ() + ") - "
-                            + myLand.get(i).getWorldName()) +"\n")
-                            ;
+                for (OwnedLand aMyLand : myLand) {
+                    landList.add((ChatColor.GOLD + "     (" + aMyLand.getX() + ", " + aMyLand.getZ() + ") - "
+                            + aMyLand.getWorldName()) + "\n")
+                    ;
                 }
                 final int numPerPage = 6;
-                int numPages = (int)ceil((double)landList.size()/(double)numPerPage);
+                int numPages = ceil((double)landList.size()/(double)numPerPage);
                 if(pageNumber > numPages){
                     player.sendMessage(ChatColor.RED+"That is not a valid page number.");
                     return true;

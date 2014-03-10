@@ -1,7 +1,6 @@
 package com.jcdesimp.landlord;
 
 import org.bukkit.*;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -13,21 +12,9 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.*;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import javax.persistence.Entity;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-
 /**
  * File created by jcdesimp on 3/4/14.
  */
@@ -76,7 +63,7 @@ public class LandListener implements Listener {
                 }
 
                 event.setCancelled(true);
-                return;
+
             }
             //System.out.println("Attacker Name:" + p.getName());
 
@@ -95,7 +82,6 @@ public class LandListener implements Listener {
 
                     }
                     event.setCancelled(true);
-                    return;
                 }
             }
 
@@ -106,7 +92,7 @@ public class LandListener implements Listener {
 
     /**
      * Event handler for block placements
-     * @param event
+     * @param event that happened
      */
     @EventHandler(priority = EventPriority.HIGH)
     public void blockPlace(BlockPlaceEvent event){
@@ -183,7 +169,6 @@ public class LandListener implements Listener {
             if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
                 p.sendMessage(ChatColor.RED+"You cannot break that on this land.");
                 event.setCancelled(true);
-                return;
             }
             //System.out.println("Attacker Name:" + p.getName());
 
@@ -208,7 +193,6 @@ public class LandListener implements Listener {
             if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
                 p.sendMessage(ChatColor.RED+"You cannot place that on this land.");
                 event.setCancelled(true);
-                return;
             }
             //System.out.println("Attacker Name:" + p.getName());
 
@@ -228,7 +212,6 @@ public class LandListener implements Listener {
         if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
             p.sendMessage(ChatColor.RED+"You cannot place that on this land.");
             event.setCancelled(true);
-            return;
         }
     }
 
@@ -243,7 +226,6 @@ public class LandListener implements Listener {
         if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
             p.sendMessage(ChatColor.RED+"You cannot do that on this land.");
             event.setCancelled(true);
-            return;
         }
     }
 

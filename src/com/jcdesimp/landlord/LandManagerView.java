@@ -3,28 +3,21 @@ package com.jcdesimp.landlord;
 import com.DarkBladee12.ParticleAPI.ParticleEffect;
 import org.bukkit.*;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.MaterialData;
-import org.bukkit.material.Skull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * File created by jcdesimp on 3/4/14.
  */
 public class LandManagerView implements Listener {
 
-    private String uiDisplayName;
     private Player player;
     private Inventory ui;
     private OwnedLand mLand;
@@ -38,7 +31,7 @@ public class LandManagerView implements Listener {
         this.player = player;
         this.mLand = mLand;
         this.perms = mLand.getLandPerms();
-        this.uiDisplayName = "Land Manager";
+        String uiDisplayName = "Land Manager";
         this.ui = Bukkit.createInventory(null, 27, uiDisplayName);
         this.buildUI();
         this.setToggles();
@@ -65,9 +58,11 @@ public class LandManagerView implements Listener {
         player.openInventory(ui);
     }
 
+    /*
     private void hideUI(){
 
     }
+    */
 
     private void buildUI(){
         // Static Items Help and row/column markers
@@ -170,7 +165,7 @@ public class LandManagerView implements Listener {
             mLand.setPermissions(mLand.permsToString(perms));
             Landlord.getInstance().getDatabase().save(mLand);
             player.sendMessage(ChatColor.GREEN + "Land permissions saved!");
-            mLand.higlightLand(player, ParticleEffect.DRIP_LAVA);
+            mLand.highlightLand(player, ParticleEffect.DRIP_LAVA);
             InventoryCloseEvent.getHandlerList().unregister(this);
         }
         isOpen = true;

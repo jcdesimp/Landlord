@@ -9,9 +9,10 @@ import javax.persistence.*;
  * Friend object
  */
 
+@SuppressWarnings("UnusedDeclaration")
 @Entity
 @Table(name="ll_friend")
-public class Friend extends Object {
+public class Friend {
 
     public static Friend friendFromName(String playerName) {
         Friend fd = new Friend();
@@ -48,11 +49,7 @@ public class Friend extends Object {
 
     @Override
     public boolean equals(Object obj){
-        if (obj instanceof Friend) {
-            return ((Friend) obj).getPlayerName().equalsIgnoreCase(playerName);
-        } else {
-            return false;
-        }
+        return obj instanceof Friend && ((Friend) obj).getPlayerName().equalsIgnoreCase(playerName);
     }
 
 

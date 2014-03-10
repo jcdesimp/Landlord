@@ -10,20 +10,12 @@ import org.bukkit.*;
 
 import javax.persistence.*;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
+@SuppressWarnings("UnusedDeclaration")
 @Entity
 @Table(name="ll_land")
 public class OwnedLand {
@@ -164,8 +156,8 @@ public class OwnedLand {
 
     /**
      * Helper method for boolean conversion
-     * @param s
-     * @return
+     * @param s string to convert
+     * @return true or false
      */
     public static boolean stringToBool(String s) {
         if (s.equals("1"))
@@ -278,7 +270,8 @@ public class OwnedLand {
 
     /**
      * Removes a friend
-     * @param f
+     * @param f friend to remove
+     * @return boolean
      */
     public boolean removeFriend(Friend f) {
         if(isFriend(f)){
@@ -294,7 +287,7 @@ public class OwnedLand {
      * Returns whether or not a player is
      * a friend of this land
      * @param f Friend to be checked
-     * @return
+     * @return boolean is a friend or not
      */
     public boolean isFriend(Friend f) {
         return friends.contains(f);
@@ -307,10 +300,10 @@ public class OwnedLand {
 
     /**
      * Gets land from the database
-     * @param x
-     * @param z
-     * @param worldName
-     * @return
+     * @param x coord of chunk
+     * @param z coord of chunk
+     * @param worldName of chunk
+     * @return OwnedLand instance
      */
     public static OwnedLand getLandFromDatabase(int x, int z, String worldName) {
         return Landlord.getInstance().getDatabase().find(OwnedLand.class)
@@ -325,14 +318,14 @@ public class OwnedLand {
 
     /**
      * Highlights the border around the chunk with a particle effect.
-     * @param p
-     * @param e
+     * @param p player
+     * @param e effect to play
      */
-    public void higlightLand(Player p, ParticleEffect e){
-        higlightLand(p, e, 5);
+    public void highlightLand(Player p, ParticleEffect e){
+        highlightLand(p, e, 5);
 
     }
-    public void higlightLand(Player p, ParticleEffect e, int amt){
+    public void highlightLand(Player p, ParticleEffect e, int amt){
         Chunk chunk = getChunk();
         ArrayList<Location> edgeBlocks = new ArrayList<Location>();
         for(int i = 0; i<16; i++){
@@ -347,8 +340,8 @@ public class OwnedLand {
         }
         //BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 
-        for(int i = 0; i < edgeBlocks.size(); i++) {
-            e.display(edgeBlocks.get(i),0.2f,0.2f,0.2f,9.2f,amt,p);
+        for (Location edgeBlock : edgeBlocks) {
+            e.display(edgeBlock, 0.2f, 0.2f, 0.2f, 9.2f, amt, p);
             //p.playEffect(edgeBlocks.get(i), e, null);
         }
 
