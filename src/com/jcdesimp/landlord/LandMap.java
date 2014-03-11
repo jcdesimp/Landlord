@@ -6,6 +6,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.*;
 
 /**
@@ -14,8 +16,35 @@ import org.bukkit.scoreboard.*;
 @SuppressWarnings("SpellCheckingInspection")
 public class LandMap {
 
+    Player mapViewer;
+    Scoreboard playerMap;
+    int schedulerId;
+    Chunk currChunk;
 
-    public static Scoreboard displayMap(Player p){
+    public LandMap(Player p) {
+        this.mapViewer=p;
+        this.playerMap=displayMap(mapViewer);
+        this.currChunk = mapViewer.getLocation().getChunk();
+        this.schedulerId = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Landlord.getInstance(), new BukkitRunnable() {
+            @Override
+            public void run() {
+                displayMap(mapViewer);
+            }
+        }, 0L, 5L);
+
+    }
+
+    public Player getMapViewer() {
+        return mapViewer;
+    }
+
+    public void removeMap(){
+        mapViewer.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+        Bukkit.getServer().getScheduler().cancelTask(schedulerId);
+
+    }
+
+    private Scoreboard displayMap(Player p){
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         Scoreboard board = manager.getNewScoreboard();
         Team team = board.registerNewTeam("teamname");
@@ -257,7 +286,7 @@ public class LandMap {
         return mapDir;
     }
 
-    public static String[] buildMap(Player p) {
+    private String[] buildMap(Player p) {
         //String st ="▒▒▒▓▒▒▒\n▒▒▓▓▓▒▒\n▒▓▓▓▓▓▒\n▓▓▓█▓▓▓\n▓▓▒▒▒▓▓\n▓▒▒▒▒▒▓\n▒▒▒▒▒▒▒";
 
         int radius = 3;
@@ -273,11 +302,14 @@ public class LandMap {
 
         for(int z = 0; z < mapBoard.length; z++){
             String row = "";
+
+            //if curr chunk
             for(int x = 0; x < mapBoard[z].length; x++){
                 OwnedLand ol = OwnedLand.getLandFromDatabase((pChunk.getX()-radius)+x,
                         (pChunk.getZ()-radius)+z,
                         pChunk.getWorld().getName());
                 String currSpot = mapBoard[z][x];
+
                 if(ol != null){
                     if(ol.getOwnerName().equals(p.getName())){
                         currSpot = ChatColor.GREEN + currSpot;
@@ -293,6 +325,8 @@ public class LandMap {
                 row += currSpot;
 
             }
+
+            //if currchunk changed
             mapRows[z] = row;
 
         }

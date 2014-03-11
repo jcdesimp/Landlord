@@ -20,15 +20,15 @@ import static org.bukkit.util.NumberConversions.ceil;
 @SuppressWarnings("UnusedParameters")
 public class LandlordCommandExecutor implements CommandExecutor {
     private Landlord plugin; //pointer to main class
-
     public LandlordCommandExecutor(Landlord plugin){
         this.plugin = plugin;
+
     }
 
     /**
      * Main command handler
      * @param sender who sent the command
-     * @param label  ???
+     * @param label exact command (or alias) run
      * @param args given with command
      * @return boolean
      */
@@ -38,7 +38,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             /*
              * ****************************************************************
              *   Use private methods below to define command implementation
-             *   call those methods form within these cases
+             *   call those methods from within these cases
              * ****************************************************************
              */
             if(args.length == 0){
@@ -271,8 +271,11 @@ public class LandlordCommandExecutor implements CommandExecutor {
     }
 
 
+
+
+
     /**
-     *
+     * Toggles the land map display
      * @param sender who executed the command
      * @param args given with command
      * @return boolean
@@ -281,13 +284,11 @@ public class LandlordCommandExecutor implements CommandExecutor {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
         } else {
-            final Player player = (Player) sender;
 
-            /*String[] brd = LandMap.buildMap(player);
-            for(int s = 0; s<brd.length; s++){
-                player.sendMessage(brd[s]+"\n");
-            }*/
-            //player.sendMessage(ChatColor.YELLOW + "" + "░░░▒░░░\n░░▒▒▒░░\n░▒▒▒▒▒░\n▒▒▒█▒▒▒\n▒▒░░░▒▒\n▒░░░░░▒\n░░░░░░░");
+            final Player player = (Player) sender;
+            plugin.getMapManager().toggleMap(player);
+
+            /*
             if(player.getScoreboard().getObjective("Land Map") != null){
                 Bukkit.getServer().getScheduler().cancelAllTasks();
                 player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
@@ -298,17 +299,27 @@ public class LandlordCommandExecutor implements CommandExecutor {
             scheduler.scheduleSyncRepeatingTask(plugin, new BukkitRunnable() {
                 @Override
                 public void run() {
-                    LandMap.displayMap(player);
+                    //LandMap.displayMap(player);
                 }
             }, 0L, 5L);
 
-            LandMap.displayMap(player);
+            //LandMap.displayMap(player);
             return  true;
+            */
         }
         return true;
 
     }
 
+
+
+
+    /**
+     * Command for managing player land perms
+     * @param sender who executed the command
+     * @param args given with command
+     * @return boolean
+     */
     private boolean landlord_manage(CommandSender sender, String[] args){
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
@@ -357,7 +368,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             if(myLand.size()==0){
                 player.sendMessage(ChatColor.YELLOW+"You do not own any land!");
             } else {
-                String header = ChatColor.DARK_GREEN+"-----( X, Z )--| World Name |-------\n";
+                String header = ChatColor.DARK_GREEN+"   | ( X, Z ) - World Name |     \n";
                 ArrayList<String> landList = new ArrayList<String>();
                 //OwnedLand curr = myLand.get(0);
                 for (OwnedLand aMyLand : myLand) {
@@ -365,13 +376,15 @@ public class LandlordCommandExecutor implements CommandExecutor {
                             + aMyLand.getWorldName()) + "\n")
                     ;
                 }
-                final int numPerPage = 6;
+                //Amount to be displayed per page
+                final int numPerPage = 7;
+
                 int numPages = ceil((double)landList.size()/(double)numPerPage);
                 if(pageNumber > numPages){
                     player.sendMessage(ChatColor.RED+"That is not a valid page number.");
                     return true;
                 }
-                String pMsg = ChatColor.DARK_GREEN+"--- Your Owned Land ---"+" Page "+pageNumber+" ---\n"+header;
+                String pMsg = ChatColor.DARK_GREEN+"--- " +ChatColor.YELLOW+"Your Owned Land"+ChatColor.DARK_GREEN+" ---"+ChatColor.YELLOW+" Page "+pageNumber+ChatColor.DARK_GREEN+" ---\n"+header;
                 if (pageNumber == numPages){
                     for(int i = (numPerPage*pageNumber-numPerPage); i<landList.size(); i++){
                         pMsg+=landList.get(i);
@@ -381,7 +394,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                     for(int i = (numPerPage*pageNumber-numPerPage); i<(numPerPage*pageNumber); i++){
                         pMsg+=landList.get(i);
                     }
-                    pMsg+=ChatColor.DARK_GREEN+"--- do /"+label+" list "+(pageNumber+1)+" for next page ---";
+                    pMsg+=ChatColor.DARK_GREEN+"--- do"+ChatColor.YELLOW+" /"+label+" list "+(pageNumber+1)+ChatColor.DARK_GREEN+" for next page ---";
                 }
 
                 player.sendMessage(pMsg);

@@ -22,6 +22,7 @@ public final class Landlord extends JavaPlugin {
 
     private MyDatabase database;
     private static Landlord plugin;
+    private MapManager mapManager = new MapManager();
     //private LandListener listner;
 
 
@@ -30,6 +31,7 @@ public final class Landlord extends JavaPlugin {
         plugin = this;
         //listner = new LandListener();
         getServer().getPluginManager().registerEvents(new LandListener(this), this);
+        getServer().getPluginManager().registerEvents(mapManager, this);
         setupDatabase();
         //getLogger().info(getDescription().getName() + ": Created by Jcdesimp");
         getLogger().info("Created by Jcdesimp!");
@@ -44,10 +46,13 @@ public final class Landlord extends JavaPlugin {
     @Override
     public void onDisable() {
         getLogger().info(getDescription().getName() + " has been disabled!");
+        mapManager.removeAllMaps();
     }
 
 
-
+    public MapManager getMapManager() {
+        return mapManager;
+    }
 
     public static Plugin getInstance() {
         return Bukkit.getPluginManager().getPlugin("Landlord");
