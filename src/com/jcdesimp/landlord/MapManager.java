@@ -32,7 +32,7 @@ public class MapManager implements Listener {
         } else {
             addMap(new LandMap(p));
         }
-        System.out.println(mapList.toString());
+        //ystem.out.println(mapList.toString());
 
     }
 
@@ -52,6 +52,13 @@ public class MapManager implements Listener {
             mapList.get(k).removeMap();
         }
         mapList.clear();
+    }
+
+    public void updateAll(){
+        Iterator it = mapList.entrySet().iterator();
+        for (String k : mapList.keySet()){
+            mapList.get(k).updateMap();
+        }
     }
 
 

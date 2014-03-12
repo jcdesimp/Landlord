@@ -150,6 +150,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 ChatColor.GREEN + "Successfully claimed chunk (" + currChunk.getX() + ", " +
                 currChunk.getZ() + ") in world " + currChunk.getWorld().getName() + "."
             );
+            plugin.getMapManager().updateAll();
             //sender.sendMessage(ChatColor.DARK_GREEN + "Land claim command executed!");
         }
         return true;
@@ -184,6 +185,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                     ChatColor.YELLOW + "Successfully unclaimed chunk (" + currChunk.getX() + ", " +
                             currChunk.getZ() + ") in world " + currChunk.getWorld().getName() + "."
             );
+            plugin.getMapManager().updateAll();
 
         }
         return true;
@@ -227,6 +229,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             land.highlightLand(player, ParticleEffect.HEART, 2);
             plugin.getDatabase().save(land);
             sender.sendMessage(ChatColor.GREEN + "Player " + args[1] +" is now a friend of this land.");
+            plugin.getMapManager().updateAll();
 
         }
         return true;
