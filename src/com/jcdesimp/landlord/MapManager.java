@@ -32,18 +32,18 @@ public class MapManager implements Listener {
         } else {
             addMap(new LandMap(p));
         }
-        //ystem.out.println(mapList.toString());
+        //System.out.println(mapList.toString());
 
     }
 
     public void remMap(String pName){
-        System.out.println("Before Rem: "+mapList.toString());
+        //System.out.println("Before Rem: "+mapList.toString());
         if( mapList.containsKey(pName) ){
             LandMap curr = mapList.get(pName);
             curr.removeMap();
             mapList.remove(pName);
         }
-        System.out.println("After Rem: "+mapList.toString());
+        //System.out.println("After Rem: "+mapList.toString());
     }
 
     public void removeAllMaps(){

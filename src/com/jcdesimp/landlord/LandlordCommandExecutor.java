@@ -111,6 +111,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 ChatColor.DARK_AQUA+"/"+label + " manage" + ChatColor.RESET + " - Manage permissions for this land.\n"
         ;
         helpMsg+=ChatColor.DARK_AQUA+"/"+label + " map" + ChatColor.RESET + " - Toggle the land map.\n";
+        helpMsg+=ChatColor.DARK_AQUA+"/"+label + " list" + ChatColor.RESET + " - List all your owned land.\n";
         sender.sendMessage(helpMsg);
         return true;
     }
@@ -147,9 +148,10 @@ public class LandlordCommandExecutor implements CommandExecutor {
             Landlord.getInstance().getDatabase().save(land);
             land.highlightLand(player, ParticleEffect.HAPPY_VILLAGER);
             sender.sendMessage(
-                ChatColor.GREEN + "Successfully claimed chunk (" + currChunk.getX() + ", " +
-                currChunk.getZ() + ") in world " + currChunk.getWorld().getName() + "."
-            );
+                    ChatColor.GREEN + "Successfully claimed chunk (" + currChunk.getX() + ", " +
+                            currChunk.getZ() + ") in world " + currChunk.getWorld().getName() + "." );
+
+            player.playSound(player.getLocation(),Sound.FIREWORK_TWINKLE2,10,10);
             plugin.getMapManager().updateAll();
             //sender.sendMessage(ChatColor.DARK_GREEN + "Land claim command executed!");
         }
@@ -185,6 +187,8 @@ public class LandlordCommandExecutor implements CommandExecutor {
                     ChatColor.YELLOW + "Successfully unclaimed chunk (" + currChunk.getX() + ", " +
                             currChunk.getZ() + ") in world " + currChunk.getWorld().getName() + "."
             );
+
+            player.playSound(player.getLocation(),Sound.ENDERMAN_HIT,10,.5f);
             plugin.getMapManager().updateAll();
 
         }
@@ -228,6 +232,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             }
             land.highlightLand(player, ParticleEffect.HEART, 2);
             plugin.getDatabase().save(land);
+            player.playSound(player.getLocation(),Sound.ORB_PICKUP,10,.2f);
             sender.sendMessage(ChatColor.GREEN + "Player " + args[1] +" is now a friend of this land.");
             plugin.getMapManager().updateAll();
 
@@ -266,6 +271,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             }
             land.highlightLand(player, ParticleEffect.ANGRY_VILLAGER, 2);
             plugin.getDatabase().save(land);
+            player.playSound(player.getLocation(),Sound.ZOMBIE_INFECT,10,.5f);
             player.sendMessage(ChatColor.GREEN + "Player " + args[1] + " is no longer a friend of this land.");
 
         }
