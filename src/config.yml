@@ -1,16 +1,39 @@
 #Landlord Created by Jcdesimp
 
+#General options
+options:
+    #Enable sound effects when interacting with owned land.
+    soundEffects: true
+    #Enable particle effects for land interaction
+    particleEffects: true
+
+    #Enable the land map (/landlord map)
+    #Can sometimes be resource intensive if a lot of players have it open.
+    enableMap: true
+
+#Limits on owned land
+limits:
+    #Max land a regular player can own (-1 for no limit).
+    landLimit: 10
+    #Extra land a player with "landlord.limit.extra" can own (Gets added to landLimit).
+    extra: 10
+
 #Economy settings (Requires Vault)
-useEconomy: false
-Buy Price: 500
-Sell Price: 500
+economy:
+    #Enable economy integration features
+    enable: false
+    #Cost of claiming land
+    Buy Price: 500
+    #Money given to player when unclaiming land
+    Sell Price: 500
 
 #Worldguard Options (Requires Worldguard)
-
-
-
+worldguard:
+    #Prevent players from claiming chunks that intersect with worldguard regions,
+    #UNLESS they have build permissions within that region.
+    blockRegionClaim: true
 
 #Database Options
 database:
-    #Empty dattabase on next restart/reload
+    #Clear database on next restart/reload, WARNING! Deletes ALL owned land.
     rebuild: false

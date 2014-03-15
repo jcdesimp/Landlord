@@ -16,26 +16,30 @@ commands:
       permission-message: You don't have <permission>
 
 permissions:
-   landlord.*:
-     description: Gives access to all Landlord commands
-     children:
-       landlord.claim: true
-       landlord.burningdeaths: true
-       inferno.burningdeaths.others: true
-   landlord.player.*:
-        description: Gives access to all Landlord player commands
+
+    landlord.*:
+        description: Gives access to all landlord commands
         children:
-          landlord.claim: true
-          landlord.burningdeaths: true
-          inferno.burningdeaths.others: true
-   inferno.flagrate:
-     description: Allows you to ignite yourself
-     default: true
-   inferno.burningdeaths:
-     description: Allows you to see how many times you have burned to death
-     default: true
-   inferno.burningdeaths.others:
-     description: Allows you to see how many times others have burned to death
-     default: op
-     children:
-       inferno.burningdeaths: true
+            landlord.player.*: true
+            landlord.admin.*: true
+
+    landlord.player.*:
+            description: Gives access to default player commands.
+            children:
+                landlord.player.own: true
+
+    landlord.admin.*:
+        description: Gives access to admin commands.
+        children:
+            landlord.admin.unclaim: true
+            landlord.admin.list: true
+            landlord.admin.manage: true
+            landlord.admin.clearWorld: true
+
+
+    landlord.admin.unclaim:
+        description: Unclaim any land
+        default: op
+    landlord.admin.list:
+        description: list all land owned by a user
+        default: op

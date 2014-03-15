@@ -23,6 +23,7 @@ public class LandMap {
     int schedulerId;
     Chunk currChunk;
     List<OwnedLand> nearbyLand;
+    String currDir;
 
     public LandMap(Player p) {
         this.mapViewer=p;
@@ -35,13 +36,18 @@ public class LandMap {
                 .eq("worldName", this.currChunk.getWorld().getName())
                 .findList();
         //displayMap(mapViewer);
-
+        this.currDir = getPlayerDirection(mapViewer);
+        displayMap(mapViewer);
         this.schedulerId = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Landlord.getInstance(), new BukkitRunnable() {
             @Override
             public void run() {
-                displayMap(mapViewer);
+                if(currDir!=getPlayerDirection(mapViewer) || currChunk!=mapViewer.getLocation().getChunk()){
+                    displayMap(mapViewer);
+                    currDir = getPlayerDirection(mapViewer);
+                }
+
             }
-        }, 0L, 5L);
+        }, 0L, 7L);
 
         displayMap(this.mapViewer);
 
