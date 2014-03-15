@@ -326,6 +326,9 @@ public class OwnedLand {
 
     }
     public void highlightLand(Player p, ParticleEffect e, int amt){
+        if(!Landlord.getInstance().getConfig().getBoolean("options.particleEffects",true)){
+            return;
+        }
         Chunk chunk = getChunk();
         ArrayList<Location> edgeBlocks = new ArrayList<Location>();
         for(int i = 0; i<16; i++){

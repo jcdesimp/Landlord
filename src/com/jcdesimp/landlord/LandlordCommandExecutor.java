@@ -101,7 +101,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 " Created by " + ChatColor.BLUE+"Jcdesimp "+ChatColor.DARK_GREEN +"||--\n"+
                 ChatColor.GRAY+"(Aliases: /landlord, /land, or /ll)\n"+
                 ChatColor.DARK_AQUA+"/"+label + " help" + ChatColor.RESET + " - Show this help message.\n"+
-                ChatColor.DARK_AQUA+"/"+label + " claim (or "+"/"+label +" buy)" + ChatColor.RESET + " - Claim this chunk.\n"+
+                ChatColor.DARK_AQUA+"/"+label + " claim (or "+"/"+label +" buy) [x,z] [world]" + ChatColor.RESET + " - Claim this chunk.\n"+
                 ChatColor.DARK_AQUA+"/"+label + " unclaim (or "+"/"+label +" sell)" + ChatColor.RESET + " - Unclaim this chunk.\n"+
                 ChatColor.DARK_AQUA+"/"+label + " addfriend <player name>" + ChatColor.RESET + " - Add a friend to this land.\n"+
                 ChatColor.DARK_AQUA+"/"+label + " remfriend <player name>" + ChatColor.RESET + " - Remove a friend from this land.\n"+
@@ -145,6 +145,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
                     return true;
                 }
             }
+
+
+
             OwnedLand land = OwnedLand.landFromProperties(player.getName(), currChunk);
             OwnedLand dbLand = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
 
@@ -158,13 +161,42 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 return true;
 
             }
+            int limit = plugin.getConfig().getInt("limits.landLimit",10);
+            if(limit >= 0){
+                if(player.hasPermission("landlord.limit.extra")){
+                    limit+=plugin.getConfig().getInt("limits.extra",0);
+                }
+                if(plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getName()).findRowCount() >= limit){
+                    player.sendMessage(ChatColor.RED+"You have reached the land limit.");
+                    return true;
+                }
+            }
+
+            if(plugin.hasVault()){
+                if(plugin.getvHandler().hasEconomy()){
+                    Double amt = plugin.getConfig().getDouble("economy.buyPrice", 100.0);
+                    if(amt > 0){
+                        if(!plugin.getvHandler().chargeCash(player, amt)){
+                            player.sendMessage(ChatColor.RED+"It costs " + plugin.getvHandler().formatCash(amt) + " to purchase land.");
+                            return true;
+                        } else {
+                            player.sendMessage(ChatColor.YELLOW+"You have been charged " + plugin.getvHandler().formatCash(amt) + " to purchase land.");
+                        }
+                    }
+
+                }
+            }
             Landlord.getInstance().getDatabase().save(land);
             land.highlightLand(player, ParticleEffect.HAPPY_VILLAGER);
             sender.sendMessage(
                     ChatColor.GREEN + "Successfully claimed chunk (" + currChunk.getX() + ", " +
                             currChunk.getZ() + ") in world " + currChunk.getWorld().getName() + "." );
 
-            player.playSound(player.getLocation(),Sound.FIREWORK_TWINKLE2,10,10);
+            if(plugin.getConfig().getBoolean("options.soundEffects",true)){
+               player.playSound(player.getLocation(),Sound.FIREWORK_TWINKLE2,10,10);
+            }
+
+
             plugin.getMapManager().updateAll();
             //sender.sendMessage(ChatColor.DARK_GREEN + "Land claim command executed!");
         }
@@ -196,15 +228,28 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 player.sendMessage(ChatColor.RED + "You do not own this land.");
                 return true;
             }
-            dbLand.highlightLand(player, ParticleEffect.WITCH_MAGIC);
+            if(plugin.hasVault()){
+                if(plugin.getvHandler().hasEconomy()){
+                    Double amt = plugin.getConfig().getDouble("economy.sellPrice", 100.0);
+                    if(amt > 0){
+                        if(plugin.getvHandler().giveCash(player, amt)){
+                            player.sendMessage(ChatColor.GREEN+"Land sold for " + plugin.getvHandler().formatCash(amt) + ".");
+                            //return true;
+                        }
+                    }
+
+                }
+            } 
             plugin.getDatabase().delete(dbLand);
+            dbLand.highlightLand(player, ParticleEffect.WITCH_MAGIC);
 
             sender.sendMessage(
                     ChatColor.YELLOW + "Successfully unclaimed chunk (" + currChunk.getX() + ", " +
                             currChunk.getZ() + ") in world " + currChunk.getWorld().getName() + "."
             );
-
-            player.playSound(player.getLocation(),Sound.ENDERMAN_HIT,10,.5f);
+            if(plugin.getConfig().getBoolean("options.soundEffects",true)){
+                player.playSound(player.getLocation(),Sound.ENDERMAN_HIT,10,.5f);
+            }
             plugin.getMapManager().updateAll();
 
         }
@@ -251,7 +296,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
             }
             land.highlightLand(player, ParticleEffect.HEART, 2);
             plugin.getDatabase().save(land);
-            player.playSound(player.getLocation(),Sound.ORB_PICKUP,10,.2f);
+            if(plugin.getConfig().getBoolean("options.soundEffects",true)){
+                player.playSound(player.getLocation(),Sound.ORB_PICKUP,10,.2f);
+            }
             sender.sendMessage(ChatColor.GREEN + "Player " + args[1] +" is now a friend of this land.");
             plugin.getMapManager().updateAll();
 
@@ -293,7 +340,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
             }
             land.highlightLand(player, ParticleEffect.ANGRY_VILLAGER, 2);
             plugin.getDatabase().save(land);
-            player.playSound(player.getLocation(),Sound.ZOMBIE_INFECT,10,.5f);
+            if(plugin.getConfig().getBoolean("options.soundEffects",true)){
+                player.playSound(player.getLocation(),Sound.ZOMBIE_INFECT,10,.5f);
+            }
             player.sendMessage(ChatColor.GREEN + "Player " + args[1] + " is no longer a friend of this land.");
 
         }
@@ -312,35 +361,19 @@ public class LandlordCommandExecutor implements CommandExecutor {
      * @return boolean
      */
     private boolean landlord_map(CommandSender sender, String[] args) {
+        if(!plugin.getConfig().getBoolean("options.enableMap", true)){
+            sender.sendMessage(ChatColor.YELLOW+"Land Map is disabled.");
+            return true;
+        }
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
         } else {
-
-            final Player player = (Player) sender;
+            Player player = (Player) sender;
             if(!player.hasPermission("landlord.player.map")){
                 player.sendMessage(ChatColor.RED+"You do not have permission.");
             }
             plugin.getMapManager().toggleMap(player);
 
-
-            /*
-            if(player.getScoreboard().getObjective("Land Map") != null){
-                Bukkit.getServer().getScheduler().cancelAllTasks();
-                player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-                //player.setScoreboard();
-                return true;
-            }
-            BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-            scheduler.scheduleSyncRepeatingTask(plugin, new BukkitRunnable() {
-                @Override
-                public void run() {
-                    //LandMap.displayMap(player);
-                }
-            }, 0L, 5L);
-
-            //LandMap.displayMap(player);
-            return  true;
-            */
         }
         return true;
 

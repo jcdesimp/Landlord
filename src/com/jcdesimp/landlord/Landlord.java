@@ -2,6 +2,7 @@ package com.jcdesimp.landlord;
 
 import com.avaje.ebean.EbeanServer;
 import com.lennardf1989.bukkitex.MyDatabase;
+import net.milkbowl.vault.Vault;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.Configuration;
@@ -24,7 +25,9 @@ public final class Landlord extends JavaPlugin {
     private MyDatabase database;
     private Landlord plugin;
     private MapManager mapManager = new MapManager();
-    private  WorldguardHandler wgHandler;
+    private WorldguardHandler wgHandler;
+    private VaultHandler vHandler;
+
 
 
     @Override
@@ -44,11 +47,22 @@ public final class Landlord extends JavaPlugin {
         getCommand("landlord").setExecutor(new LandlordCommandExecutor(this));
 
         //Worldguard Check
-        if(!hasWorldGuard()){
+        if(!hasWorldGuard() && this.getConfig().getBoolean("worldguard.blockRegionClaim", true)){
             getLogger().warning("Worldguard not found, worldguard features disabled.");
         } else {
             getLogger().info("Worldguard found!");
             wgHandler = new WorldguardHandler(getWorldGuard());
+        }
+
+        //Vault Check
+        if(!hasVault() && this.getConfig().getBoolean("economy.enable", true)){
+            getLogger().warning("Vault not found, economy features disabled.");
+        } else {
+            getLogger().info("Vault found!");
+            vHandler = new VaultHandler();
+            if(!vHandler.hasEconomy()){
+                getLogger().warning("No economy found, economy features disabled.");
+            }
         }
     }
 
@@ -74,6 +88,13 @@ public final class Landlord extends JavaPlugin {
      * ***************************
      *      Dependency Stuff
      * ***************************
+     */
+
+
+    /*
+     * **************
+     *   Worldguard
+     * **************
      */
     private WorldGuardPlugin getWorldGuard() {
         Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
@@ -106,6 +127,26 @@ public final class Landlord extends JavaPlugin {
         return true;
     }
 
+    /*
+     * **************
+     *     Vault
+     * **************
+     */
+
+    public boolean hasVault(){
+        Plugin plugin = getServer().getPluginManager().getPlugin("Vault");
+
+        // WorldGuard may not be loaded
+        if (plugin == null || !(plugin instanceof Vault) || !this.getConfig().getBoolean("economy.enable", true)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public VaultHandler getvHandler(){
+        return vHandler;
+    }
 
 
 

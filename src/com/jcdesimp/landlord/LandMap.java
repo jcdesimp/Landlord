@@ -309,8 +309,8 @@ public class LandMap {
     public void updateMap(){
         nearbyLand = Landlord.getInstance().getDatabase().find(OwnedLand.class)
                 .where()
-                .ge("x", currChunk.getX()-3).le("x", currChunk.getX()+3)
-                .ge("z", currChunk.getZ()-3).le("z",currChunk.getZ()+3)
+                .ge("x", currChunk.getX()-4).le("x", currChunk.getX()+4)
+                .ge("z", currChunk.getZ()-4).le("z",currChunk.getZ()+4)
                 .eq("worldName", currChunk.getWorld().getName())
                 .findList();
         currChunk = mapViewer.getLocation().getChunk();

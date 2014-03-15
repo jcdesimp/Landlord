@@ -165,7 +165,9 @@ public class LandManagerView implements Listener {
             mLand.setPermissions(mLand.permsToString(perms));
             Landlord.getInstance().getDatabase().save(mLand);
             player.sendMessage(ChatColor.GREEN + "Land permissions saved!");
-            player.playSound(player.getLocation(),Sound.FIZZ,10,10);
+            if(Landlord.getInstance().getConfig().getBoolean("options.soundEffects",true)){
+                player.playSound(player.getLocation(),Sound.FIZZ,10,10);
+            }
             mLand.highlightLand(player, ParticleEffect.DRIP_LAVA);
             InventoryCloseEvent.getHandlerList().unregister(this);
         }

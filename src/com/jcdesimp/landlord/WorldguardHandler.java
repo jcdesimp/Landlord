@@ -23,7 +23,7 @@ public class WorldguardHandler {
 
 
     /**
-     * COnstructor
+     * Constructor
      * @param worldguard plugin instance
      */
     public WorldguardHandler(WorldGuardPlugin worldguard) {
@@ -50,9 +50,9 @@ public class WorldguardHandler {
                 //System.out.println("in try!");
                 List<ProtectedRegion> intersects = check.getIntersectingRegions(new ArrayList<ProtectedRegion>(regionManager.getRegions().values()));
                 //System.out.println("got intersects");
-                for (int i = 0; i < intersects.size(); i++) {
+                for (ProtectedRegion intersect : intersects) {
                     //System.out.println(intersects.get(i).toString());
-                    if(!regionManager.getApplicableRegions(intersects.get(i)).canBuild(worldguard.wrapPlayer(player))){
+                    if (!regionManager.getApplicableRegions(intersect).canBuild(worldguard.wrapPlayer(player))) {
                         return false;
                     }
                 }
