@@ -314,6 +314,7 @@ public class LandMap {
                 .eq("worldName", currChunk.getWorld().getName())
                 .findList();
         currChunk = mapViewer.getLocation().getChunk();
+        currDir = "";
     }
 
     private String[] buildMap(Player p) {
@@ -368,8 +369,13 @@ public class LandMap {
                         currSpot = ChatColor.RED + currSpot;
                     }
                 } else {
-                    currSpot = ChatColor.RESET + currSpot;
+                    if(currSpot.equals("∞") || currSpot.equals("\u2062")){
+                        currSpot = ChatColor.RESET + currSpot;
+                    } else {
+                    currSpot = ChatColor.GRAY + currSpot;
+                    }
                 }
+
                 //System.out.println(currSpot);
                 row += currSpot;
 

@@ -1,17 +1,14 @@
 package com.jcdesimp.landlord;
 
-
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import com.DarkBladee12.ParticleAPI.ParticleEffect;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitScheduler;
+
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.bukkit.util.NumberConversions.ceil;
 
 /**
@@ -131,11 +128,27 @@ public class LandlordCommandExecutor implements CommandExecutor {
             sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
         } else {
             Player player = (Player) sender;
+            if(!player.hasPermission("landlord.player.own")){
+                player.sendMessage(ChatColor.RED+"You do not have permission.");
+            }
+
+
+
+
             //sender.sendMessage(ChatColor.GOLD + "Current Location: " + player.getLocation().toString());
             Chunk currChunk = player.getLocation().getChunk();
 
+
+            if(plugin.hasWorldGuard()){
+                if(!plugin.getWgHandler().canClaim(player,currChunk)){
+                    player.sendMessage(ChatColor.RED+"You cannot claim here.");
+                    return true;
+                }
+            }
             OwnedLand land = OwnedLand.landFromProperties(player.getName(), currChunk);
             OwnedLand dbLand = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
+
+
             if(dbLand != null){
                 if (dbLand.getOwnerName().equalsIgnoreCase(player.getName())){
                     player.sendMessage(ChatColor.YELLOW + "You already own this land!");
@@ -173,6 +186,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
             sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
         } else {
             Player player = (Player) sender;
+            if(!player.hasPermission("landlord.player.own")){
+                player.sendMessage(ChatColor.RED+"You do not have permission.");
+            }
             //sender.sendMessage(ChatColor.GOLD + "Current Location: " + player.getLocation().toString());
             Chunk currChunk = player.getLocation().getChunk();
             OwnedLand dbLand = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
@@ -205,7 +221,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
      */
     private boolean landlord_addfriend(CommandSender sender, String[] args) {
 
-        //is sender a plater
+        //is sender a player
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
         } else {
@@ -214,6 +230,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 return true;
             }
             Player player = (Player) sender;
+            if(!player.hasPermission("landlord.player.own")){
+                player.sendMessage(ChatColor.RED+"You do not have permission.");
+            }
 
             Chunk currChunk = player.getLocation().getChunk();
 
@@ -257,6 +276,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 return true;
             }
             Player player = (Player) sender;
+            if(!player.hasPermission("landlord.player.own")){
+                player.sendMessage(ChatColor.RED+"You do not have permission.");
+            }
 
             Chunk currChunk = player.getLocation().getChunk();
             Friend frd = Friend.friendFromName(args[1]);
@@ -295,7 +317,11 @@ public class LandlordCommandExecutor implements CommandExecutor {
         } else {
 
             final Player player = (Player) sender;
+            if(!player.hasPermission("landlord.player.map")){
+                player.sendMessage(ChatColor.RED+"You do not have permission.");
+            }
             plugin.getMapManager().toggleMap(player);
+
 
             /*
             if(player.getScoreboard().getObjective("Land Map") != null){
@@ -334,6 +360,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
             sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
         } else {
             Player player = (Player) sender;
+            if(!player.hasPermission("landlord.player.own")){
+                player.sendMessage(ChatColor.RED+"You do not have permission.");
+            }
             Chunk currChunk = player.getLocation().getChunk();
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
             if( land == null || !land.getOwnerName().equalsIgnoreCase(player.getName()) ){
@@ -361,6 +390,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
             sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
         } else {
             Player player = (Player) sender;
+            if(!player.hasPermission("landlord.player.own")){
+                player.sendMessage(ChatColor.RED+"You do not have permission.");
+            }
 
             //check if page number is valid
             int pageNumber = 1;

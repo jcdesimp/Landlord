@@ -8,6 +8,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="bukkit" level="project" />
+    <orderEntry type="library" name="WorldGuard" level="project" />
+    <orderEntry type="library" name="WorldEdit" level="project" />
   </component>
 </module>
 

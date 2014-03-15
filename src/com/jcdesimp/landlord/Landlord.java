@@ -12,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import javax.persistence.PersistenceException;
 import java.util.ArrayList;
 import java.util.List;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 /**
  *
@@ -21,9 +22,9 @@ import java.util.List;
 public final class Landlord extends JavaPlugin {
 
     private MyDatabase database;
-    private static Landlord plugin;
+    private Landlord plugin;
     private MapManager mapManager = new MapManager();
-    //private LandListener listner;
+    private  WorldguardHandler wgHandler;
 
 
     @Override
@@ -41,6 +42,14 @@ public final class Landlord extends JavaPlugin {
 
         // Command Executor
         getCommand("landlord").setExecutor(new LandlordCommandExecutor(this));
+
+        //Worldguard Check
+        if(!hasWorldGuard()){
+            getLogger().warning("Worldguard not found, worldguard features disabled.");
+        } else {
+            getLogger().info("Worldguard found!");
+            wgHandler = new WorldguardHandler(getWorldGuard());
+        }
     }
 
     @Override
@@ -58,6 +67,46 @@ public final class Landlord extends JavaPlugin {
         return Bukkit.getPluginManager().getPlugin("Landlord");
         //return Bukkit.getPluginManager().getPlugin("MyPlugin");
     }
+
+
+
+    /*
+     * ***************************
+     *      Dependency Stuff
+     * ***************************
+     */
+    private WorldGuardPlugin getWorldGuard() {
+        Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
+
+        // WorldGuard may not be loaded
+        if (plugin == null || !(plugin instanceof WorldGuardPlugin)) {
+            return null; // Maybe you want throw an exception instead
+        }
+
+        return (WorldGuardPlugin) plugin;
+    }
+
+
+    /**
+     * Provides access to the Landlord WorldGuardHandler
+     * @return ll wg handler
+     */
+    public WorldguardHandler getWgHandler(){
+        return wgHandler;
+    }
+
+    public boolean hasWorldGuard() {
+        Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
+
+        // WorldGuard may not be loaded
+        if (plugin == null || !(plugin instanceof WorldGuardPlugin) || !this.getConfig().getBoolean("worldguard.blockRegionClaim", true)) {
+            return false;
+        }
+
+        return true;
+    }
+
+
 
 
     /*
@@ -87,7 +136,7 @@ public final class Landlord extends JavaPlugin {
                 config.getString("database.password","walrus"),
                 config.getString("database.isolation","SERIALIZABLE"),
                 config.getBoolean("database.logging", false),
-                config.getBoolean("database.rebuild", true)
+                config.getBoolean("database.rebuild", false)
         );
 
         config.set("database.rebuild", false);

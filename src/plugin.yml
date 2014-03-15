@@ -5,17 +5,19 @@ author: Jcdesimp
 authors: []
 website: http://dev.bukkit.org/bukkit-plugins/landlord/
 
-softdepend: [Vault, WorldGuard]
+softdepend: [Vault, WorldGuard, WorldEdit]
 
 commands:
    landlord:
       aliases: [land, ll]
       description: The base Landlord command.
       usage: /<command> [player]
-      permission: <plugin name>.player.*
-      permission-message: You don't have <permission>
+      permission: landlord.use
+      permission-message: You don't have permission.
 
 permissions:
+
+
 
     landlord.*:
         description: Gives access to all landlord commands
@@ -26,7 +28,9 @@ permissions:
     landlord.player.*:
             description: Gives access to default player commands.
             children:
+                landlord.use: true
                 landlord.player.own: true
+                landlord.player.map: true
 
     landlord.admin.*:
         description: Gives access to admin commands.
@@ -34,12 +38,37 @@ permissions:
             landlord.admin.unclaim: true
             landlord.admin.list: true
             landlord.admin.manage: true
-            landlord.admin.clearWorld: true
+            landlord.admin.clearworld: true
+            landlord.admin.bypass: true
 
+    landlord.use:
+            description: required to use any commands
+            default: true
+
+    landlord.player.own:
+        description: permission for plot ownership (claim, unclaim, manage, friends, etc.)
+        default: true
+    landlord.player.map:
+        description: permission to use the land map
+        default: true
+
+    landlord.limit.extra:
+        description: gives a larger land limit
+        default: false
 
     landlord.admin.unclaim:
-        description: Unclaim any land
+        description: Unclaim anyone's land
         default: op
     landlord.admin.list:
         description: list all land owned by a user
         default: op
+    landlord.admin.manage:
+        description: manage anyone's land
+        default: op
+    landlord.admin.clearworld:
+        description: clear a player's land in a world or all land in a world
+        default: op
+    landlord.admin.bypass:
+        description: bypass land protections
+        default: op
+
