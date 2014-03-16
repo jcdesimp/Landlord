@@ -23,9 +23,9 @@ economy:
     #Enable economy integration features
     enable: false
     #Cost of claiming land
-    buyPrice: 500
+    buyPrice: 100
     #Money given to player when unclaiming land
-    sellPrice: 500
+    sellPrice: 50
 
 #Worldguard Options (Requires Worldguard)
 worldguard:

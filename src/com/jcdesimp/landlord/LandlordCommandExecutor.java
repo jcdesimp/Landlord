@@ -41,7 +41,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             if(args.length == 0){
 
                 //landlord
-                return landlord(sender, label);
+                return landlord(sender, args, label);
 
             } else if(args[0].equalsIgnoreCase("claim") || args[0].equalsIgnoreCase("buy")) {
 
@@ -75,7 +75,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 return landlord_clearWorld(sender, args, label);
 
             } else {
-                return landlord(sender, label);
+                return landlord(sender, args, label);
             }
 
         } //If this has happened the function will return true.
@@ -101,8 +101,8 @@ public class LandlordCommandExecutor implements CommandExecutor {
      * @param sender who executed the command
      * @return boolean
      */
-    private boolean landlord(CommandSender sender, String label) {
-        String helpMsg = "";
+    private boolean landlord(CommandSender sender, String[] args, String label) {
+        /*String helpMsg = "";
         helpMsg+=ChatColor.DARK_GREEN + "--|| Landlord v"+Landlord.getInstance().getDescription().getVersion() +
                 " Created by " + ChatColor.BLUE+"Jcdesimp "+ChatColor.DARK_GREEN +"||--\n"+
                 ChatColor.GRAY+"(Aliases: /landlord, /land, or /ll)\n"+
@@ -116,7 +116,88 @@ public class LandlordCommandExecutor implements CommandExecutor {
         helpMsg+=ChatColor.DARK_AQUA+"/"+label + " map" + ChatColor.RESET + " - Toggle the land map.\n";
         helpMsg+=ChatColor.DARK_AQUA+"/"+label + " list" + ChatColor.RESET + " - List all your owned land.\n";
         sender.sendMessage(helpMsg);
+        return true;*/
+
+
+        //check if page number is valid
+        int pageNumber = 1;
+        if (args.length > 1 && args[0].equals("help")){
+            try{
+                pageNumber = Integer.parseInt(args[1]);}
+            catch (NumberFormatException e){
+                sender.sendMessage(ChatColor.RED+"That is not a valid page number.");
+                return true;
+            }
+        }
+
+        //List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getName()).findList();
+
+        String header = ChatColor.DARK_GREEN + "--|| Landlord v"+Landlord.getInstance().getDescription().getVersion() +
+                " Created by " + ChatColor.BLUE+"Jcdesimp "+ChatColor.DARK_GREEN +"||--\n"+
+                ChatColor.GRAY+"(Aliases: /landlord, /land, or /ll)\n";
+
+        ArrayList<String> helpList = new ArrayList<String>();
+
+
+        helpList.add(ChatColor.DARK_AQUA+"/"+label + " help [page #]" + ChatColor.RESET + " - Show this help message.\n");
+        String claim = ChatColor.DARK_AQUA+"/"+label + " claim (or "+"/"+label +" buy)" + ChatColor.RESET + " - Claim this chunk.";
+        if(plugin.hasVault()){
+            if(plugin.getvHandler().hasEconomy() && plugin.getConfig().getDouble("economy.buyPrice", 100.0)>0){
+                claim += " Costs "+plugin.getvHandler().formatCash(plugin.getConfig().getDouble("economy.buyPrice", 100.0))+" to claim.";
+            }
+        }
+        helpList.add(claim+"\n");
+        String unclaim = ChatColor.DARK_AQUA+"/"+label + " unclaim [x,z] [world] (or "+"/"+label +" sell)" + ChatColor.RESET + " - Unclaim this chunk.";
+        if(plugin.hasVault()){
+            if(plugin.getvHandler().hasEconomy() && plugin.getConfig().getDouble("economy.sellPrice", 50.0)>0){
+                unclaim += " Get "+plugin.getvHandler().formatCash(plugin.getConfig().getDouble("economy.sellPrice", 50.0))+" per unclaim.";
+            }
+        }
+        helpList.add(unclaim+"\n");
+
+        helpList.add(ChatColor.DARK_AQUA+"/"+label + " addfriend <player name>" + ChatColor.RESET + " - Add a friend to this land.\n");
+        helpList.add(ChatColor.DARK_AQUA+"/"+label + " remfriend <player name>" + ChatColor.RESET + " - Remove a friend from this land.\n");
+        helpList.add(ChatColor.DARK_AQUA+"/"+label + " manage" + ChatColor.RESET + " - Manage permissions for this land.\n");
+        helpList.add(ChatColor.DARK_AQUA+"/"+label + " list" + ChatColor.RESET + " - List all your owned land.\n");
+        if(sender.hasPermission("landlord.player.map") && plugin.getConfig().getBoolean("options.enableMap",true)){
+            helpList.add(ChatColor.DARK_AQUA+"/"+label + " map" + ChatColor.RESET + " - Toggle the land map.\n");
+        }
+        if(sender.hasPermission("landlord.player.map") && plugin.getConfig().getBoolean("options.enableMap",true)){
+            helpList.add(ChatColor.DARK_AQUA+"/"+label + " map" + ChatColor.RESET + " - Toggle the land map.\n");
+        }
+        if(sender.hasPermission("landlord.admin.list")){
+            helpList.add(ChatColor.DARK_AQUA+"/"+label + " list <player>" + ChatColor.RESET + " - List land owned by another player.\n");
+        }
+        if(sender.hasPermission("landlord.admin.clearworld")){
+            helpList.add(ChatColor.DARK_AQUA+"/"+label + " clearworld <world> [player]" + ChatColor.RESET + " - Delete land all owned by a player in a world." +
+                    " Delete all land of a world from console.\n");
+        }
+        //OwnedLand curr = myLand.get(0);
+
+        //Amount to be displayed per page
+        final int numPerPage = 5;
+
+        int numPages = ceil((double)helpList.size()/(double)numPerPage);
+        if(pageNumber > numPages){
+            sender.sendMessage(ChatColor.RED+"That is not a valid page number.");
+            return true;
+        }
+        String pMsg = header;
+        if (pageNumber == numPages){
+            for(int i = (numPerPage*pageNumber-numPerPage); i<helpList.size(); i++){
+                pMsg+=helpList.get(i);
+            }
+            pMsg+=ChatColor.DARK_GREEN+"------------------------------";
+        } else {
+            for(int i = (numPerPage*pageNumber-numPerPage); i<(numPerPage*pageNumber); i++){
+                pMsg+=helpList.get(i);
+            }
+            pMsg+=ChatColor.DARK_GREEN+"--- do"+ChatColor.YELLOW+" /"+label+" help "+(pageNumber+1)+ChatColor.DARK_GREEN+" for next page ---";
+        }
+
+        sender.sendMessage(pMsg);
         return true;
+
     }
 
     /**
@@ -174,7 +255,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                     limit+=plugin.getConfig().getInt("limits.extra",0);
                 }
                 if(plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getName()).findRowCount() >= limit){
-                    player.sendMessage(ChatColor.RED+"You have reached the land limit.");
+                    player.sendMessage(ChatColor.RED+"You can only own " + limit + " chunks of land.");
                     return true;
                 }
             }

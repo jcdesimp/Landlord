@@ -1,6 +1,6 @@
 name: Landlord
 main: com.jcdesimp.landlord.Landlord
-version: 0.1
+version: 0.2
 author: Jcdesimp
 authors: []
 website: http://dev.bukkit.org/bukkit-plugins/landlord/
@@ -11,7 +11,7 @@ commands:
    landlord:
       aliases: [land, ll]
       description: The base Landlord command.
-      usage: /<command> [player]
+      usage: /<command> [command]
       permission: landlord.use
       permission-message: You don't have permission.
 
