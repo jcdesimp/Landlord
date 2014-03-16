@@ -51,7 +51,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             } else if(args[0].equalsIgnoreCase("unclaim") || args[0].equalsIgnoreCase("sell")) {
 
                 //landlord unclaim
-                return landlord_unclaim(sender, args);
+                return landlord_unclaim(sender, args, label);
             } else if(args[0].equalsIgnoreCase("addfriend")) {
 
                 //landlord addfriend
@@ -67,6 +67,12 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
             } else if(args[0].equalsIgnoreCase("list")) {
                 return landlord_list(sender, args, label);
+
+            } else if(args[0].equalsIgnoreCase("listplayer")) {
+                return landlord_listplayer(sender, args, label);
+
+            } else if(args[0].equalsIgnoreCase("clearworld")) {
+                return landlord_clearWorld(sender, args, label);
 
             } else {
                 return landlord(sender, label);
@@ -101,8 +107,8 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 " Created by " + ChatColor.BLUE+"Jcdesimp "+ChatColor.DARK_GREEN +"||--\n"+
                 ChatColor.GRAY+"(Aliases: /landlord, /land, or /ll)\n"+
                 ChatColor.DARK_AQUA+"/"+label + " help" + ChatColor.RESET + " - Show this help message.\n"+
-                ChatColor.DARK_AQUA+"/"+label + " claim (or "+"/"+label +" buy) [x,z] [world]" + ChatColor.RESET + " - Claim this chunk.\n"+
-                ChatColor.DARK_AQUA+"/"+label + " unclaim (or "+"/"+label +" sell)" + ChatColor.RESET + " - Unclaim this chunk.\n"+
+                ChatColor.DARK_AQUA+"/"+label + " claim (or "+"/"+label +" buy)" + ChatColor.RESET + " - Claim this chunk.\n"+
+                ChatColor.DARK_AQUA+"/"+label + " unclaim [x,z] [world] (or "+"/"+label +" sell)" + ChatColor.RESET + " - Unclaim this chunk.\n"+
                 ChatColor.DARK_AQUA+"/"+label + " addfriend <player name>" + ChatColor.RESET + " - Add a friend to this land.\n"+
                 ChatColor.DARK_AQUA+"/"+label + " remfriend <player name>" + ChatColor.RESET + " - Remove a friend from this land.\n"+
                 ChatColor.DARK_AQUA+"/"+label + " manage" + ChatColor.RESET + " - Manage permissions for this land.\n"
@@ -130,6 +136,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             Player player = (Player) sender;
             if(!player.hasPermission("landlord.player.own")){
                 player.sendMessage(ChatColor.RED+"You do not have permission.");
+                return true;
             }
 
 
@@ -190,7 +197,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             land.highlightLand(player, ParticleEffect.HAPPY_VILLAGER);
             sender.sendMessage(
                     ChatColor.GREEN + "Successfully claimed chunk (" + currChunk.getX() + ", " +
-                            currChunk.getZ() + ") in world " + currChunk.getWorld().getName() + "." );
+                            currChunk.getZ() + ") in world \'" + currChunk.getWorld().getName() + "\'." );
 
             if(plugin.getConfig().getBoolean("options.soundEffects",true)){
                player.playSound(player.getLocation(),Sound.FIREWORK_TWINKLE2,10,10);
@@ -211,20 +218,53 @@ public class LandlordCommandExecutor implements CommandExecutor {
      * @param args given with command
      * @return boolean
      */
-    private boolean landlord_unclaim(CommandSender sender, String[] args) {
+    private boolean landlord_unclaim(CommandSender sender, String[] args, String label) {
 
         //is sender a plater
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
         } else {
             Player player = (Player) sender;
-            if(!player.hasPermission("landlord.player.own")){
+            if(!player.hasPermission("landlord.player.own") && !player.hasPermission("landlord.admin.unclaim")){
                 player.sendMessage(ChatColor.RED+"You do not have permission.");
+                return true;
             }
             //sender.sendMessage(ChatColor.GOLD + "Current Location: " + player.getLocation().toString());
             Chunk currChunk = player.getLocation().getChunk();
-            OwnedLand dbLand = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
-            if (dbLand == null || !dbLand.getOwnerName().equalsIgnoreCase(player.getName())){
+
+            int x = currChunk.getX();
+            int z = currChunk.getZ();
+            String worldname = currChunk.getWorld().getName();
+
+            if(args.length>1){
+                try{
+                    String[] coords = args[1].split(",");
+                    //System.out.println("COORDS: "+coords);
+                    x = Integer.parseInt(coords[0]);
+                    z = Integer.parseInt(coords[1]);
+                    if(args.length>2){
+                        worldname = args[2];
+                        if(plugin.getServer().getWorld(worldname) == null){
+                            player.sendMessage(ChatColor.RED + "World \'"+worldname + "\' does not exist.");
+                            return true;
+                        }
+                    }
+                } catch (NumberFormatException e){
+                    //e.printStackTrace();
+                    player.sendMessage(ChatColor.RED+"usage: /"+label +" "+ args[0]+ " [x,z] [world]");
+                    return true;
+
+                } catch (ArrayIndexOutOfBoundsException e){
+                    player.sendMessage(ChatColor.RED+"usage: /"+label +" "+ args[0]+" [x,z] [world]");
+                    return true;
+                }
+            } else {
+
+            }
+            OwnedLand dbLand = OwnedLand.getLandFromDatabase(x, z, worldname);
+
+
+            if (dbLand == null || (!dbLand.getOwnerName().equalsIgnoreCase(player.getName()) && !player.hasPermission("landlord.admin.unclaim"))){
                 player.sendMessage(ChatColor.RED + "You do not own this land.");
                 return true;
             }
@@ -239,13 +279,16 @@ public class LandlordCommandExecutor implements CommandExecutor {
                     }
 
                 }
-            } 
+            }
+            if(!player.getName().equals(dbLand.getOwnerName())){
+                player.sendMessage(ChatColor.YELLOW+"Unclaimed " + dbLand.getOwnerName() + "'s land.");
+            }
             plugin.getDatabase().delete(dbLand);
             dbLand.highlightLand(player, ParticleEffect.WITCH_MAGIC);
 
             sender.sendMessage(
                     ChatColor.YELLOW + "Successfully unclaimed chunk (" + currChunk.getX() + ", " +
-                            currChunk.getZ() + ") in world " + currChunk.getWorld().getName() + "."
+                            currChunk.getZ() + ") in world \'" + currChunk.getWorld().getName() + "\'."
             );
             if(plugin.getConfig().getBoolean("options.soundEffects",true)){
                 player.playSound(player.getLocation(),Sound.ENDERMAN_HIT,10,.5f);
@@ -277,6 +320,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             Player player = (Player) sender;
             if(!player.hasPermission("landlord.player.own")){
                 player.sendMessage(ChatColor.RED+"You do not have permission.");
+                return true;
             }
 
             Chunk currChunk = player.getLocation().getChunk();
@@ -325,6 +369,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             Player player = (Player) sender;
             if(!player.hasPermission("landlord.player.own")){
                 player.sendMessage(ChatColor.RED+"You do not have permission.");
+                return true;
             }
 
             Chunk currChunk = player.getLocation().getChunk();
@@ -371,6 +416,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             Player player = (Player) sender;
             if(!player.hasPermission("landlord.player.map")){
                 player.sendMessage(ChatColor.RED+"You do not have permission.");
+                return true;
             }
             plugin.getMapManager().toggleMap(player);
 
@@ -395,12 +441,16 @@ public class LandlordCommandExecutor implements CommandExecutor {
             Player player = (Player) sender;
             if(!player.hasPermission("landlord.player.own")){
                 player.sendMessage(ChatColor.RED+"You do not have permission.");
+                return true;
             }
             Chunk currChunk = player.getLocation().getChunk();
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
-            if( land == null || !land.getOwnerName().equalsIgnoreCase(player.getName()) ){
+            if( land == null || ( !land.getOwnerName().equalsIgnoreCase(player.getName()) && !player.hasPermission("landlord.admin.manage") ) ){
                 player.sendMessage(ChatColor.RED + "You do not own this land.");
                 return true;
+            }
+            if(!land.getOwnerName().equalsIgnoreCase(player.getName())){
+                player.sendMessage(ChatColor.YELLOW+"Managing someone else's land.");
             }
             LandManagerView ui = new LandManagerView(player, land);
             ui.showUI();
@@ -425,6 +475,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             Player player = (Player) sender;
             if(!player.hasPermission("landlord.player.own")){
                 player.sendMessage(ChatColor.RED+"You do not have permission.");
+                return true;
             }
 
             //check if page number is valid
@@ -477,5 +528,106 @@ public class LandlordCommandExecutor implements CommandExecutor {
         }
         return  true;
     }
+
+    private boolean landlord_listplayer(CommandSender sender, String[] args, String label){
+        String owner = "";
+
+        //sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
+        if(args.length>1){
+            owner = args[1];
+        } else {
+            sender.sendMessage(ChatColor.RED+"usage: /" + label + " listplayer <player> [page#]");
+            return true;
+        }
+
+        //Player player = (Player) sender;
+        if(!sender.hasPermission("landlord.admin.list")){
+            sender.sendMessage(ChatColor.RED+"You do not have permission.");
+            return true;
+        }
+
+        //check if page number is valid
+        int pageNumber = 1;
+        if (args.length > 2){
+            try{
+                pageNumber = Integer.parseInt(args[2]);}
+            catch (NumberFormatException e){
+                sender.sendMessage(ChatColor.RED+"That is not a valid page number.");
+                return true;
+            }
+        }
+
+        List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().ieq("ownerName", owner).findList();
+        if(myLand.size()==0){
+            sender.sendMessage(ChatColor.YELLOW+ owner +" does not own any land!");
+        } else {
+            String header = ChatColor.DARK_GREEN+"   | ( X, Z ) - World Name |     \n";
+            ArrayList<String> landList = new ArrayList<String>();
+            //OwnedLand curr = myLand.get(0);
+            for (OwnedLand aMyLand : myLand) {
+                landList.add((ChatColor.GOLD + "     (" + aMyLand.getX() + ", " + aMyLand.getZ() + ") - "
+                        + aMyLand.getWorldName()) + "\n")
+                ;
+            }
+            //Amount to be displayed per page
+            final int numPerPage = 7;
+
+            int numPages = ceil((double)landList.size()/(double)numPerPage);
+            if(pageNumber > numPages){
+                sender.sendMessage(ChatColor.RED+"That is not a valid page number.");
+                return true;
+            }
+            String pMsg = ChatColor.DARK_GREEN+"--- " +ChatColor.YELLOW+ owner +"'s Owned Land"+ChatColor.DARK_GREEN+" ---"+ChatColor.YELLOW+" Page "+pageNumber+ChatColor.DARK_GREEN+" ---\n"+header;
+            if (pageNumber == numPages){
+                for(int i = (numPerPage*pageNumber-numPerPage); i<landList.size(); i++){
+                    pMsg+=landList.get(i);
+                }
+                pMsg+=ChatColor.DARK_GREEN+"------------------------------";
+            } else {
+                for(int i = (numPerPage*pageNumber-numPerPage); i<(numPerPage*pageNumber); i++){
+                    pMsg+=landList.get(i);
+                }
+                pMsg+=ChatColor.DARK_GREEN+"--- do"+ChatColor.YELLOW+" /"+label+" list "+(pageNumber+1)+ChatColor.DARK_GREEN+" for next page ---";
+            }
+
+            sender.sendMessage(pMsg);
+        }
+
+
+        return  true;
+    }
+
+    private boolean landlord_clearWorld(CommandSender sender, String[] args, String label){
+        if(!sender.hasPermission("landlord.admin.clearworld")){
+            sender.sendMessage(ChatColor.RED+"You do not have permission.");
+            return true;
+        }
+        if(args.length > 1){
+            List<OwnedLand> land;
+            if(args.length > 2){
+                land = plugin.getDatabase().find(OwnedLand.class).where().ieq("ownerName",args[2]).eq("worldName",args[1]).findList();
+            } else {
+                if(sender instanceof Player){
+                    sender.sendMessage(ChatColor.RED+"You can only delete entire worlds from the console.");
+                    return true;
+                }
+                land = plugin.getDatabase().find(OwnedLand.class).where().eq("worldName",args[1]).findList();
+            } 
+            if(land.isEmpty()){
+                sender.sendMessage(ChatColor.RED + "No land to remove.");
+                return true;
+            }
+
+            plugin.getDatabase().delete(land);
+            plugin.getMapManager().updateAll();
+            sender.sendMessage(ChatColor.GREEN+"Land(s) deleted!");
+
+        } else {
+            sender.sendMessage(ChatColor.RED + "format: " + label + " clearworld <world> [<player>]");
+        }
+        return true;
+    }
+
+
 
 }

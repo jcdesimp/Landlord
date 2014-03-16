@@ -36,12 +36,13 @@ public final class Landlord extends JavaPlugin {
         //listner = new LandListener();
         getServer().getPluginManager().registerEvents(new LandListener(this), this);
         getServer().getPluginManager().registerEvents(mapManager, this);
+        //Generates new config file if not present
+        saveDefaultConfig();
         setupDatabase();
         //getLogger().info(getDescription().getName() + ": Created by Jcdesimp");
         getLogger().info("Created by Jcdesimp!");
 
-        //Generates new config file if not present
-        saveDefaultConfig();
+
 
         // Command Executor
         getCommand("landlord").setExecutor(new LandlordCommandExecutor(this));

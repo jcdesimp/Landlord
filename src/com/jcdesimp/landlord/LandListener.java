@@ -55,6 +55,9 @@ public class LandListener implements Listener {
         //System.out.println("Attacker: " + attacker.getType().toString());
         if(attacker.getType().toString().equals("PLAYER")){
             Player p = (Player)attacker;
+            if(p.hasPermission("landlord.admin.bypass")){
+                return;
+            }
             if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.HARM_ANIMALS)){
                 if(isItemFrame){
                     p.sendMessage(ChatColor.RED+"You cannot break that on this land.");
@@ -73,6 +76,9 @@ public class LandListener implements Listener {
             Player p;
             if(a.getShooter() instanceof Player){
                 p = (Player)a.getShooter();
+                if(p.hasPermission("landlord.admin.bypass")){
+                    return;
+                }
                 if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.HARM_ANIMALS)){
                     if(isItemFrame){
                         p.sendMessage(ChatColor.RED+"You cannot break that on this land.");
@@ -102,6 +108,9 @@ public class LandListener implements Listener {
             return;
         }
         Player p = event.getPlayer();
+        if(p.hasPermission("landlord.admin.bypass")){
+            return;
+        }
         if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
             p.sendMessage(ChatColor.RED + "You are not allowed to build on this land.");
             event.setCancelled(true);
@@ -116,6 +125,9 @@ public class LandListener implements Listener {
             return;
         }
         Player p = event.getPlayer();
+        if(p.hasPermission("landlord.admin.bypass")){
+            return;
+        }
 
         if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
             p.sendMessage(ChatColor.RED + "You are not allowed to break on this land.");
@@ -142,6 +154,9 @@ public class LandListener implements Listener {
             return;
         }
         Player p = event.getPlayer();
+        if(p.hasPermission("landlord.admin.bypass")){
+            return;
+        }
         if(event.getAction().equals(Action.PHYSICAL) && !land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
             p.sendMessage(ChatColor.RED + "You are not allowed to destroy crops on this land.");
             event.setCancelled(true);
@@ -166,6 +181,9 @@ public class LandListener implements Listener {
         }
         if(remover.getType().toString().equals("PLAYER")){
             Player p = (Player)remover;
+            if(p.hasPermission("landlord.admin.bypass")){
+                return;
+            }
             if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
                 p.sendMessage(ChatColor.RED+"You cannot break that on this land.");
                 event.setCancelled(true);
@@ -190,6 +208,9 @@ public class LandListener implements Listener {
         }
         if(remover.getType().toString().equals("PLAYER")){
             Player p = (Player)remover;
+            if(p.hasPermission("landlord.admin.bypass")){
+                return;
+            }
             if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
                 p.sendMessage(ChatColor.RED+"You cannot place that on this land.");
                 event.setCancelled(true);
@@ -208,7 +229,11 @@ public class LandListener implements Listener {
         if(land == null){
             return;
         }
+
         Player p=event.getPlayer();
+        if(p.hasPermission("landlord.admin.bypass")){
+            return;
+        }
         if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
             p.sendMessage(ChatColor.RED+"You cannot place that on this land.");
             event.setCancelled(true);
@@ -223,6 +248,9 @@ public class LandListener implements Listener {
             return;
         }
         Player p=event.getPlayer();
+        if(p.hasPermission("landlord.admin.bypass")){
+            return;
+        }
         if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
             p.sendMessage(ChatColor.RED+"You cannot do that on this land.");
             event.setCancelled(true);

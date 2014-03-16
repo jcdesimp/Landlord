@@ -328,34 +328,20 @@ public class LandMap {
 
         String[] mapRows = new String[mapBoard.length + 3];
 
-        //Chunk pChunk = p.getLocation().getChunk();
-        //OwnedLand.getLandFromDatabase(1,2,world)
-        //System.out.println(currChunk);
         if(!currChunk.equals(mapViewer.getLocation().getChunk())){
             updateMap();
         }
-        //System.out.println("Viewer: "+mapViewer);
-        //System.out.println("EndQuery: "+currChunk);
-        //System.out.println("nearLand: "+nearbyLand);
         for(int z = 0; z < mapBoard.length; z++){
             String row = "";
 
             //if curr chunk
             for(int x = 0; x < mapBoard[z].length; x++){
-                //System.out.println("Iteration: "+z +", "+x);
                 List<OwnedLand> filteredList =
                         Landlord.getInstance().getDatabase().filter(OwnedLand.class)
                                 .eq("x", currChunk.getX()-radius+x)
                                 .eq("z", currChunk.getZ()-radius+z)
                                 .eq("worldName", currChunk.getWorld().getName())
                                 .filter(nearbyLand);
-                //System.out.println("FilteredList: "+filteredList);
-                /*
-                OwnedLand ol = OwnedLand.getLandFromDatabase((pChunk.getX()-radius)+x,
-                        (pChunk.getZ()-radius)+z,
-                        pChunk.getWorld().getName());
-
-                        */
                 String currSpot = mapBoard[z][x];
 
 
