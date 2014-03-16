@@ -191,10 +191,14 @@ public abstract class MyDatabase {
 
                 //Query passed without throwing an exception, a database therefore already exists
                 databaseExists = true;
-                break;
+                //////CHANGE///////
+                //break;
             }
             catch (Exception ex) {
-                //Do nothing
+                //databaseExists = false;
+
+                //////CHANGE///////
+                rebuild = true;
             }
         }
 
@@ -218,8 +222,13 @@ public abstract class MyDatabase {
             }
         }
 
-        //Generate a DropDDL-script
-        gen.runScript(true, gen.generateDropDdl());
+        //////CHANGE///////
+        if(databaseExists){
+            //Generate a DropDDL-script
+            gen.runScript(true, gen.generateDropDdl());
+        }
+
+
 
 
         //If SQLite is being used, the database has to reloaded to release all resources

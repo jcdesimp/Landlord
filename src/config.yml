@@ -33,7 +33,3 @@ worldguard:
     #UNLESS they have build permissions within that region.
     blockRegionClaim: true
 
-#Database Options
-database:
-    #Clear database on next restart/reload, WARNING! Deletes ALL owned land.
-    rebuild: false
