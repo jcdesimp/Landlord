@@ -715,7 +715,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
 
     /**
-     * Relaod landlord configuration file
+     * Reload landlord configuration file
      * @param sender who executed the command
      * @param args given with command
      * @param label exact command (or alias) run
@@ -738,13 +738,20 @@ public class LandlordCommandExecutor implements CommandExecutor {
             Player player = (Player) sender;
             if(!player.hasPermission("landlord.player.info")){
                 player.sendMessage(ChatColor.RED+"You do not have permission.");
+                return true;
             }
             Chunk currChunk = player.getLocation().getChunk();
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
             String owner = ChatColor.GRAY + "" + ChatColor.ITALIC + "None";
             if( land != null ){
+
                 owner = ChatColor.GOLD + land.getOwnerName();
+            } else {
+                land = OwnedLand.landFromProperties("NONE",currChunk);
             }
+
+
+            land.highlightLand(player, ParticleEffect.DRIP_LAVA);
             String msg = ChatColor.DARK_GREEN + "--- You are in chunk " + ChatColor.GOLD + "(" + currChunk.getX() + ", " + currChunk.getZ() + ") " +
                     ChatColor.DARK_GREEN + " in world \"" + ChatColor.GOLD + currChunk.getWorld().getName()  + ChatColor.DARK_GREEN + "\"\n"+ "----- Owned by: " +
                     owner;
