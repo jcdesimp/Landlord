@@ -750,8 +750,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 land = OwnedLand.landFromProperties("NONE",currChunk);
             }
 
-
-            land.highlightLand(player, ParticleEffect.DRIP_LAVA);
+            if(plugin.getConfig().getBoolean("options.particleEffects")){
+                land.highlightLand(player, ParticleEffect.DRIP_LAVA);
+            }
             String msg = ChatColor.DARK_GREEN + "--- You are in chunk " + ChatColor.GOLD + "(" + currChunk.getX() + ", " + currChunk.getZ() + ") " +
                     ChatColor.DARK_GREEN + " in world \"" + ChatColor.GOLD + currChunk.getWorld().getName()  + ChatColor.DARK_GREEN + "\"\n"+ "----- Owned by: " +
                     owner;
