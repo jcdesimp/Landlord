@@ -31,6 +31,7 @@ permissions:
                 landlord.use: true
                 landlord.player.own: true
                 landlord.player.map: true
+                landlord.player.info: true
 
     landlord.admin.*:
         description: Gives access to admin commands.
@@ -40,6 +41,7 @@ permissions:
             landlord.admin.manage: true
             landlord.admin.clearworld: true
             landlord.admin.bypass: true
+            landlord.admin.reload: true
 
     landlord.use:
             description: required to use any commands
@@ -50,6 +52,9 @@ permissions:
         default: true
     landlord.player.map:
         description: permission to use the land map
+        default: true
+    landlord.player.info:
+        description: Permission to use land info
         default: true
 
     landlord.limit.extra:
@@ -71,4 +76,6 @@ permissions:
     landlord.admin.bypass:
         description: bypass land protections
         default: op
-
+    landlord.admin.reload:
+        description: reload plugin configuration
+        default: op

@@ -74,6 +74,10 @@ public class LandlordCommandExecutor implements CommandExecutor {
             } else if(args[0].equalsIgnoreCase("clearworld")) {
                 return landlord_clearWorld(sender, args, label);
 
+            } else if(args[0].equalsIgnoreCase("reload")) {
+                return landlord_reload(sender,args,label);
+            } else if(args[0].equalsIgnoreCase("info")) {
+                return landlord_info(sender,args,label);
             } else {
                 return landlord(sender, args, label);
             }
@@ -707,6 +711,48 @@ public class LandlordCommandExecutor implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "format: " + label + " clearworld <world> [<player>]");
         }
         return true;
+    }
+
+
+    /**
+     * Relaod landlord configuration file
+     * @param sender who executed the command
+     * @param args given with command
+     * @param label exact command (or alias) run
+     * @return boolean of success
+     */
+    private boolean landlord_reload(CommandSender sender, String[] args, String label){
+        if(sender.hasPermission("landlord.admin.reload")){
+            plugin.reloadConfig();
+            sender.sendMessage(ChatColor.GREEN+"Landlord config reloaded.");
+            return true;
+        }
+        sender.sendMessage(ChatColor.RED+"You do not have permission.");
+        return true;
+    }
+
+    private boolean landlord_info(CommandSender sender, String[] args, String label){
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
+        } else {
+            Player player = (Player) sender;
+            if(!player.hasPermission("landlord.player.info")){
+                player.sendMessage(ChatColor.RED+"You do not have permission.");
+            }
+            Chunk currChunk = player.getLocation().getChunk();
+            OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
+            String owner = ChatColor.GRAY + "" + ChatColor.ITALIC + "None";
+            if( land != null ){
+                owner = ChatColor.GOLD + land.getOwnerName();
+            }
+            String msg = ChatColor.DARK_GREEN + "--- You are in chunk " + ChatColor.GOLD + "(" + currChunk.getX() + ", " + currChunk.getZ() + ") " +
+                    ChatColor.DARK_GREEN + " in world \"" + ChatColor.GOLD + currChunk.getWorld().getName()  + ChatColor.DARK_GREEN + "\"\n"+ "----- Owned by: " +
+                    owner;
+            player.sendMessage(msg);
+
+        }
+        return true;
+
     }
 
 

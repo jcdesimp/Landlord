@@ -11,6 +11,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import javax.persistence.PersistenceException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
@@ -41,6 +42,14 @@ public final class Landlord extends JavaPlugin {
         setupDatabase();
         //getLogger().info(getDescription().getName() + ": Created by Jcdesimp");
         getLogger().info("Created by Jcdesimp!");
+
+        //Plugin Metrics
+        try {
+            Metrics metrics = new Metrics(this);
+            metrics.start();
+        } catch (IOException e) {
+            // Failed to submit the stats :-(
+        }
 
 
 
