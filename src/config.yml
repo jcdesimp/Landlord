@@ -32,4 +32,3 @@ worldguard:
     #Prevent players from claiming chunks that intersect with worldguard regions,
     #UNLESS they have build permissions within that region.
     blockRegionClaim: true
-
