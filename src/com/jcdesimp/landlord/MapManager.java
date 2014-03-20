@@ -3,6 +3,7 @@ package com.jcdesimp.landlord;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
@@ -68,5 +69,12 @@ public class MapManager implements Listener {
             remMap(event.getPlayer().getName());
         }
 
+    }
+
+    @EventHandler
+    public void playerWorldChange(PlayerChangedWorldEvent event){
+        if (mapList.containsKey(event.getPlayer().getName())){
+            remMap(event.getPlayer().getName());
+        }
     }
 }
