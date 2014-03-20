@@ -184,6 +184,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
             helpList.add(ChatColor.DARK_AQUA+"/"+label + " clearworld <world> [player]" + ChatColor.RESET + " - Delete land all owned by a player in a world." +
                     " Delete all land of a world from console.\n");
         }
+        if(sender.hasPermission("landlord.admin.reload")){
+            helpList.add(ChatColor.DARK_AQUA+"/"+label + " reload" + ChatColor.RESET + " - Reloads the Landlord config file.\n");
+        }
         //OwnedLand curr = myLand.get(0);
 
         //Amount to be displayed per page
