@@ -41,7 +41,7 @@ public class LandMap {
         this.schedulerId = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Landlord.getInstance(), new BukkitRunnable() {
             @Override
             public void run() {
-                if(currDir!=getPlayerDirection(mapViewer) || currChunk!=mapViewer.getLocation().getChunk()){
+                if(!currDir.equals(getPlayerDirection(mapViewer)) || !currChunk.equals(mapViewer.getLocation().getChunk())){
                     displayMap(mapViewer);
                     currDir = getPlayerDirection(mapViewer);
                 }
@@ -71,8 +71,13 @@ public class LandMap {
         team.addPlayer(p);
 
         Objective objective = board.registerNewObjective("Land Map", "dummy");
+        /*ChatColor.STRIKETHROUGH+""+ChatColor.DARK_GREEN+
+        "=== "+ChatColor.RESET+""+ChatColor.DARK_GREEN +"Land Map"
+                +ChatColor.STRIKETHROUGH+""+ChatColor.DARK_GREEN+" ==="*/
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        //objective.setDisplayName("MAP");
+        objective.setDisplayName(ChatColor.YELLOW+""+ChatColor.STRIKETHROUGH+
+                "=="+ChatColor.RESET+""+ChatColor.GOLD +" Land Map "
+                +ChatColor.YELLOW+""+ChatColor.STRIKETHROUGH+"==");
         String[] mapData = buildMap(p);
         for(int i = 0; i<mapData.length; i++){
             if(mapData[i].length()<21){

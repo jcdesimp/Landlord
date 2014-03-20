@@ -45,6 +45,11 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 //landlord
                 return landlord(sender, args, label);
 
+            } else if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("buy")) {
+
+                //landlord claim
+                return landlord_help(sender, args, label);
+
             } else if(args[0].equalsIgnoreCase("claim") || args[0].equalsIgnoreCase("buy")) {
 
                 //landlord claim
@@ -113,6 +118,14 @@ public class LandlordCommandExecutor implements CommandExecutor {
      * @return boolean
      */
     private boolean landlord(CommandSender sender, String[] args, String label) {
+        sender.sendMessage(ChatColor.DARK_GREEN + "--|| Landlord v"+Landlord.getInstance().getDescription().getVersion() +
+                " Created by " + ChatColor.BLUE+"Jcdesimp "+ChatColor.DARK_GREEN +"||--\n"+
+                ChatColor.GRAY+"(Aliases: /landlord, /land, or /ll)\n"+
+                ChatColor.DARK_GREEN+"Type " +ChatColor.YELLOW+"/"+label+" help "+ChatColor.DARK_GREEN +"for a list of commands");
+        return true;
+    }
+
+    private boolean landlord_help(CommandSender sender, String[] args, String label) {
         /*String helpMsg = "";
         helpMsg+=ChatColor.DARK_GREEN + "--|| Landlord v"+Landlord.getInstance().getDescription().getVersion() +
                 " Created by " + ChatColor.BLUE+"Jcdesimp "+ChatColor.DARK_GREEN +"||--\n"+
@@ -178,7 +191,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             helpList.add(ChatColor.DARK_AQUA+"/"+label + " info" + ChatColor.RESET + " - View info about this chunk.\n");
         }
         if(sender.hasPermission("landlord.admin.list")){
-            helpList.add(ChatColor.DARK_AQUA+"/"+label + " list <player>" + ChatColor.RESET + " - List land owned by another player.\n");
+            helpList.add(ChatColor.DARK_AQUA+"/"+label + " listplayer <player>" + ChatColor.RESET + " - List land owned by another player.\n");
         }
         if(sender.hasPermission("landlord.admin.clearworld")){
             helpList.add(ChatColor.DARK_AQUA+"/"+label + " clearworld <world> [player]" + ChatColor.RESET + " - Delete land all owned by a player in a world." +
