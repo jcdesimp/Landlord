@@ -1,6 +1,6 @@
 name: Landlord
 main: com.jcdesimp.landlord.Landlord
-version: 0.4
+version: 0.5
 author: Jcdesimp
 authors: []
 website: http://dev.bukkit.org/bukkit-plugins/landlord/
@@ -28,7 +28,6 @@ permissions:
     landlord.player.*:
             description: Gives access to default player commands.
             children:
-                landlord.use: true
                 landlord.player.own: true
                 landlord.player.map: true
                 landlord.player.info: true

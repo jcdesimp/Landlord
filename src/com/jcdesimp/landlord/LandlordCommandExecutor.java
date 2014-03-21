@@ -45,7 +45,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 //landlord
                 return landlord(sender, args, label);
 
-            } else if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("buy")) {
+            } else if(args[0].equalsIgnoreCase("help")) {
 
                 //landlord claim
                 return landlord_help(sender, args, label);
