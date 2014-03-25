@@ -131,7 +131,7 @@ public class LandManagerView implements Listener {
                         ui.setItem(20,makeButton(ChatColor.RED+"Denied Animal Damage", new String[]{ChatColor.WHITE+"Friends of this land cannot harm animals.",ChatColor.YELLOW+"Click to toggle."},
                                 new ItemStack(Material.WOOL, 1,(short)14)));
                     } else {
-                        ui.setItem(20,makeButton(ChatColor.GREEN+"Allowed Animal Damage", new String[]{ChatColor.WHITE+"Friends of this land can cannot harm animals.",ChatColor.YELLOW+"Click to toggle."},
+                        ui.setItem(20,makeButton(ChatColor.GREEN+"Allowed Animal Damage", new String[]{ChatColor.WHITE+"Friends of this land can harm animals.",ChatColor.YELLOW+"Click to toggle."},
                                 new ItemStack(Material.WOOL, 1,(short)5)));
                     }
 
