@@ -58,7 +58,7 @@ public class LandListener implements Listener {
             if(p.hasPermission("landlord.admin.bypass")){
                 return;
             }
-            if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.HARM_ANIMALS)){
+            if(!land.hasPermTo(p, OwnedLand.LandAction.HARM_ANIMALS)){
                 if(isItemFrame){
                     p.sendMessage(ChatColor.RED+"You cannot break that on this land.");
                 } else {
@@ -79,7 +79,7 @@ public class LandListener implements Listener {
                 if(p.hasPermission("landlord.admin.bypass")){
                     return;
                 }
-                if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.HARM_ANIMALS)){
+                if(!land.hasPermTo(p, OwnedLand.LandAction.HARM_ANIMALS)){
                     if(isItemFrame){
                         p.sendMessage(ChatColor.RED+"You cannot break that on this land.");
 
@@ -111,7 +111,7 @@ public class LandListener implements Listener {
         if(p.hasPermission("landlord.admin.bypass")){
             return;
         }
-        if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
+        if(!land.hasPermTo(p, OwnedLand.LandAction.BUILD)){
             p.sendMessage(ChatColor.RED + "You are not allowed to build on this land.");
             event.setCancelled(true);
         }
@@ -129,7 +129,7 @@ public class LandListener implements Listener {
             return;
         }
 
-        if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
+        if(!land.hasPermTo(p, OwnedLand.LandAction.BUILD)){
             p.sendMessage(ChatColor.RED + "You are not allowed to break on this land.");
             event.setCancelled(true);
         }
@@ -157,12 +157,12 @@ public class LandListener implements Listener {
         if(p.hasPermission("landlord.admin.bypass")){
             return;
         }
-        if(event.getAction().equals(Action.PHYSICAL) && !land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
+        if(event.getAction().equals(Action.PHYSICAL) && !land.hasPermTo(p, OwnedLand.LandAction.BUILD)){
             p.sendMessage(ChatColor.RED + "You are not allowed to destroy crops on this land.");
             event.setCancelled(true);
             return;
         }
-        if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.OPEN_CONTAINERS)){
+        if(!land.hasPermTo(p, OwnedLand.LandAction.OPEN_CONTAINERS)){
             p.sendMessage(ChatColor.RED + "You are not allowed to use containers on this land.");
             event.setCancelled(true);
         }
@@ -184,7 +184,7 @@ public class LandListener implements Listener {
             if(p.hasPermission("landlord.admin.bypass")){
                 return;
             }
-            if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
+            if(!land.hasPermTo(p, OwnedLand.LandAction.BUILD)){
                 p.sendMessage(ChatColor.RED+"You cannot break that on this land.");
                 event.setCancelled(true);
             }
@@ -211,7 +211,7 @@ public class LandListener implements Listener {
             if(p.hasPermission("landlord.admin.bypass")){
                 return;
             }
-            if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
+            if(!land.hasPermTo(p, OwnedLand.LandAction.BUILD)){
                 p.sendMessage(ChatColor.RED+"You cannot place that on this land.");
                 event.setCancelled(true);
             }
@@ -234,7 +234,7 @@ public class LandListener implements Listener {
         if(p.hasPermission("landlord.admin.bypass")){
             return;
         }
-        if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
+        if(!land.hasPermTo(p, OwnedLand.LandAction.BUILD)){
             p.sendMessage(ChatColor.RED+"You cannot place that on this land.");
             event.setCancelled(true);
         }
@@ -251,7 +251,7 @@ public class LandListener implements Listener {
         if(p.hasPermission("landlord.admin.bypass")){
             return;
         }
-        if(!land.hasPermTo(p.getName(), OwnedLand.LandAction.BUILD)){
+        if(!land.hasPermTo(p, OwnedLand.LandAction.BUILD)){
             p.sendMessage(ChatColor.RED+"You cannot do that on this land.");
             event.setCancelled(true);
         }

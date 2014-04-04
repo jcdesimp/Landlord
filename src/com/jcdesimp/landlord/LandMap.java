@@ -7,7 +7,6 @@ import org.bukkit.Chunk;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.*;
 
 import java.util.List;
@@ -352,9 +351,9 @@ public class LandMap {
 
                 if(!filteredList.isEmpty()){
                     OwnedLand ol = filteredList.get(0);
-                    if(ol.getOwnerName().equals(p.getName())){
+                    if(ol.ownerUUID().equals(p.getUniqueId())){
                         currSpot = ChatColor.GREEN + currSpot;
-                    } else if(ol.isFriend(p.getName())){
+                    } else if(ol.isFriend(p)){
                         currSpot = ChatColor.YELLOW + currSpot;
                     } else {
                         currSpot = ChatColor.RED + currSpot;

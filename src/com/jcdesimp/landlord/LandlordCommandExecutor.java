@@ -1,6 +1,5 @@
 package com.jcdesimp.landlord;
 
-import net.milkbowl.vault.chat.Chat;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,8 +8,11 @@ import org.bukkit.entity.Player;
 import com.DarkBladee12.ParticleAPI.ParticleEffect;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
+
+import static org.bukkit.Bukkit.getOfflinePlayer;
+import static org.bukkit.Bukkit.getPlayer;
 import static org.bukkit.util.NumberConversions.ceil;
 
 /**
@@ -264,12 +266,13 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
 
 
-            OwnedLand land = OwnedLand.landFromProperties(player.getName(), currChunk);
+            OwnedLand land = OwnedLand.landFromProperties(player, currChunk);
             OwnedLand dbLand = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
 
 
             if(dbLand != null){
-                if (dbLand.getOwnerName().equalsIgnoreCase(player.getName())){
+                //Check if they already own this land
+                if (dbLand.ownerUUID().equals(player.getUniqueId())){
                     player.sendMessage(ChatColor.YELLOW + "You already own this land!");
                     return true;
                 }
@@ -282,7 +285,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 if(player.hasPermission("landlord.limit.extra")){
                     limit+=plugin.getConfig().getInt("limits.extra",0);
                 }
-                if(plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getName()).findRowCount() >= limit){
+                if(plugin.getDatabase().find(OwnedLand.class).where().eq("ownerUUID",player.getUniqueId().toString()).findRowCount() >= limit){
                     player.sendMessage(ChatColor.RED+"You can only own " + limit + " chunks of land.");
                     return true;
                 }
@@ -367,13 +370,11 @@ public class LandlordCommandExecutor implements CommandExecutor {
                     player.sendMessage(ChatColor.RED+"usage: /"+label +" "+ args[0]+" [x,z] [world]");
                     return true;
                 }
-            } else {
-
             }
             OwnedLand dbLand = OwnedLand.getLandFromDatabase(x, z, worldname);
 
 
-            if (dbLand == null || (!dbLand.getOwnerName().equalsIgnoreCase(player.getName()) && !player.hasPermission("landlord.admin.unclaim"))){
+            if (dbLand == null || (!dbLand.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.unclaim"))){
                 player.sendMessage(ChatColor.RED + "You do not own this land.");
                 return true;
             }
@@ -389,8 +390,8 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
                 }
             }
-            if(!player.getName().equals(dbLand.getOwnerName())){
-                player.sendMessage(ChatColor.YELLOW+"Unclaimed " + dbLand.getOwnerName() + "'s land.");
+            if(!player.getUniqueId().equals(dbLand.ownerUUID())){
+                player.sendMessage(ChatColor.YELLOW+"Unclaimed " + getOfflinePlayer(dbLand.ownerUUID()) + "'s land.");
             }
             plugin.getDatabase().delete(dbLand);
             dbLand.highlightLand(player, ParticleEffect.WITCH_MAGIC);
@@ -437,7 +438,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
 
             //Does land exist, and if so does player own it
-            if( land == null || !land.getOwnerName().equalsIgnoreCase(player.getName()) ){
+            if( land == null || !land.ownerUUID().equals(player.getUniqueId()) ){
                 player.sendMessage(ChatColor.RED + "You do not own this land.");
                 return true;
             }
@@ -487,7 +488,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             Chunk currChunk = player.getLocation().getChunk();
             Friend frd = Friend.friendFromName(args[1]);
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
-            if( land == null || !land.getOwnerName().equalsIgnoreCase(player.getName()) ){
+            if( land == null || !land.ownerUUID().equals(player.getUniqueId()) ){
                 player.sendMessage(ChatColor.RED + "You do not own this land.");
                 return true;
             }
@@ -522,11 +523,11 @@ public class LandlordCommandExecutor implements CommandExecutor {
             }
             Chunk currChunk = player.getLocation().getChunk();
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
-            if( land == null || ( !land.getOwnerName().equalsIgnoreCase(player.getName()) && !player.hasPermission("landlord.admin.friends") ) ){
+            if( land == null || ( !land.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.friends") ) ){
                 player.sendMessage(ChatColor.RED + "You do not own this land.");
                 return true;
             }
-            if(!land.getOwnerName().equalsIgnoreCase(player.getName())){
+            if(!land.getOwnerUUID().equals(player.getUniqueId())){
                 //player.sendMessage(ChatColor.YELLOW+"Viewing friends of someone else's land.");
             }
             if(plugin.getConfig().getBoolean("options.particleEffects",true)) {
@@ -639,11 +640,11 @@ public class LandlordCommandExecutor implements CommandExecutor {
             }
             Chunk currChunk = player.getLocation().getChunk();
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
-            if( land == null || ( !land.getOwnerName().equalsIgnoreCase(player.getName()) && !player.hasPermission("landlord.admin.manage") ) ){
+            if( land == null || ( !land.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.manage") ) ){
                 player.sendMessage(ChatColor.RED + "You do not own this land.");
                 return true;
             }
-            if(!land.getOwnerName().equalsIgnoreCase(player.getName())){
+            if(!land.ownerUUID().equals(player.getUniqueId())){
                 player.sendMessage(ChatColor.YELLOW+"Managing someone else's land.");
             }
             LandManagerView ui = new LandManagerView(player, land);
@@ -683,7 +684,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 }
             }
 
-            List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getName()).findList();
+            List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerUUID",player.getUniqueId().toString()).findList();
             if(myLand.size()==0){
                 player.sendMessage(ChatColor.YELLOW+"You do not own any land!");
             } else {
@@ -724,7 +725,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
     }
 
     private boolean landlord_listplayer(CommandSender sender, String[] args, String label){
-        String owner = "";
+        String owner;
 
         //sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
         if(args.length>1){
@@ -855,9 +856,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
             String owner = ChatColor.GRAY + "" + ChatColor.ITALIC + "None";
             if( land != null ){
 
-                owner = ChatColor.GOLD + land.getOwnerName();
+                owner = ChatColor.GOLD + getOfflinePlayer(land.ownerUUID()).getName();
             } else {
-                land = OwnedLand.landFromProperties("NONE",currChunk);
+                land = OwnedLand.landFromProperties(null,currChunk);
             }
 
             if(plugin.getConfig().getBoolean("options.particleEffects")){

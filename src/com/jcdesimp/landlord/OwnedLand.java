@@ -13,6 +13,9 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import static org.bukkit.Bukkit.getOfflinePlayer;
 
 
 @SuppressWarnings("UnusedDeclaration")
@@ -27,9 +30,9 @@ public class OwnedLand {
      * @param c The chunk this land represents
      * @return OwnedLand
      */
-    public static OwnedLand landFromProperties(String owner, Chunk c){
+    public static OwnedLand landFromProperties(Player owner, Chunk c){
         OwnedLand lnd = new OwnedLand();
-        lnd.setProperties(owner, c);
+        lnd.setProperties(owner.getUniqueId(), c);
         return lnd;
 
     }
@@ -39,8 +42,11 @@ public class OwnedLand {
     private int id;
 
 
+
+    //Used to be the owners username
     @NotNull
-    private String ownerName;
+    private String ownerUUID;
+
 
 
 
@@ -62,14 +68,14 @@ public class OwnedLand {
 
     /**
      * Sets the properties of an OwnedLand instance
-     * @param pName name of player to be set owner
+     * @param pUUID name of player to be set owner
      * @param c chunk to be represented
      */
-    public void setProperties(String pName, Chunk c) {
-        ownerName = pName;
-        this.setX(c.getX());
-        this.setZ(c.getZ());
-        this.setWorldName(c.getWorld().getName());
+    public void setProperties(UUID pUUID, Chunk c) {
+        ownerUUID = pUUID.toString();
+        setX(c.getX());
+        setZ(c.getZ());
+        setWorldName(c.getWorld().getName());
     }
 
 
@@ -81,12 +87,15 @@ public class OwnedLand {
         return id;
     }
 
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
+    public void setOwnerUUID(String ownerUUID) {
+        this.ownerUUID = ownerUUID;
     }
 
-    public String getOwnerName() {
-        return ownerName;
+    public String getOwnerUUID() {
+        return ownerUUID;
+    }
+    public UUID ownerUUID() {
+        return UUID.fromString(ownerUUID);
     }
 
     public void setFriends(List<Friend> friends) {
@@ -196,11 +205,11 @@ public class OwnedLand {
         return permArray;
     }
 
-    public boolean hasPermTo(String playerName, LandAction action){
+    public boolean hasPermTo(Player player, LandAction action){
         String[][] perms = getLandPerms();
-        if(getOwnerName().equalsIgnoreCase(playerName)){
+        if(UUID.fromString(getOwnerUUID()).equals(player.getUniqueId())){
             return true;
-        } else if (isFriend(playerName)) {
+        } else if (isFriend(player)) {
             String[] subPerms = perms[1];
             switch (action){
               case BUILD:
@@ -293,8 +302,8 @@ public class OwnedLand {
         return friends.contains(f);
     }
 
-    public boolean isFriend(String f) {
-        return isFriend(Friend.friendFromName(f));
+    public boolean isFriend(Player f) {
+        return isFriend(Friend.friendFromName(f.getName()));
     }
 
 
@@ -313,6 +322,7 @@ public class OwnedLand {
                 .eq("worldName", worldName)
                 .findUnique();
     }
+
 
 
 

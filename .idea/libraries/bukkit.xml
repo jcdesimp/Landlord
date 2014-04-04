@@ -5,6 +5,7 @@
     </CLASSES>
     <JAVADOC>
       <root url="http://jd.bukkit.org/rb/apidocs/" />
+      <root url="http://jd.bukkit.org/dev/apidocs/" />
     </JAVADOC>
     <SOURCES>
       <root url="jar://$USER_HOME$/Library/Developer/bukkit.jar!/" />
