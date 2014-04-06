@@ -9,6 +9,7 @@ import com.DarkBladee12.ParticleAPI.ParticleEffect;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.bukkit.Bukkit.getOfflinePlayer;
 import static org.bukkit.Bukkit.getPlayer;
@@ -571,13 +572,13 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 return true;
             }
             for(Friend f: land.getFriends()){
-                String fr = ChatColor.DARK_GREEN+" - "+ChatColor.GOLD+f.getPlayerName()+ChatColor.DARK_GREEN+" - ";
+                String fr = ChatColor.DARK_GREEN+" - "+ChatColor.GOLD+f.getName()+ChatColor.DARK_GREEN+" - ";
                 /*
                  * *************************************
                  * mark for possible change    !!!!!!!!!
                  * *************************************
                  */
-                if(Bukkit.getOfflinePlayer(f.getPlayerName()).isOnline()){
+                if(Bukkit.getOfflinePlayer(f.getUUID()).isOnline()){
                     fr+= ChatColor.GREEN+""+ChatColor.ITALIC+" Online";
                 } else {
                     fr+= ChatColor.RED+""+ChatColor.ITALIC+" Offline";
@@ -920,66 +921,55 @@ public class LandlordCommandExecutor implements CommandExecutor {
         if(!sender.hasPermission("landlord.admin.convertdb")) {
             sender.sendMessage(ChatColor.RED+"You do not have permission.");
         }
-        sender.sendMessage(ChatColor.RED+"Starting OwnedLand conversion, this could take a while...");
-        Bukkit.getScheduler().runTask(plugin, new Runnable() {
-            @Override
-            public void run() {
-
-                List<OwnedLand> allLand = plugin.getDatabase().find(OwnedLand.class).findList();
-                for (OwnedLand l : allLand){
-                    if(l.getOwnerName().length() < 32){
-                        //plugin.getLogger().info("Converting "+ l.getId() + "...");
+        sender.sendMessage(ChatColor.RED+"Starting OwnedLand conversion...");
+        List<OwnedLand> allLand = plugin.getDatabase().find(OwnedLand.class).findList();
+        for (OwnedLand l : allLand){
+            if(l.getOwnerName().length() < 32){
+                //plugin.getLogger().info("Converting "+ l.getId() + "...");
                         /*
                          * *************************************
                          * mark for possible change    !!!!!!!!!
                          * *************************************
                          */
-                       if(getOfflinePlayer(l.getOwnerName()).hasPlayedBefore()) {
-                           plugin.getLogger().info("Converting "+ l.getId() + "... Owner: "+l.getOwnerName());
-                           l.setOwnerName(getOfflinePlayer(l.getOwnerName()).getUniqueId().toString());
-                           plugin.getDatabase().save(l);
+                if(getOfflinePlayer(l.getOwnerName()).hasPlayedBefore()) {
+                    plugin.getLogger().info("Converting "+ l.getId() + "... Owner: "+l.getOwnerName());
+                    l.setOwnerName(getOfflinePlayer(l.getOwnerName()).getUniqueId().toString());
+                    plugin.getDatabase().save(l);
 
-                       } else {
-                           plugin.getLogger().info("Deleting "+ l.getId() + "! Owner: "+l.getOwnerName());
-                           plugin.getDatabase().delete(l);
-                       }
-
-
-                    }
+                } else {
+                    plugin.getLogger().info("Deleting "+ l.getId() + "! Owner: "+l.getOwnerName());
+                    plugin.getDatabase().delete(l);
                 }
-                sender.sendMessage(ChatColor.GREEN+"Land Conversion completed!");
-            }
-        });
-        sender.sendMessage(ChatColor.RED+"Starting Friend conversion, this could take a while...");
-        Bukkit.getScheduler().runTask(plugin, new Runnable() {
-            @Override
-            public void run() {
 
-                List<Friend> allFriends = plugin.getDatabase().find(Friend.class).findList();
-                for (Friend f : allFriends){
-                    if(f.getPlayerName().length() < 32){
-                        //plugin.getLogger().info("Converting "+ l.getId() + "...");
+
+            }
+        }
+        sender.sendMessage(ChatColor.GREEN+"Land Conversion completed!");
+
+        sender.sendMessage(ChatColor.RED+"Starting Friend conversion...");
+        List<Friend> allFriends = plugin.getDatabase().find(Friend.class).findList();
+        for (Friend f : allFriends){
+            if(f.getPlayerName().length() < 32){
+                //plugin.getLogger().info("Converting "+ l.getId() + "...");
                         /*
                          * *************************************
                          * mark for possible change    !!!!!!!!!
                          * *************************************
                          */
-                        if(getOfflinePlayer(f.getPlayerName()).hasPlayedBefore()) {
-                            plugin.getLogger().info("Converting "+ f.getId() + "... Name: "+f.getPlayerName());
-                            f.setPlayerName(getOfflinePlayer(f.getPlayerName()).getUniqueId().toString());
-                            plugin.getDatabase().save(f);
+                if(getOfflinePlayer(f.getPlayerName()).hasPlayedBefore()) {
+                    plugin.getLogger().info("Converting "+ f.getId() + "... Name: "+f.getPlayerName());
+                    f.setPlayerName(getOfflinePlayer(f.getPlayerName()).getUniqueId().toString());
+                    plugin.getDatabase().save(f);
 
-                        } else {
-                            plugin.getLogger().info("Deleting "+ f.getId() + "! Name: "+f.getPlayerName());
-                            plugin.getDatabase().delete(f);
-                        }
-
-
-                    }
+                } else {
+                    plugin.getLogger().info("Deleting "+ f.getId() + "! Name: "+f.getPlayerName());
+                    plugin.getDatabase().delete(f);
                 }
-                sender.sendMessage(ChatColor.GREEN+"Friend Conversion completed!");
+
+
             }
-        });
+        }
+        sender.sendMessage(ChatColor.GREEN+"Friend Conversion completed!");
         return true;
     }
 

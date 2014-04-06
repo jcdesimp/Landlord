@@ -5,6 +5,9 @@ import com.avaje.ebean.validation.NotNull;
 import org.bukkit.entity.Player;
 
 import javax.persistence.*;
+import java.util.UUID;
+
+import static org.bukkit.Bukkit.getOfflinePlayer;
 
 /**
  * Friend object
@@ -53,6 +56,18 @@ public class Friend {
         return obj instanceof Friend && ((Friend) obj).getPlayerName().equalsIgnoreCase(playerName);
     }
 
+    public String getName() {
+        /*
+         * *************************************
+         * mark for possible change    !!!!!!!!!
+         * *************************************
+         */
+        return getOfflinePlayer(UUID.fromString(playerName)).getName();
+    }
+
+    public UUID getUUID() {
+        return UUID.fromString(playerName);
+    }
 
     /*
     public void setFriendOf(List<OwnedLand> friendOf) {
