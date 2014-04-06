@@ -6,6 +6,8 @@ package com.jcdesimp.landlord;
  */
 import com.DarkBladee12.ParticleAPI.ParticleEffect;
 import com.avaje.ebean.validation.NotNull;
+import com.avaje.ebeaninternal.server.idgen.UuidIdGenerator;
+import org.apache.commons.lang.ObjectUtils;
 import org.bukkit.*;
 
 import javax.persistence.*;
@@ -14,8 +16,6 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import static org.bukkit.Bukkit.getOfflinePlayer;
 
 
 @SuppressWarnings("UnusedDeclaration")
@@ -32,7 +32,16 @@ public class OwnedLand {
      */
     public static OwnedLand landFromProperties(Player owner, Chunk c){
         OwnedLand lnd = new OwnedLand();
-        lnd.setProperties(owner.getUniqueId(), c);
+        //System.out.println(owner.getUniqueId());
+        try {
+            lnd.setProperties(owner.getUniqueId(), c);
+        } catch (NullPointerException e) {
+            lnd.setX(c.getX());
+            lnd.setZ(c.getZ());
+            lnd.setWorldName(c.getWorld().getName());
+            lnd.setOwnerName("");
+        }
+
         return lnd;
 
     }
@@ -45,7 +54,7 @@ public class OwnedLand {
 
     //Used to be the owners username
     @NotNull
-    private String ownerUUID;
+    private String ownerName;
 
 
 
@@ -72,7 +81,7 @@ public class OwnedLand {
      * @param c chunk to be represented
      */
     public void setProperties(UUID pUUID, Chunk c) {
-        ownerUUID = pUUID.toString();
+        ownerName = pUUID.toString();
         setX(c.getX());
         setZ(c.getZ());
         setWorldName(c.getWorld().getName());
@@ -87,15 +96,20 @@ public class OwnedLand {
         return id;
     }
 
-    public void setOwnerUUID(String ownerUUID) {
-        this.ownerUUID = ownerUUID;
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 
-    public String getOwnerUUID() {
-        return ownerUUID;
+    public String getOwnerName() {
+        return ownerName;
     }
     public UUID ownerUUID() {
-        return UUID.fromString(ownerUUID);
+        if (ownerName.length() < 32) {
+            return UUID.randomUUID();
+        }
+        //System.out.println(ownerName);
+        //System.out.println(UUID.fromString(ownerName));
+        return UUID.fromString(ownerName);
     }
 
     public void setFriends(List<Friend> friends) {
@@ -207,7 +221,7 @@ public class OwnedLand {
 
     public boolean hasPermTo(Player player, LandAction action){
         String[][] perms = getLandPerms();
-        if(UUID.fromString(getOwnerUUID()).equals(player.getUniqueId())){
+        if(UUID.fromString(getOwnerName()).equals(player.getUniqueId())){
             return true;
         } else if (isFriend(player)) {
             String[] subPerms = perms[1];
@@ -303,7 +317,7 @@ public class OwnedLand {
     }
 
     public boolean isFriend(Player f) {
-        return isFriend(Friend.friendFromName(f.getName()));
+        return isFriend(Friend.friendFromPlayer(f));
     }
 
 

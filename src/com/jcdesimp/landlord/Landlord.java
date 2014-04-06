@@ -74,6 +74,7 @@ public final class Landlord extends JavaPlugin {
                 getLogger().warning("No economy found, economy features disabled.");
             }
         }
+
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.jcdesimp.landlord;
 
 
 import com.avaje.ebean.validation.NotNull;
+import org.bukkit.entity.Player;
 
 import javax.persistence.*;
 
@@ -14,9 +15,9 @@ import javax.persistence.*;
 @Table(name="ll_friend")
 public class Friend {
 
-    public static Friend friendFromName(String playerName) {
+    public static Friend friendFromPlayer(Player p) {
         Friend fd = new Friend();
-        fd.setPlayerName(playerName);
+        fd.setPlayerName(p.getUniqueId().toString());
         return fd;
     }
 

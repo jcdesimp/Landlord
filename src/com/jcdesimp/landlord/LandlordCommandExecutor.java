@@ -9,7 +9,6 @@ import com.DarkBladee12.ParticleAPI.ParticleEffect;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static org.bukkit.Bukkit.getOfflinePlayer;
 import static org.bukkit.Bukkit.getPlayer;
@@ -92,6 +91,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
             } else if(args[0].equalsIgnoreCase("friends")) {
 
                 return landlord_friends(sender,args,label);
+            } else if(args[0].equalsIgnoreCase("convertDB")) {
+
+                return landlord_convertDB(sender,args,label);
             } else {
                 return landlord(sender, args, label);
             }
@@ -285,11 +287,11 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 if(player.hasPermission("landlord.limit.extra")){
                     limit+=plugin.getConfig().getInt("limits.extra",0);
                 }
-                if(plugin.getDatabase().find(OwnedLand.class).where().eq("ownerUUID",player.getUniqueId().toString()).findRowCount() >= limit){
+                if(plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId().toString()).findRowCount() >= limit){
                     player.sendMessage(ChatColor.RED+"You can only own " + limit + " chunks of land.");
                     return true;
                 }
-            }
+            }                       //
 
             if(plugin.hasVault()){
                 if(plugin.getvHandler().hasEconomy()){
@@ -443,7 +445,17 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 return true;
             }
             //
-            Friend friend = Friend.friendFromName(args[1]);
+            if (!getOfflinePlayer(args[1]).hasPlayedBefore()){
+                player.sendMessage(ChatColor.RED+"That player is not recognized.");
+                return true;
+            }
+            Friend friend = Friend.friendFromPlayer(getOfflinePlayer(args[1]).getPlayer());
+            /*
+             * *************************************
+             * mark for possible change    !!!!!!!!!
+             * *************************************
+             */
+
             if (! land.addFriend(friend)) {
                 player.sendMessage(ChatColor.YELLOW + "Player " + args[1] + " is already a friend of this land.");
                 return true;
@@ -486,7 +498,12 @@ public class LandlordCommandExecutor implements CommandExecutor {
             }
 
             Chunk currChunk = player.getLocation().getChunk();
-            Friend frd = Friend.friendFromName(args[1]);
+            /*
+             * *************************************
+             * mark for possible change    !!!!!!!!!
+             * *************************************
+             */
+            Friend frd = Friend.friendFromPlayer(getOfflinePlayer(args[1]).getPlayer());
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
             if( land == null || !land.ownerUUID().equals(player.getUniqueId()) ){
                 player.sendMessage(ChatColor.RED + "You do not own this land.");
@@ -527,7 +544,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 player.sendMessage(ChatColor.RED + "You do not own this land.");
                 return true;
             }
-            if(!land.getOwnerUUID().equals(player.getUniqueId())){
+            if(!land.getOwnerName().equals(player.getUniqueId())){
                 //player.sendMessage(ChatColor.YELLOW+"Viewing friends of someone else's land.");
             }
             if(plugin.getConfig().getBoolean("options.particleEffects",true)) {
@@ -555,6 +572,11 @@ public class LandlordCommandExecutor implements CommandExecutor {
             }
             for(Friend f: land.getFriends()){
                 String fr = ChatColor.DARK_GREEN+" - "+ChatColor.GOLD+f.getPlayerName()+ChatColor.DARK_GREEN+" - ";
+                /*
+                 * *************************************
+                 * mark for possible change    !!!!!!!!!
+                 * *************************************
+                 */
                 if(Bukkit.getOfflinePlayer(f.getPlayerName()).isOnline()){
                     fr+= ChatColor.GREEN+""+ChatColor.ITALIC+" Online";
                 } else {
@@ -684,7 +706,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 }
             }
 
-            List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerUUID",player.getUniqueId().toString()).findList();
+            List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId().toString()).findList();
             if(myLand.size()==0){
                 player.sendMessage(ChatColor.YELLOW+"You do not own any land!");
             } else {
@@ -751,8 +773,16 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 return true;
             }
         }
-
-        List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().ieq("ownerName", owner).findList();
+        /*
+         * *************************************
+         * mark for possible change    !!!!!!!!!
+         * *************************************
+         */
+        if( !getOfflinePlayer(owner).hasPlayedBefore()){
+            sender.sendMessage(ChatColor.YELLOW+ owner +" does not own any land!");
+            return true;
+        }
+        List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().ieq("ownerName", getOfflinePlayer(owner).getUniqueId().toString()).findList();
         if(myLand.size()==0){
             sender.sendMessage(ChatColor.YELLOW+ owner +" does not own any land!");
         } else {
@@ -856,7 +886,12 @@ public class LandlordCommandExecutor implements CommandExecutor {
             String owner = ChatColor.GRAY + "" + ChatColor.ITALIC + "None";
             if( land != null ){
 
-                owner = ChatColor.GOLD + getOfflinePlayer(land.ownerUUID()).getName();
+                /*
+                 * *************************************
+                 * mark for possible change    !!!!!!!!!
+                 * *************************************
+                 */
+                owner = ChatColor.GOLD + land.getOwnerName();
             } else {
                 land = OwnedLand.landFromProperties(null,currChunk);
             }
@@ -872,6 +907,80 @@ public class LandlordCommandExecutor implements CommandExecutor {
         }
         return true;
 
+    }
+
+    /**
+     * UUID Conversion method -_-
+     * @param sender who executed the command
+     * @param args given with command
+     * @param label exact command (or alias) run
+     * @return boolean of success
+     */
+    private boolean landlord_convertDB(final CommandSender sender, String[] args, String label){
+        if(!sender.hasPermission("landlord.admin.convertdb")) {
+            sender.sendMessage(ChatColor.RED+"You do not have permission.");
+        }
+        sender.sendMessage(ChatColor.RED+"Starting OwnedLand conversion, this could take a while...");
+        Bukkit.getScheduler().runTask(plugin, new Runnable() {
+            @Override
+            public void run() {
+
+                List<OwnedLand> allLand = plugin.getDatabase().find(OwnedLand.class).findList();
+                for (OwnedLand l : allLand){
+                    if(l.getOwnerName().length() < 32){
+                        //plugin.getLogger().info("Converting "+ l.getId() + "...");
+                        /*
+                         * *************************************
+                         * mark for possible change    !!!!!!!!!
+                         * *************************************
+                         */
+                       if(getOfflinePlayer(l.getOwnerName()).hasPlayedBefore()) {
+                           plugin.getLogger().info("Converting "+ l.getId() + "... Owner: "+l.getOwnerName());
+                           l.setOwnerName(getOfflinePlayer(l.getOwnerName()).getUniqueId().toString());
+                           plugin.getDatabase().save(l);
+
+                       } else {
+                           plugin.getLogger().info("Deleting "+ l.getId() + "! Owner: "+l.getOwnerName());
+                           plugin.getDatabase().delete(l);
+                       }
+
+
+                    }
+                }
+                sender.sendMessage(ChatColor.GREEN+"Land Conversion completed!");
+            }
+        });
+        sender.sendMessage(ChatColor.RED+"Starting Friend conversion, this could take a while...");
+        Bukkit.getScheduler().runTask(plugin, new Runnable() {
+            @Override
+            public void run() {
+
+                List<Friend> allFriends = plugin.getDatabase().find(Friend.class).findList();
+                for (Friend f : allFriends){
+                    if(f.getPlayerName().length() < 32){
+                        //plugin.getLogger().info("Converting "+ l.getId() + "...");
+                        /*
+                         * *************************************
+                         * mark for possible change    !!!!!!!!!
+                         * *************************************
+                         */
+                        if(getOfflinePlayer(f.getPlayerName()).hasPlayedBefore()) {
+                            plugin.getLogger().info("Converting "+ f.getId() + "... Name: "+f.getPlayerName());
+                            f.setPlayerName(getOfflinePlayer(f.getPlayerName()).getUniqueId().toString());
+                            plugin.getDatabase().save(f);
+
+                        } else {
+                            plugin.getLogger().info("Deleting "+ f.getId() + "! Name: "+f.getPlayerName());
+                            plugin.getDatabase().delete(f);
+                        }
+
+
+                    }
+                }
+                sender.sendMessage(ChatColor.GREEN+"Friend Conversion completed!");
+            }
+        });
+        return true;
     }
 
 
