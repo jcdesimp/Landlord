@@ -892,7 +892,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                  * mark for possible change    !!!!!!!!!
                  * *************************************
                  */
-                owner = ChatColor.GOLD + land.getOwnerName();
+                owner = ChatColor.GOLD + land.getOwnerUsername();
             } else {
                 land = OwnedLand.landFromProperties(null,currChunk);
             }

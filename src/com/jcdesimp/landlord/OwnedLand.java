@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static org.bukkit.Bukkit.getOfflinePlayer;
+
 
 @SuppressWarnings("UnusedDeclaration")
 @Entity
@@ -110,6 +112,22 @@ public class OwnedLand {
         //System.out.println(ownerName);
         //System.out.println(UUID.fromString(ownerName));
         return UUID.fromString(ownerName);
+    }
+
+    public UUID getOwnerUUID() {
+        return UUID.fromString(ownerName);
+    }
+
+    public String getOwnerUsername() {
+        /*
+         * *************************************
+         * mark for possible change    !!!!!!!!!
+         * *************************************
+         */
+        if (!getOfflinePlayer(UUID.fromString(ownerName)).hasPlayedBefore()) {
+            return ChatColor.ITALIC+"Unknown";
+        }
+        return getOfflinePlayer(UUID.fromString(ownerName)).getName();
     }
 
     public void setFriends(List<Friend> friends) {

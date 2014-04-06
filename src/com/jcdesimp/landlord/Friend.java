@@ -2,6 +2,7 @@ package com.jcdesimp.landlord;
 
 
 import com.avaje.ebean.validation.NotNull;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import javax.persistence.*;
@@ -62,6 +63,9 @@ public class Friend {
          * mark for possible change    !!!!!!!!!
          * *************************************
          */
+        if (!getOfflinePlayer(UUID.fromString(playerName)).hasPlayedBefore()) {
+            return ChatColor.ITALIC+"Unknown";
+        }
         return getOfflinePlayer(UUID.fromString(playerName)).getName();
     }
 
