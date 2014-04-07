@@ -1,4 +1,4 @@
-package com.DarkBladee12.ParticleAPI;
+package com.jcdesimp.landlord.DarkBladee12.ParticleAPI;
 
 import java.util.HashMap;
 import java.util.Map;

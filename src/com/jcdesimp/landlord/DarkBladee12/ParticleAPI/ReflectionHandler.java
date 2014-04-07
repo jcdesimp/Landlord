@@ -1,4 +1,4 @@
-package com.DarkBladee12.ParticleAPI;
+package com.jcdesimp.landlord.DarkBladee12.ParticleAPI;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

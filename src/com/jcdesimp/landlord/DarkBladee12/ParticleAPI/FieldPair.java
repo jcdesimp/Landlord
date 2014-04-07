@@ -1,4 +1,4 @@
-package com.DarkBladee12.ParticleAPI;
+package com.jcdesimp.landlord.DarkBladee12.ParticleAPI;
 
 /**
  * This class is part of the ReflectionHandler and follows the same usage conditions
