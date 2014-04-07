@@ -1,6 +1,6 @@
 package com.jcdesimp.landlord;
 
-import com.DarkBladee12.ParticleAPI.ParticleEffect;
+import com.jcdesimp.landlord.DarkBladee12.ParticleAPI.ParticleEffect;
 import org.bukkit.*;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;

@@ -4,10 +4,8 @@ package com.jcdesimp.landlord;
  * File created by jcdesimp on 2/28/14.
  * This class represents a plot of owned land.
  */
-import com.DarkBladee12.ParticleAPI.ParticleEffect;
+import com.jcdesimp.landlord.DarkBladee12.ParticleAPI.ParticleEffect;
 import com.avaje.ebean.validation.NotNull;
-import com.avaje.ebeaninternal.server.idgen.UuidIdGenerator;
-import org.apache.commons.lang.ObjectUtils;
 import org.bukkit.*;
 
 import javax.persistence.*;

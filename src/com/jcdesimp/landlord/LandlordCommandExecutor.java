@@ -5,11 +5,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import com.DarkBladee12.ParticleAPI.ParticleEffect;
+import com.jcdesimp.landlord.DarkBladee12.ParticleAPI.ParticleEffect;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static org.bukkit.Bukkit.getOfflinePlayer;
 import static org.bukkit.Bukkit.getPlayer;
@@ -92,9 +91,6 @@ public class LandlordCommandExecutor implements CommandExecutor {
             } else if(args[0].equalsIgnoreCase("friends")) {
 
                 return landlord_friends(sender,args,label);
-            } else if(args[0].equalsIgnoreCase("convertDB")) {
-
-                return landlord_convertDB(sender,args,label);
             } else {
                 return landlord(sender, args, label);
             }
@@ -125,7 +121,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
     private boolean landlord(CommandSender sender, String[] args, String label) {
         sender.sendMessage(ChatColor.DARK_GREEN + "--|| Landlord v"+Landlord.getInstance().getDescription().getVersion() +
                 " Created by " + ChatColor.BLUE+"Jcdesimp "+ChatColor.DARK_GREEN +"||--\n"+
-                ChatColor.GRAY+"(Aliases: /landlord, /land, or /ll)\n"+
+                //ChatColor.GRAY+"(Aliases: /landlord, /land, or /ll)\n"+
                 ChatColor.DARK_GREEN+"Type " +ChatColor.YELLOW+"/"+label+" help "+ChatColor.DARK_GREEN +"for a list of commands");
         return true;
     }
@@ -184,8 +180,8 @@ public class LandlordCommandExecutor implements CommandExecutor {
         }
         helpList.add(unclaim);
 
-        helpList.add(ChatColor.DARK_AQUA+"/"+label + " addfriend <player name>" + ChatColor.RESET + " - Add a friend to this land.\n");
-        helpList.add(ChatColor.DARK_AQUA+"/"+label + " remfriend <player name>" + ChatColor.RESET + " - Remove a friend from this land.\n");
+        helpList.add(ChatColor.DARK_AQUA+"/"+label + " addfriend <player name>" + ChatColor.RESET + " - Add friend to this land.\n");
+        helpList.add(ChatColor.DARK_AQUA+"/"+label + " remfriend <player name>" + ChatColor.RESET + " - Remove friend from this land.\n");
         helpList.add(ChatColor.DARK_AQUA+"/"+label + " friends" + ChatColor.RESET + " - List friends of this land.\n");
         helpList.add(ChatColor.DARK_AQUA+"/"+label + " manage" + ChatColor.RESET + " - Manage permissions for this land.\n");
         helpList.add(ChatColor.DARK_AQUA+"/"+label + " list" + ChatColor.RESET + " - List all your owned land.\n");
@@ -199,7 +195,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             helpList.add(ChatColor.DARK_AQUA+"/"+label + " listplayer <player>" + ChatColor.RESET + " - List land owned by another player.\n");
         }
         if(sender.hasPermission("landlord.admin.clearworld")){
-            helpList.add(ChatColor.DARK_AQUA+"/"+label + " clearworld <world> [player]" + ChatColor.RESET + " - Delete land all owned by a player in a world." +
+            helpList.add(ChatColor.DARK_AQUA+"/"+label + " clearworld <world> [player]" + ChatColor.RESET + " - Delete all land owned by a player in a world." +
                     " Delete all land of a world from console.\n");
         }
         if(sender.hasPermission("landlord.admin.reload")){
@@ -910,68 +906,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
     }
 
-    /**
-     * UUID Conversion method -_-
-     * @param sender who executed the command
-     * @param args given with command
-     * @param label exact command (or alias) run
-     * @return boolean of success
-     */
-    private boolean landlord_convertDB(final CommandSender sender, String[] args, String label){
-        if(!sender.hasPermission("landlord.admin.convertdb")) {
-            sender.sendMessage(ChatColor.RED+"You do not have permission.");
-        }
-        sender.sendMessage(ChatColor.RED+"Starting OwnedLand conversion...");
-        List<OwnedLand> allLand = plugin.getDatabase().find(OwnedLand.class).findList();
-        for (OwnedLand l : allLand){
-            if(l.getOwnerName().length() < 32){
-                //plugin.getLogger().info("Converting "+ l.getId() + "...");
-                        /*
-                         * *************************************
-                         * mark for possible change    !!!!!!!!!
-                         * *************************************
-                         */
-                if(getOfflinePlayer(l.getOwnerName()).hasPlayedBefore()) {
-                    plugin.getLogger().info("Converting "+ l.getId() + "... Owner: "+l.getOwnerName());
-                    l.setOwnerName(getOfflinePlayer(l.getOwnerName()).getUniqueId().toString());
-                    plugin.getDatabase().save(l);
 
-                } else {
-                    plugin.getLogger().info("Deleting "+ l.getId() + "! Owner: "+l.getOwnerName());
-                    plugin.getDatabase().delete(l);
-                }
-
-
-            }
-        }
-        sender.sendMessage(ChatColor.GREEN+"Land Conversion completed!");
-
-        sender.sendMessage(ChatColor.RED+"Starting Friend conversion...");
-        List<Friend> allFriends = plugin.getDatabase().find(Friend.class).findList();
-        for (Friend f : allFriends){
-            if(f.getPlayerName().length() < 32){
-                //plugin.getLogger().info("Converting "+ l.getId() + "...");
-                        /*
-                         * *************************************
-                         * mark for possible change    !!!!!!!!!
-                         * *************************************
-                         */
-                if(getOfflinePlayer(f.getPlayerName()).hasPlayedBefore()) {
-                    plugin.getLogger().info("Converting "+ f.getId() + "... Name: "+f.getPlayerName());
-                    f.setPlayerName(getOfflinePlayer(f.getPlayerName()).getUniqueId().toString());
-                    plugin.getDatabase().save(f);
-
-                } else {
-                    plugin.getLogger().info("Deleting "+ f.getId() + "! Name: "+f.getPlayerName());
-                    plugin.getDatabase().delete(f);
-                }
-
-
-            }
-        }
-        sender.sendMessage(ChatColor.GREEN+"Friend Conversion completed!");
-        return true;
-    }
 
 
 

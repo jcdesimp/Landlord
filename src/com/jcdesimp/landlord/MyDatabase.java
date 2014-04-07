@@ -1,4 +1,8 @@
-package com.lennardf1989.bukkitex;
+package com.jcdesimp.landlord;
+
+/**
+ * File created by jcdesimp on 4/6/14.
+ */
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -29,6 +33,7 @@ public abstract class MyDatabase {
     private boolean usingSQLite;
     private ServerConfig serverConfig;
     private EbeanServer ebeanServer;
+    private List<List> holds;
 
     /**
      * Create an instance of MyDatabase
@@ -187,18 +192,27 @@ public abstract class MyDatabase {
         for (int i = 0; i < classes.size(); i++) {
             try {
                 //Do a simple query which only throws an exception if the table does not exist
-                ebeanServer.find(classes.get(i)).findRowCount();
+                System.out.println(classes.get(i).getName()+" Table Row count: " + ebeanServer.find(classes.get(i)).findRowCount());
+
 
                 //Query passed without throwing an exception, a database therefore already exists
                 databaseExists = true;
-                //////CHANGE///////
                 //break;
             }
             catch (Exception ex) {
-                //databaseExists = false;
+                DdlGenerator g = ((SpiEbeanServer) ebeanServer).getDdlGenerator();
+                if(classes.get(i).getName().equals("com.jcdesimp.landlord.DBVersion")){
+                    g.runScript(false, "create table ll_version (\n" +
+                            "id                        integer primary key,\n" +
+                            "identifier                varchar(255) not null,\n" +
+                            "string_data                varchar(255),\n" +
+                            "int_data                   integer\n" +
+                            ");");
+                }
 
-                //////CHANGE///////
-                rebuild = true;
+                //ebeanServer.execute(ebeanServer.);
+                System.out.println(classes.get(i).getName()+ " doesn't exist!");
+                //rebuild = true;
             }
         }
 
@@ -222,14 +236,8 @@ public abstract class MyDatabase {
             }
         }
 
-        //////CHANGE///////
-        if(databaseExists){
-            //Generate a DropDDL-script
-            gen.runScript(true, gen.generateDropDdl());
-        }
-
-
-
+        //Generate a DropDDL-script
+        gen.runScript(true, gen.generateDropDdl());
 
         //If SQLite is being used, the database has to reloaded to release all resources
         if(usingSQLite) {
@@ -390,12 +398,31 @@ public abstract class MyDatabase {
     /**
      * Method called before the loaded database is being dropped
      */
-    protected void beforeDropDatabase() {}
+    protected void beforeDropDatabase() {
+        //ebeanServer.fin
+        /*for(Class c : getDatabaseClasses()) {
+            try {
+                holds.add(ebeanServer.find(c).findList());
+
+
+            } catch (Exception ex) {
+                //throw new RuntimeException("An unexpected exception occured", ex);
+            }
+        } */
+    }
 
     /**
      * Method called after the loaded database has been created
      */
-    protected void afterCreateDatabase() {}
+    protected void afterCreateDatabase() {
+        /*for(List l : holds) {
+            try {
+                ebeanServer.save(l);
+            } catch (Exception ex) {
+                //throw new RuntimeException("An unexpected exception occured", ex);
+            }
+        }*/
+    }
 
     /**
      * Method called near the end of prepareDatabase, before the dataSourceConfig is attached to the serverConfig.

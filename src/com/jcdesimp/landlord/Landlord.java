@@ -1,7 +1,7 @@
 package com.jcdesimp.landlord;
 
 import com.avaje.ebean.EbeanServer;
-import com.lennardf1989.bukkitex.MyDatabase;
+//import com.lennardf1989.bukkitex.MyDatabase;
 import net.milkbowl.vault.Vault;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+
+import static org.bukkit.Bukkit.getOfflinePlayer;
 
 /**
  *
@@ -74,6 +76,8 @@ public final class Landlord extends JavaPlugin {
                 getLogger().warning("No economy found, economy features disabled.");
             }
         }
+
+        verifyDatabaseVersion();
 
     }
 
@@ -176,6 +180,7 @@ public final class Landlord extends JavaPlugin {
                 List<Class<?>> list = new ArrayList<Class<?>>();
                 list.add(OwnedLand.class);
                 list.add(Friend.class);
+                list.add(DBVersion.class);
 
                 return list;
             };
@@ -207,6 +212,71 @@ public final class Landlord extends JavaPlugin {
     @Override
     public EbeanServer getDatabase() {
         return database.getDatabase();
+    }
+
+    public void verifyDatabaseVersion() {
+        int CURRENT_VERSION = 1;
+        if (this.getDatabase().find(DBVersion.class).where().eq("identifier","version").findUnique() == null) {
+            //Convert Database
+            this.getLogger().info("Starting OwnedLand conversion...");
+            List<OwnedLand> allLand = plugin.getDatabase().find(OwnedLand.class).findList();
+            for (OwnedLand l : allLand){
+                if(l.getOwnerName().length() < 32){
+                    //plugin.getLogger().info("Converting "+ l.getId() + "...");
+                        /*
+                         * *************************************
+                         * mark for possible change    !!!!!!!!!
+                         * *************************************
+                         */
+                    if(getOfflinePlayer(l.getOwnerName()).hasPlayedBefore()) {
+                        plugin.getLogger().info("Converting "+ l.getId() + "... Owner: "+l.getOwnerName());
+                        l.setOwnerName(getOfflinePlayer(l.getOwnerName()).getUniqueId().toString());
+                        plugin.getDatabase().save(l);
+
+                    } else {
+                        plugin.getLogger().info("Deleting "+ l.getId() + "! Owner: "+l.getOwnerName());
+                        plugin.getDatabase().delete(l);
+                    }
+
+
+                }
+            }
+            this.getLogger().info("Land Conversion completed!");
+
+            this.getLogger().info("Starting Friend conversion...");
+            List<Friend> allFriends = plugin.getDatabase().find(Friend.class).findList();
+            for (Friend f : allFriends){
+                if(f.getPlayerName().length() < 32){
+                    //plugin.getLogger().info("Converting "+ l.getId() + "...");
+                        /*
+                         * *************************************
+                         * mark for possible change    !!!!!!!!!
+                         * *************************************
+                         */
+                    if(getOfflinePlayer(f.getPlayerName()).hasPlayedBefore()) {
+                        plugin.getLogger().info("Converting "+ f.getId() + "... Name: "+f.getPlayerName());
+                        f.setPlayerName(getOfflinePlayer(f.getPlayerName()).getUniqueId().toString());
+                        plugin.getDatabase().save(f);
+
+                    } else {
+                        plugin.getLogger().info("Deleting "+ f.getId() + "! Name: "+f.getPlayerName());
+                        plugin.getDatabase().delete(f);
+                    }
+
+
+                }
+            }
+            this.getLogger().info("Friend Conversion completed!");
+            DBVersion vUpdate = new DBVersion();
+            vUpdate.setIdentifier("version");
+            vUpdate.setIntData(1);
+            this.getDatabase().save(vUpdate);
+        }
+        int currVersion = this.getDatabase().find(DBVersion.class).where().eq("identifier","version").findUnique().getIntData();
+        if(currVersion < CURRENT_VERSION){
+            this.getLogger().info("Database outdated!");
+        }
+
     }
 
 
