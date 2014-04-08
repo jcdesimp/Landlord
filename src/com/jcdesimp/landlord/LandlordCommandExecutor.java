@@ -1,5 +1,8 @@
 package com.jcdesimp.landlord;
 
+import com.jcdesimp.landlord.landManagement.LandManagerView;
+import com.jcdesimp.landlord.persistantData.Friend;
+import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

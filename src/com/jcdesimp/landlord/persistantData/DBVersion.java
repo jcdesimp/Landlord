@@ -1,4 +1,4 @@
-package com.jcdesimp.landlord;
+package com.jcdesimp.landlord.persistantData;
 
 import com.avaje.ebean.validation.NotNull;
 

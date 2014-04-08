@@ -1,8 +1,8 @@
-package com.jcdesimp.landlord;
+package com.jcdesimp.landlord.configuration;
 
 /**
  * File created by jcdesimp on 4/8/14.
  */
-public class CustomConfig {
+public class ConfigManager {
     //To be implemented
 }

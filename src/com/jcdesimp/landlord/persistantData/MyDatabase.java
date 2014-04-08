@@ -1,4 +1,4 @@
-package com.jcdesimp.landlord;
+package com.jcdesimp.landlord.persistantData;
 
 /**
  * File created by jcdesimp on 4/6/14.

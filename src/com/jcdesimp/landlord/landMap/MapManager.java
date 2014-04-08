@@ -1,4 +1,4 @@
-package com.jcdesimp.landlord;
+package com.jcdesimp.landlord.landMap;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -8,7 +8,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  * File created by jcdesimp on 3/10/14.

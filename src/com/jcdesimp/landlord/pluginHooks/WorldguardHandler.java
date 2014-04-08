@@ -1,4 +1,4 @@
-package com.jcdesimp.landlord;
+package com.jcdesimp.landlord.pluginHooks;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.UnsupportedIntersectionException;

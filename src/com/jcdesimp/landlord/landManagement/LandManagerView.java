@@ -1,6 +1,8 @@
-package com.jcdesimp.landlord;
+package com.jcdesimp.landlord.landManagement;
 
 import com.jcdesimp.landlord.DarkBladee12.ParticleAPI.ParticleEffect;
+import com.jcdesimp.landlord.Landlord;
+import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.*;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;

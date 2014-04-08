@@ -1,4 +1,4 @@
-package com.jcdesimp.landlord;
+package com.jcdesimp.landlord.persistantData;
 
 /**
  * File created by jcdesimp on 2/28/14.
@@ -6,6 +6,7 @@ package com.jcdesimp.landlord;
  */
 import com.jcdesimp.landlord.DarkBladee12.ParticleAPI.ParticleEffect;
 import com.avaje.ebean.validation.NotNull;
+import com.jcdesimp.landlord.Landlord;
 import org.bukkit.*;
 
 import javax.persistence.*;

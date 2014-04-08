@@ -1,5 +1,6 @@
-package com.jcdesimp.landlord;
+package com.jcdesimp.landlord.landManagement;
 
+import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;

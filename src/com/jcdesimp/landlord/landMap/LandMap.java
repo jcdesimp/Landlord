@@ -1,6 +1,8 @@
-package com.jcdesimp.landlord;
+package com.jcdesimp.landlord.landMap;
 
 
+import com.jcdesimp.landlord.Landlord;
+import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
