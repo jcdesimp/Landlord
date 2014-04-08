@@ -26,6 +26,8 @@ import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import com.avaje.ebeaninternal.server.lib.sql.TransactionIsolation;
 
+import javax.persistence.Table;
+
 public abstract class MyDatabase {
     private JavaPlugin javaPlugin;
     private ClassLoader classLoader;
@@ -192,7 +194,8 @@ public abstract class MyDatabase {
         for (int i = 0; i < classes.size(); i++) {
             try {
                 //Do a simple query which only throws an exception if the table does not exist
-                System.out.println(classes.get(i).getName()+" Table Row count: " + ebeanServer.find(classes.get(i)).findRowCount());
+                //System.out.println(classes.get(i).getName()+" Table Row count: " +
+                ebeanServer.find(classes.get(i)).findRowCount();
 
 
                 //Query passed without throwing an exception, a database therefore already exists
@@ -200,18 +203,23 @@ public abstract class MyDatabase {
                 //break;
             }
             catch (Exception ex) {
+                System.out.println(classes.get(i).getName()+ " doesn't exist!");
                 DdlGenerator g = ((SpiEbeanServer) ebeanServer).getDdlGenerator();
-                if(classes.get(i).getName().equals("com.jcdesimp.landlord.DBVersion")){
-                    g.runScript(false, "create table ll_version (\n" +
-                            "id                        integer primary key,\n" +
-                            "identifier                varchar(255) not null,\n" +
-                            "string_data                varchar(255),\n" +
-                            "int_data                   integer\n" +
-                            ");");
+
+                String gs = g.generateCreateDdl();
+                String[] scriptStatements = gs.split(";");
+                //System.out.println("NAME: "+classes.get(i).getAnnotation(Table.class).name());
+                for (String s : scriptStatements){
+                    if(s.contains("create table "+classes.get(i).getAnnotation(Table.class).name())) {
+                        g.runScript(false, s+";");
+                        break;
+                    }
                 }
+                //g.runScript();
+
 
                 //ebeanServer.execute(ebeanServer.);
-                System.out.println(classes.get(i).getName()+ " doesn't exist!");
+
                 //rebuild = true;
             }
         }

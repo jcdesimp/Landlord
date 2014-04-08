@@ -229,12 +229,12 @@ public final class Landlord extends JavaPlugin {
                          * *************************************
                          */
                     if(getOfflinePlayer(l.getOwnerName()).hasPlayedBefore()) {
-                        plugin.getLogger().info("Converting "+ l.getId() + "... Owner: "+l.getOwnerName());
+                        //plugin.getLogger().info("Converting "+ l.getId() + "... Owner: "+l.getOwnerName());
                         l.setOwnerName(getOfflinePlayer(l.getOwnerName()).getUniqueId().toString());
                         plugin.getDatabase().save(l);
 
                     } else {
-                        plugin.getLogger().info("Deleting "+ l.getId() + "! Owner: "+l.getOwnerName());
+                        //plugin.getLogger().info("Deleting "+ l.getId() + "! Owner: "+l.getOwnerName());
                         plugin.getDatabase().delete(l);
                     }
 
@@ -254,12 +254,12 @@ public final class Landlord extends JavaPlugin {
                          * *************************************
                          */
                     if(getOfflinePlayer(f.getPlayerName()).hasPlayedBefore()) {
-                        plugin.getLogger().info("Converting "+ f.getId() + "... Name: "+f.getPlayerName());
+                        //plugin.getLogger().info("Converting "+ f.getId() + "... Name: "+f.getPlayerName());
                         f.setPlayerName(getOfflinePlayer(f.getPlayerName()).getUniqueId().toString());
                         plugin.getDatabase().save(f);
 
                     } else {
-                        plugin.getLogger().info("Deleting "+ f.getId() + "! Name: "+f.getPlayerName());
+                        //plugin.getLogger().info("Deleting "+ f.getId() + "! Name: "+f.getPlayerName());
                         plugin.getDatabase().delete(f);
                     }
 
