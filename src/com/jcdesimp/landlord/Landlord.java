@@ -6,14 +6,18 @@ import net.milkbowl.vault.Vault;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import javax.persistence.PersistenceException;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import static org.bukkit.Bukkit.getOfflinePlayer;
@@ -39,8 +43,37 @@ public final class Landlord extends JavaPlugin {
         //listner = new LandListener();
         getServer().getPluginManager().registerEvents(new LandListener(this), this);
         getServer().getPluginManager().registerEvents(mapManager, this);
+
+        //// CONFIG FILE MANAGEMENT ///
+
+
+
+
+        Map<String,Object> oldConfig = getConfig().getValues(true);
         //Generates new config file if not present
         saveDefaultConfig();
+        String header = getConfig().options().header();
+        FileConfiguration config = getConfig();
+
+
+        // checks for missing entries and applies new ones
+        for (Map.Entry<String, Object> entry : config.getDefaults().getValues(true).entrySet())
+        {
+            if(oldConfig.containsKey(entry.getKey())){
+                config.set(entry.getKey(),oldConfig.get(entry.getKey()));
+            } else {
+                config.set(entry.getKey(), entry.getValue());
+            }
+
+        }
+
+        saveConfig();
+
+        ////////////////////////////////
+
+
+
+        // Database creation, configuration, and maintenance.
         setupDatabase();
         //getLogger().info(getDescription().getName() + ": Created by Jcdesimp");
         getLogger().info("Created by Jcdesimp!");

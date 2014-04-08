@@ -1,34 +1,47 @@
-#Landlord Created by Jcdesimp
+# Landlord Created by Jcdesimp
+# ##### DEFAULT CONFIG #####
+# General options
+# options:
+#    #Enable sound effects when interacting with owned land.
+#    soundEffects: true
+#    #Enable particle effects for land interaction
+#    particleEffects: true
+#    #Enable the land map (/landlord map)
+#    #Can sometimes be resource intensive if a lot of players have it open.
+#    enableMap: true
+# Limits on owned land
+# limits:
+#    #Max land a regular player can own (-1 for no limit).
+#    landLimit: 10
+#    #Extra land a player with "landlord.limit.extra" can own (Gets added to landLimit).
+#    extra: 10
+# Economy settings (Requires Vault)
+# economy:
+#    #Enable economy integration features
+#    enable: false
+#    #Cost of claiming land
+#    buyPrice: 100
+#    #Money given to player when unclaiming land
+#    sellPrice: 50
+# Worldguard Options (Requires Worldguard)
+# worldguard:
+#    #Prevent players from claiming chunks that intersect with worldguard regions,
+#    #UNLESS they have build permissions within that region.
+#    blockRegionClaim: true
+# newTestValue: test
+# #### CONFIGURE OPTIONS BELOW ####
 
-#General options
 options:
-    #Enable sound effects when interacting with owned land.
-    soundEffects: true
-    #Enable particle effects for land interaction
-    particleEffects: true
-
-    #Enable the land map (/landlord map)
-    #Can sometimes be resource intensive if a lot of players have it open.
-    enableMap: true
-
-#Limits on owned land
+  soundEffects: true
+  particleEffects: true
+  enableMap: true
 limits:
-    #Max land a regular player can own (-1 for no limit).
-    landLimit: 10
-    #Extra land a player with "landlord.limit.extra" can own (Gets added to landLimit).
-    extra: 10
-
-#Economy settings (Requires Vault)
+  landLimit: 10
+  extra: 10
 economy:
-    #Enable economy integration features
-    enable: false
-    #Cost of claiming land
-    buyPrice: 100
-    #Money given to player when unclaiming land
-    sellPrice: 50
-
-#Worldguard Options (Requires Worldguard)
+  enable: false
+  buyPrice: 100
+  sellPrice: 50
 worldguard:
-    #Prevent players from claiming chunks that intersect with worldguard regions,
-    #UNLESS they have build permissions within that region.
-    blockRegionClaim: true
+  blockRegionClaim: true
+newTestValue: test
