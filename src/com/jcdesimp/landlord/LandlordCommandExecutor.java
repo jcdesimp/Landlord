@@ -15,6 +15,7 @@ import java.util.List;
 
 import static org.bukkit.Bukkit.getOfflinePlayer;
 import static org.bukkit.Bukkit.getPlayer;
+import static org.bukkit.Bukkit.getWorld;
 import static org.bukkit.util.NumberConversions.ceil;
 
 /**
@@ -201,8 +202,13 @@ public class LandlordCommandExecutor implements CommandExecutor {
             helpList.add(ChatColor.DARK_AQUA+"/"+label + " listplayer <player>" + ChatColor.RESET + " - List land owned by another player.\n");
         }
         if(sender.hasPermission("landlord.admin.clearworld")){
-            helpList.add(ChatColor.DARK_AQUA+"/"+label + " clearworld <world> [player]" + ChatColor.RESET + " - Delete all land owned by a player in a world." +
-                    " Delete all land of a world from console.\n");
+            String clearHelp = ChatColor.DARK_AQUA+"/"+label + " clearworld <world> [player]" + ChatColor.RESET + " - Delete all land owned by a player in a world." +
+                    " Delete all land of a world from console.\n";
+            if(plugin.getConfig().getBoolean("options.regenOnUnclaim",false)){
+                clearHelp += ChatColor.YELLOW+""+ChatColor.ITALIC+" Does not regenerate chunks.\n";
+            }
+            helpList.add(clearHelp);
+
         }
         if(sender.hasPermission("landlord.admin.reload")){
             helpList.add(ChatColor.DARK_AQUA+"/"+label + " reload" + ChatColor.RESET + " - Reloads the Landlord config file.\n");
@@ -359,12 +365,15 @@ public class LandlordCommandExecutor implements CommandExecutor {
                     //System.out.println("COORDS: "+coords);
                     x = Integer.parseInt(coords[0]);
                     z = Integer.parseInt(coords[1]);
+                    currChunk = currChunk.getWorld().getChunkAt(x,z);
                     if(args.length>2){
-                        worldname = args[2];
+
                         if(plugin.getServer().getWorld(worldname) == null){
                             player.sendMessage(ChatColor.RED + "World \'"+worldname + "\' does not exist.");
                             return true;
                         }
+                        currChunk = getWorld(worldname).getChunkAt(x, z);
+
                     }
                 } catch (NumberFormatException e){
                     //e.printStackTrace();
@@ -839,7 +848,12 @@ public class LandlordCommandExecutor implements CommandExecutor {
         if(args.length > 1){
             List<OwnedLand> land;
             if(args.length > 2){
-                land = plugin.getDatabase().find(OwnedLand.class).where().ieq("ownerName",args[2]).eq("worldName",args[1]).findList();
+                /*
+                 * *************************************
+                 * mark for possible change    !!!!!!!!!
+                 * *************************************
+                 */
+                land = plugin.getDatabase().find(OwnedLand.class).where().ieq("ownerName",getPlayer(args[2]).getUniqueId().toString()).eq("worldName",args[1]).findList();
             } else {
                 if(sender instanceof Player){
                     sender.sendMessage(ChatColor.RED+"You can only delete entire worlds from the console.");

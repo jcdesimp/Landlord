@@ -355,6 +355,9 @@ public class OwnedLand {
     }
 
 
+    public void delete() {
+        Landlord.getInstance().getDatabase().delete(this);
+    }
 
 
     /**

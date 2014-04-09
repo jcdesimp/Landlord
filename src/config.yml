@@ -30,7 +30,6 @@
 #    #Prevent players from claiming chunks that intersect with worldguard regions,
 #    #UNLESS they have build permissions within that region.
 #    blockRegionClaim: true
-# newTestValue: test
 # #### CONFIGURE OPTIONS BELOW ####
 
 options:
@@ -47,4 +46,3 @@ economy:
   sellPrice: 50
 worldguard:
   blockRegionClaim: true
-newTestValue: test
