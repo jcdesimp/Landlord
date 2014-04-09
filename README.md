@@ -11,4 +11,4 @@ Landlord aims to keep the minecraft experience simple and fluid for players whil
 
 Functionality
 ---------------
-Players claim land in chunks at a time for a configurable cost. That's all a player needs to do to protect their builds within that chunk. Each area of claimed land will have a very basic permissions system that users can choose to tweak with but also not touch if it isn't desired. Possible Feature: Allow connected claimed chunks to function as one "land" with shared.
+Players claim land in chunks at a time for a configurable cost. That's all a player needs to do to protect their builds within that chunk. Each area of claimed land will have a very basic permissions system that users can choose to tweak with but also not touch if it isn't desired.
