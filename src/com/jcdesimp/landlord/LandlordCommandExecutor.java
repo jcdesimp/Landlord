@@ -176,10 +176,13 @@ public class LandlordCommandExecutor implements CommandExecutor {
         }
         helpList.add(claim);
         String unclaim = ChatColor.DARK_AQUA+"/"+label + " unclaim [x,z] [world] (or "+"/"+label +" sell)" + ChatColor.RESET + " - Unclaim this chunk.\n";
-        if(plugin.hasVault()){
-            if(plugin.getvHandler().hasEconomy() && plugin.getConfig().getDouble("economy.sellPrice", 50.0)>0){
-                unclaim += ChatColor.YELLOW+""+ChatColor.ITALIC+" Get "+plugin.getvHandler().formatCash(plugin.getConfig().getDouble("economy.sellPrice", 50.0))+" per unclaim.\n";
+        if (plugin.hasVault() && plugin.getvHandler().hasEconomy() && plugin.getConfig().getDouble("economy.sellPrice", 50.0) > 0) {
+            if(plugin.getConfig().getBoolean("options.regenOnUnclaim",false)) {
+                unclaim+=ChatColor.RED+""+ChatColor.ITALIC +" Regenerates Chunk!";
             }
+            unclaim += ChatColor.YELLOW + "" + ChatColor.ITALIC + " Get " + plugin.getvHandler().formatCash(plugin.getConfig().getDouble("economy.sellPrice", 50.0)) + " per unclaim.\n";
+        } else if(plugin.getConfig().getBoolean("options.regenOnUnclaim",false)) {
+            unclaim+=ChatColor.RED+""+ChatColor.ITALIC +" Regenerates Chunk!\n";
         }
         helpList.add(unclaim);
 
@@ -402,6 +405,12 @@ public class LandlordCommandExecutor implements CommandExecutor {
                     ChatColor.YELLOW + "Successfully unclaimed chunk (" + currChunk.getX() + ", " +
                             currChunk.getZ() + ") in world \'" + currChunk.getWorld().getName() + "\'."
             );
+
+            //Regen land if enabled
+            if(plugin.getConfig().getBoolean("options.regenOnUnclaim",false)){
+                currChunk.getWorld().regenerateChunk(currChunk.getX(),currChunk.getZ());
+            }
+
             if(plugin.getConfig().getBoolean("options.soundEffects",true)){
                 player.playSound(player.getLocation(),Sound.ENDERMAN_HIT,10,.5f);
             }

@@ -9,6 +9,8 @@
 #    #Enable the land map (/landlord map)
 #    #Can sometimes be resource intensive if a lot of players have it open.
 #    enableMap: true
+#    #Regenerate a chunk when it is unclaimed (Removes all builds and changes)
+#    regenOnUnclaim: false
 # Limits on owned land
 # limits:
 #    #Max land a regular player can own (-1 for no limit).
@@ -35,6 +37,7 @@ options:
   soundEffects: true
   particleEffects: true
   enableMap: true
+  regenOnUnclaim: false
 limits:
   landLimit: 10
   extra: 10
