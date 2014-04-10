@@ -227,10 +227,14 @@ public class OwnedLand {
         }
         String[] permString = perms.split("\\|");
         //ArrayList<String[]> permArray = new ArrayList<String[]>();
-        String[][] permArray = new String[permString.length][];
-        for(int i = 0; i<permString.length; i++){
+        ArrayList<String> newPermString = new ArrayList<String>();
+        for (String s : permString){
+            newPermString.add(Integer.toBinaryString(Integer.parseInt(s)));
+        }
+        String[][] permArray = new String[newPermString.size()][];
+        for(int i = 0; i<newPermString.size(); i++){
             //permArray.add(permString[i].split(""));
-            permArray[i]=permString[i].split("(?!^)");
+            permArray[i]=newPermString.get(i).split("(?!^)");
         }
         //return permArray.toArray(new String[permArray.size()]);
         return permArray;
@@ -278,10 +282,12 @@ public class OwnedLand {
     public String permsToString(String[][] perms) {
         String permString = "";
         for(int i = 0; i<perms.length; i++){
+            String currPerm = "";
             for(int ii = 0; ii<perms[i].length; ii++){
-                permString += perms[i][ii];
+                currPerm += perms[i][ii];
 
             }
+            permString+=Integer.toString(Integer.parseInt(currPerm,2));
             if(i+1<perms.length){
                 permString += "|";
             }

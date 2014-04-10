@@ -3,6 +3,7 @@ package com.jcdesimp.landlord.persistantData;
 
 import com.avaje.ebean.validation.NotNull;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import javax.persistence.*;
@@ -20,6 +21,12 @@ import static org.bukkit.Bukkit.getOfflinePlayer;
 public class Friend {
 
     public static Friend friendFromPlayer(Player p) {
+        Friend fd = new Friend();
+        fd.setPlayerName(p.getUniqueId().toString());
+        return fd;
+    }
+
+    public static Friend friendFromOfflinePlayer(OfflinePlayer p) {
         Friend fd = new Friend();
         fd.setPlayerName(p.getUniqueId().toString());
         return fd;
@@ -63,10 +70,11 @@ public class Friend {
          * mark for possible change    !!!!!!!!!
          * *************************************
          */
-        if (!getOfflinePlayer(UUID.fromString(playerName)).hasPlayedBefore()) {
+        OfflinePlayer op = getOfflinePlayer(UUID.fromString(playerName));
+        if (!op.hasPlayedBefore()) {
             return ChatColor.ITALIC+"Unknown";
         }
-        return getOfflinePlayer(UUID.fromString(playerName)).getName();
+        return op.getName();
     }
 
     public UUID getUUID() {

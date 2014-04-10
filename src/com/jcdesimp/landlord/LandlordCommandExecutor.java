@@ -467,7 +467,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 player.sendMessage(ChatColor.RED+"That player is not recognized.");
                 return true;
             }
-            Friend friend = Friend.friendFromPlayer(getOfflinePlayer(args[1]).getPlayer());
+            Friend friend = Friend.friendFromOfflinePlayer(getOfflinePlayer(args[1]));
             /*
              * *************************************
              * mark for possible change    !!!!!!!!!
@@ -571,9 +571,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
             //check if page number is valid
             int pageNumber = 1;
             if (args.length > 1 && args[0].equals("friends")){
-                try{
-                    pageNumber = Integer.parseInt(args[1]);}
-                catch (NumberFormatException e){
+                try {
+                    pageNumber = Integer.parseInt(args[1]);
+                } catch (NumberFormatException e){
                     player.sendMessage(ChatColor.RED+"That is not a valid page number.");
                     return true;
                 }

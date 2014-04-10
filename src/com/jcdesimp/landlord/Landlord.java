@@ -306,6 +306,26 @@ public final class Landlord extends JavaPlugin {
                 }
             }
             this.getLogger().info("Friend Conversion completed!");
+            this.getLogger().info("Starting Permission conversion...");
+            allLand = plugin.getDatabase().find(OwnedLand.class).findList();
+            for (OwnedLand l : allLand){
+                if(l.getPermissions() != null) {
+
+
+                    String[] currPerms = l.getPermissions().split("\\|");
+                    String newPermString = "";
+                    for (int i = 0; i < currPerms.length; i++) {
+                        newPermString += Integer.toString(Integer.parseInt(currPerms[i], 2));
+                        if (i < currPerms.length - 1) {
+                            newPermString += "|";
+                        }
+
+                    }
+                    l.setPermissions(newPermString);
+                    plugin.getDatabase().save(l);
+                }
+            }
+            this.getLogger().info("Permission Conversion completed!");
             DBVersion vUpdate = new DBVersion();
             vUpdate.setIdentifier("version");
             vUpdate.setIntData(1);
