@@ -59,6 +59,9 @@ permissions:
     landlord.limit.extra:
         description: gives a larger land limit
         default: false
+    landlord.limit.override:
+        description: allows unlimited land ownership
+        default: false
 
     landlord.admin.unclaim:
         description: Unclaim anyone's land

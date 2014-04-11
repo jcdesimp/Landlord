@@ -292,7 +292,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
             }
             int limit = plugin.getConfig().getInt("limits.landLimit",10);
-            if(limit >= 0){
+            if(limit >= 0 && !player.hasPermission("landlord.limit.override")){
                 if(player.hasPermission("landlord.limit.extra")){
                     limit+=plugin.getConfig().getInt("limits.extra",0);
                 }
