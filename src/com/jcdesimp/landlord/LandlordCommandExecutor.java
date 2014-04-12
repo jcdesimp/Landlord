@@ -77,9 +77,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
                  * Make sure to change back!!!
                  *
                  */
-                //return landlord_map(sender, args);
-                sender.sendMessage(ChatColor.RED+"Land map is temporarily disabled!");
-                return true;
+                return landlord_map(sender, args);
+                //sender.sendMessage(ChatColor.RED+"Land map is temporarily disabled!");
+                //return true;
             } else if(args[0].equalsIgnoreCase("manage")) {
                 return landlord_manage(sender, args);
 
