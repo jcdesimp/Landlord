@@ -140,7 +140,7 @@ public class LandListener implements Listener {
     public void storageOpenCropTrample(PlayerInteractEvent event){
         //System.out.println(event.getAction().toString());
         //System.out.println(event.getClickedBlock().getType().toString());
-        String[] blockAccess = {"CHEST","TRAPPED_CHEST","BURNING_FURNACE","FURNACE","ANVIL","DROPPER","DISPENSER","HOPPER","BREWING_STAND","SOIL"};
+        String[] blockAccess = {"CHEST","TRAPPED_CHEST","BURNING_FURNACE","FURNACE","ANVIL","DROPPER","DISPENSER","HOPPER","BREWING_STAND","SOIL","BEACON"};
         //System.out.println(event.getClickedBlock().getType());
 
         if(!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.PHYSICAL))){
