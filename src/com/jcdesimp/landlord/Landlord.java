@@ -2,6 +2,7 @@ package com.jcdesimp.landlord;
 
 import com.avaje.ebean.EbeanServer;
 //import com.lennardf1989.bukkitex.MyDatabase;
+import com.jcdesimp.landlord.landManagement.FlagManager;
 import com.jcdesimp.landlord.landManagement.LandListener;
 import com.jcdesimp.landlord.landMap.MapManager;
 import com.jcdesimp.landlord.persistantData.DBVersion;
@@ -38,6 +39,7 @@ public final class Landlord extends JavaPlugin {
     private MapManager mapManager = new MapManager();
     private WorldguardHandler wgHandler;
     private VaultHandler vHandler;
+    private FlagManager flagManager;
 
 
 
@@ -46,7 +48,9 @@ public final class Landlord extends JavaPlugin {
         plugin = this;
         //listner = new LandListener();
         getServer().getPluginManager().registerEvents(new LandListener(this), this);
+        flagManager = new FlagManager(this);
         getServer().getPluginManager().registerEvents(mapManager, this);
+
 
         //// CONFIG FILE MANAGEMENT ///
 
@@ -125,7 +129,9 @@ public final class Landlord extends JavaPlugin {
     }
 
 
-
+    public FlagManager getFlagManager() {
+        return flagManager;
+    }
 
     public MapManager getMapManager() {
         return mapManager;

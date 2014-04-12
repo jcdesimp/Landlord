@@ -48,7 +48,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             if(args.length == 0){
 
                 //landlord
-                return landlord(sender, args, label);
+                return landlord_help(sender, args, label);
 
             } else if(args[0].equalsIgnoreCase("help")) {
 
@@ -96,7 +96,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
                 return landlord_friends(sender,args,label);
             } else {
-                return landlord(sender, args, label);
+                return landlord_help(sender, args, label);
             }
 
         } //If this has happened the function will return true.
@@ -521,7 +521,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
              * mark for possible change    !!!!!!!!!
              * *************************************
              */
-            Friend frd = Friend.friendFromPlayer(getOfflinePlayer(args[1]).getPlayer());
+            Friend frd = Friend.friendFromOfflinePlayer(getOfflinePlayer(args[1]));
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
             if( land == null || !land.ownerUUID().equals(player.getUniqueId()) ){
                 player.sendMessage(ChatColor.RED + "You do not own this land.");

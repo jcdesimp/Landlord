@@ -68,6 +68,7 @@ public class LandMap {
     private Scoreboard displayMap(Player p){
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         Scoreboard board = manager.getNewScoreboard();
+        //Scoreboard board = manager.getMainScoreboard();
         Team team = board.registerNewTeam("teamname");
         team.addPlayer(p);
 
@@ -87,6 +88,7 @@ public class LandMap {
                 }
             }
             OfflinePlayer ofp = Bukkit.getOfflinePlayer(mapData[i].substring(5,17));
+            Landlord.getInstance().getLogger().warning("FAKE PLAYER: "+ofp.getName());
             Score score = objective.getScore(ofp);
             score.setScore(mapData.length - i);
 
