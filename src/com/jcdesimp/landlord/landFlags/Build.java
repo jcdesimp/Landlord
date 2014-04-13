@@ -11,7 +11,8 @@ import org.bukkit.Server;
  */
 public class Build extends Landflag {
     public Build() {
-        super("Build");
+        //super("Build");
+
 
 
 

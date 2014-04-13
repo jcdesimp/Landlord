@@ -7,6 +7,7 @@ import org.bukkit.*;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
@@ -37,7 +38,7 @@ public class LandManagerView implements Listener {
         this.ui = Bukkit.createInventory(null, 27, uiDisplayName);
         this.buildUI();
         this.setToggles();
-        this.showUI();
+        //this.showUI();
     }
 
     private ItemStack makeButton(String displayName, String[] lore, Material material){
@@ -160,8 +161,11 @@ public class LandManagerView implements Listener {
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event){
         HumanEntity p = event.getPlayer();
-        //player.sendMessage(ChatColor.GREEN + "Closing! " + event.getEventName());
-        if(event.getInventory().getTitle().contains("Land Manager") && p.getName().equalsIgnoreCase(player.getName())&& isOpen){
+
+        //player.sendMessage(ChatColor.GREEN + "Closing: " + event.getInventory().getTitle() + " of type "+ event.getInventory().getType());
+        //player.sendMessage(ChatColor.GREEN + "Viewer:" +
+                //" " + event.getViewers().toString());
+        if(event.getInventory().getTitle().contains("Land Manager") && p.getName().equalsIgnoreCase(player.getName()) /*&& isOpen*/ ){
 
 
             mLand.setPermissions(mLand.permsToString(perms));
@@ -171,11 +175,21 @@ public class LandManagerView implements Listener {
                 player.playSound(player.getLocation(),Sound.FIZZ,10,10);
             }
             mLand.highlightLand(player, ParticleEffect.DRIP_LAVA);
-            InventoryCloseEvent.getHandlerList().unregister(this);
+            //InventoryCloseEvent.getHandlerList().unregister(this);
+            HandlerList.unregisterAll(this);
         }
-        isOpen = true;
+        //isOpen = true;
 
     }
+
+    /*
+    @EventHandler
+    public void onInventoryOpen(InventoryOpenEvent event){
+        player.sendMessage(ChatColor.GREEN + "Opening! " + event.getEventName());
+        if(event.getInventory().getTitle().contains("Land Manager")){
+            isOpen = true;
+        }
+    }*/
 
     @EventHandler
     public void clickButton(InventoryClickEvent event){

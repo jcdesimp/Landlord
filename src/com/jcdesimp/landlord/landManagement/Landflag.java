@@ -6,12 +6,15 @@ import org.bukkit.event.Listener;
  * File created by jcdesimp on 4/11/14.
  */
 public abstract class Landflag implements Listener {
-    private String uniqueName = this.getClass().getSimpleName();
+    //Data Fields
+    private String uniqueName;
     private int permSlot;
 
-    protected Landflag(String uniqueName) {
-        this.uniqueName = uniqueName;
-    }
+    //Display Fields
+    private String displayName;
+    private String descrition;
+
+
 
     public String getUniqueName() {
         return uniqueName;
