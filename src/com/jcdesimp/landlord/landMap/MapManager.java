@@ -1,10 +1,13 @@
 package com.jcdesimp.landlord.landMap;
 
+import com.jcdesimp.landlord.Landlord;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -76,4 +79,24 @@ public class MapManager implements Listener {
             remMap(event.getPlayer().getName());
         }
     }
+
+
+    /**
+     * Update map when player teleports
+     * @param event
+     */
+    @EventHandler
+    public void playerTeleportKeepMap(PlayerTeleportEvent event){
+        final Player p = event.getPlayer();
+        if (mapList.containsKey(event.getPlayer().getName())) {
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Landlord.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    mapList.get(p.getName()).updateMap();
+                }
+            }, 1L);
+        }
+    }
+
+
 }

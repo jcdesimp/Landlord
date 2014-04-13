@@ -88,7 +88,7 @@ public class LandMap {
                 }
             }
             OfflinePlayer ofp = Bukkit.getOfflinePlayer(mapData[i].substring(5,17));
-            Landlord.getInstance().getLogger().warning("FAKE PLAYER: "+ofp.getName());
+            //Landlord.getInstance().getLogger().warning("FAKE PLAYER: "+ofp.getName());
             Score score = objective.getScore(ofp);
             score.setScore(mapData.length - i);
 
