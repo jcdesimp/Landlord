@@ -659,7 +659,11 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 player.sendMessage(ChatColor.RED+"You do not have permission.");
                 return true;
             }
-            plugin.getMapManager().toggleMap(player);
+            try {
+                plugin.getMapManager().toggleMap(player);
+            } catch (Exception e) {
+                sender.sendMessage(ChatColor.RED+"Map unavailable.");
+            }
 
         }
         return true;

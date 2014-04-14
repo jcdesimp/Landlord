@@ -3,15 +3,14 @@ package com.jcdesimp.landlord.landMap;
 
 import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * File created by jcdesimp on 3/1/14.
@@ -87,9 +86,94 @@ public class LandMap {
                     mapData[i] += ChatColor.RESET;
                 }
             }
-            OfflinePlayer ofp = Bukkit.getOfflinePlayer(mapData[i].substring(5,17));
-            //Landlord.getInstance().getLogger().warning("FAKE PLAYER: "+ofp.getName());
+
+
+            //THIS BETTER NOT STAY!!!!!!
+            class myOfflinePlayer implements OfflinePlayer {
+                String name;
+
+                public myOfflinePlayer(String name){
+                    this.name=name;
+                }
+
+                @Override
+                public Player getPlayer() {
+                    return null;
+                }
+                @Override
+                public boolean hasPlayedBefore() {
+                    return false;
+                }
+
+                @Override
+                public String getName() {
+                    return name;
+                }
+
+                @Override
+                public void setOp(boolean b){
+                    return;
+                }
+                @Override
+                public UUID getUniqueId() {
+                    return null;
+                }
+                @Override
+                public long getFirstPlayed(){
+                    return 0;
+                }
+
+                @Override
+                public boolean isBanned() {
+                    return false;
+                }
+
+                @Override
+                public Map<String,Object> serialize() {
+                    return null;
+                }
+
+                @Override
+                public boolean isWhitelisted() {
+                    return true;
+                }
+
+                @Override
+                public Location getBedSpawnLocation(){
+                    return null;
+                }
+
+                @Override
+                public void setWhitelisted(boolean b) {
+                    return;
+                }
+
+                @Override
+                public boolean isOnline(){
+                    return false;
+                }
+                @Override
+                public long getLastPlayed(){
+                    return 0;
+                }
+                @Override
+                public void setBanned(boolean b) {
+                    return;
+                }
+                @Override
+                public boolean isOp(){
+                    return false;
+                }
+
+            }
+
+            //OfflinePlayer ofp = Bukkit.getOfflinePlayer(mapData[i].substring(5,17));
+            OfflinePlayer ofp = new myOfflinePlayer(mapData[i].substring(5,17));
+            //String ofp = mapData[i].substring(5,17);
+
+
             Score score = objective.getScore(ofp);
+
             score.setScore(mapData.length - i);
 
 
