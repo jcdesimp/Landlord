@@ -88,19 +88,20 @@ public class LandManagerView implements Listener {
             ItemStack allState;
             //System.out.println("VALUE: "+mLand.getLandPerms()[0][l.getPermSlot()]);
             if(perms[0][l.getPermSlot()].equals("1")){
-                desc = colorLore(("Regular players "+l.getAllowedText()).split("\\|"));
+                desc = colorLore((
+                        ("Regular players "+l.getAllowedText())+"|"+ChatColor.YELLOW+"Click to toggle.").split("\\|"));
                 allState = makeButton(ChatColor.GREEN+l.getAllowedTitle(), desc, new ItemStack(Material.WOOL,1, (short)5));
             } else {
-                desc = colorLore(("Regular players "+l.getDeniedText()).split("\\|"));
+                desc = colorLore((("Regular players "+l.getDeniedText()+"|"+ChatColor.YELLOW+"Click to toggle.")).split("\\|"));
                 allState = makeButton(ChatColor.RED+l.getDeniedTitle(), desc, new ItemStack(Material.WOOL,1, (short)14));
             }
 
             ItemStack friendState;
             if(perms[1][l.getPermSlot()].equals("1")){
-                desc = colorLore(("Friends of this land "+l.getAllowedText()).split("\\|"));
+                desc = colorLore((("Friends of this land "+l.getAllowedText())+"|"+ChatColor.YELLOW+"Click to toggle.").split("\\|"));
                 friendState = makeButton(ChatColor.GREEN+l.getAllowedTitle(), desc, new ItemStack(Material.WOOL,1, (short)5));
             } else {
-                desc = colorLore(("Friends of this land "+l.getDeniedText()).split("\\|"));
+                desc = colorLore((("Friends of this land "+l.getDeniedText()+"|"+ChatColor.YELLOW+"Click to toggle.")).split("\\|"));
                 friendState = makeButton(ChatColor.RED+l.getDeniedTitle(), desc, new ItemStack(Material.WOOL,1, (short)14));
             }
 
@@ -165,75 +166,9 @@ public class LandManagerView implements Listener {
             slot++;
         }
 
-        /*for(int g=0; g<perms.length; g++){
-            //System.out.println(perms[g]);
-            //System.out.println("Build Perms: "+perms[g][1]);
 
-
-            switch (g){
-
-                case 0:  //everyone
-                    if(perms[g][1].equals("0")){
-                        ui.setItem(10,makeButton(ChatColor.RED+"Denied Build", new String[]{ChatColor.WHITE+"Regular players cannot build.",ChatColor.YELLOW+"Click to toggle."},
-                                new ItemStack(Material.WOOL, 1,(short)14)));
-                    } else {
-                        ui.setItem(10,makeButton(ChatColor.GREEN+"Allowed Build", new String[]{ChatColor.WHITE+"Regular players can build.",ChatColor.YELLOW+"Click to toggle."},
-                                new ItemStack(Material.WOOL, 1,(short)5)));
-                    }
-
-                    if(perms[g][2].equals("0")){
-                        ui.setItem(11,makeButton(ChatColor.RED+"Denied Animal Damage", new String[]{ChatColor.WHITE+"Regular players cannot harm animals.",ChatColor.YELLOW+"Click to toggle."},
-                                new ItemStack(Material.WOOL, 1,(short)14)));
-                    } else {
-                        ui.setItem(11,makeButton(ChatColor.GREEN+"Allowed Animal Damage", new String[]{ChatColor.WHITE+"Regular players can harm animals.",ChatColor.YELLOW+"Click to toggle."},
-                                new ItemStack(Material.WOOL, 1,(short)5)));
-                    }
-
-                    if(perms[g][3].equals("0")){
-                        ui.setItem(12,makeButton(ChatColor.RED+"Denied Container Access", new String[]{ChatColor.WHITE+"Regular players cannot access containers.",ChatColor.YELLOW+"Click to toggle."},
-                                new ItemStack(Material.WOOL, 1,(short)14)));
-                    } else {
-                        ui.setItem(12,makeButton(ChatColor.GREEN+"Allowed Container Access", new String[]{ChatColor.WHITE+"Regular players can access containers.",ChatColor.YELLOW+"Click to toggle."},
-                                new ItemStack(Material.WOOL, 1,(short)5)));
-                    }
-
-
-                    break;
-                case 1:  //friends
-                    if(perms[g][1].equals("0")){
-                        ui.setItem(19,makeButton(ChatColor.RED+"Denied Build", new String[]{ChatColor.WHITE+"Friends of this land cannot build.",ChatColor.YELLOW+"Click to toggle."},
-                                new ItemStack(Material.WOOL, 1,(short)14)));
-                    } else {
-                        ui.setItem(19,makeButton(ChatColor.GREEN+"Allowed Build", new String[]{ChatColor.WHITE+"Friends of this land can build.",ChatColor.YELLOW+"Click to toggle."},
-                                new ItemStack(Material.WOOL, 1,(short)5)));
-                    }
-                    if(perms[g][2].equals("0")){
-                        ui.setItem(20,makeButton(ChatColor.RED+"Denied Animal Damage", new String[]{ChatColor.WHITE+"Friends of this land cannot harm animals.",ChatColor.YELLOW+"Click to toggle."},
-                                new ItemStack(Material.WOOL, 1,(short)14)));
-                    } else {
-                        ui.setItem(20,makeButton(ChatColor.GREEN+"Allowed Animal Damage", new String[]{ChatColor.WHITE+"Friends of this land can harm animals.",ChatColor.YELLOW+"Click to toggle."},
-                                new ItemStack(Material.WOOL, 1,(short)5)));
-                    }
-
-                    if(perms[g][3].equals("0")){
-                        ui.setItem(21,makeButton(ChatColor.RED+"Denied Container Access", new String[]{ChatColor.WHITE+"Friends of this land cannot", ChatColor.WHITE+"access containers.",ChatColor.YELLOW+"Click to toggle."},
-                                new ItemStack(Material.WOOL, 1,(short)14)));
-                    } else {
-                        ui.setItem(21,makeButton(ChatColor.GREEN+"Allowed Container Access", new String[]{ChatColor.WHITE+"Friends of this land can",ChatColor.WHITE+"access containers.",ChatColor.YELLOW+"Click to toggle."},
-                                new ItemStack(Material.WOOL, 1,(short)5)));
-                    }
-                    break;
-
-
-            }
-        }*/
 
     }
-    /*
-    private void forceClose(){
-        player.closeInventory();
-        InventoryCloseEvent.getHandlerList().unregister(this);
-    }*/
 
 
     @EventHandler

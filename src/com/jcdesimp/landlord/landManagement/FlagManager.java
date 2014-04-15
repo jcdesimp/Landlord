@@ -47,6 +47,7 @@ public class FlagManager {
             e.printStackTrace();
             return false;
         }
+
         plugin.getLogger().info("Registered flag: "+f.getClass().getSimpleName());
         return true;
 
