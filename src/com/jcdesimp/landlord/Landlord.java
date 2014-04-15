@@ -2,13 +2,11 @@ package com.jcdesimp.landlord;
 
 import com.avaje.ebean.EbeanServer;
 //import com.lennardf1989.bukkitex.MyDatabase;
+import com.jcdesimp.landlord.landFlags.Build;
 import com.jcdesimp.landlord.landManagement.FlagManager;
-import com.jcdesimp.landlord.landManagement.LandListener;
+//import com.jcdesimp.landlord.landManagement.LandListener;
 import com.jcdesimp.landlord.landMap.MapManager;
-import com.jcdesimp.landlord.persistantData.DBVersion;
-import com.jcdesimp.landlord.persistantData.Friend;
-import com.jcdesimp.landlord.persistantData.MyDatabase;
-import com.jcdesimp.landlord.persistantData.OwnedLand;
+import com.jcdesimp.landlord.persistantData.*;
 import com.jcdesimp.landlord.pluginHooks.VaultHandler;
 import com.jcdesimp.landlord.pluginHooks.WorldguardHandler;
 import net.milkbowl.vault.Vault;
@@ -47,7 +45,7 @@ public final class Landlord extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         //listner = new LandListener();
-        getServer().getPluginManager().registerEvents(new LandListener(this), this);
+        //getServer().getPluginManager().registerEvents(new LandListener(this), this);
         flagManager = new FlagManager(this);
         getServer().getPluginManager().registerEvents(mapManager, this);
 
@@ -120,6 +118,11 @@ public final class Landlord extends JavaPlugin {
 
         verifyDatabaseVersion();
 
+
+        //Register default flags
+        flagManager.registerFlag(new Build());
+
+
     }
 
     @Override
@@ -137,8 +140,8 @@ public final class Landlord extends JavaPlugin {
         return mapManager;
     }
 
-    public static Plugin getInstance() {
-        return Bukkit.getPluginManager().getPlugin("Landlord");
+    public static Landlord getInstance() {
+        return (Landlord)Bukkit.getPluginManager().getPlugin("Landlord");
         //return Bukkit.getPluginManager().getPlugin("MyPlugin");
     }
 
@@ -226,6 +229,7 @@ public final class Landlord extends JavaPlugin {
                 list.add(OwnedLand.class);
                 list.add(Friend.class);
                 list.add(DBVersion.class);
+                list.add(LandFlagPerm.class);
 
                 return list;
             };
@@ -321,6 +325,7 @@ public final class Landlord extends JavaPlugin {
                     String[] currPerms = l.getPermissions().split("\\|");
                     String newPermString = "";
                     for (int i = 0; i < currPerms.length; i++) {
+                        currPerms[i]=currPerms[i].substring(0,3);
                         newPermString += Integer.toString(Integer.parseInt(currPerms[i], 2));
                         if (i < currPerms.length - 1) {
                             newPermString += "|";
@@ -331,6 +336,11 @@ public final class Landlord extends JavaPlugin {
                     plugin.getDatabase().save(l);
                 }
             }
+            //Entries for legacy flags
+            this.getDatabase().save(LandFlagPerm.flagPermFromData("Build",1));
+            this.getDatabase().save(LandFlagPerm.flagPermFromData("HarmAnimals",2));
+            this.getDatabase().save(LandFlagPerm.flagPermFromData("UseContainers",3));
+
             this.getLogger().info("Permission Conversion completed!");
             DBVersion vUpdate = new DBVersion();
             vUpdate.setIdentifier("version");

@@ -7,6 +7,7 @@ package com.jcdesimp.landlord.persistantData;
 import com.jcdesimp.landlord.DarkBladee12.ParticleAPI.ParticleEffect;
 import com.avaje.ebean.validation.NotNull;
 import com.jcdesimp.landlord.Landlord;
+import com.jcdesimp.landlord.landManagement.Landflag;
 import org.bukkit.*;
 
 import javax.persistence.*;
@@ -181,16 +182,33 @@ public class OwnedLand {
      *********************
      */
 
-    public enum LandAction {
+    /*public enum LandAction {
         BUILD, HARM_ANIMALS, OPEN_CONTAINERS
+    }*/
+
+    public static OwnedLand getApplicableLand(Location l){
+        Chunk c = l.getChunk();
+        return getLandFromDatabase(c.getX(),c.getZ(),c.getWorld().getName());
     }
+
+
 
     /**
      * Get default permission string
      * @return default permission string
      */
     private String[][] getDefaultPerms() {
-        return new String[][]{{"1","0","0","0","0","0","0","0","0","0"},{"1","1","1","1","1","1","0","0","0","0"}};
+        ArrayList<String> guestPerms = new ArrayList<String>();
+        ArrayList<String> friendsPerms = new ArrayList<String>();
+        guestPerms.add("1");
+        friendsPerms.add("1");
+        for(int i = 0; i<((Landlord)Landlord.getInstance()).getFlagManager().getRegisteredFlags().size(); i++){
+            guestPerms.add("0");
+            friendsPerms.add("1");
+        }
+
+
+        return new String[][]{guestPerms.toArray(new String[guestPerms.size()]),friendsPerms.toArray(new String[friendsPerms.size()])};
     }
 
 
@@ -240,39 +258,23 @@ public class OwnedLand {
         return permArray;
     }
 
-    public boolean hasPermTo(Player player, LandAction action){
+    public boolean hasPermTo(Player player, Landflag lf){
+        if(player.hasPermission("landlord.admin.bypass") || player.getUniqueId().equals(ownerUUID())){
+            return true;
+        }
         String[][] perms = getLandPerms();
+        int applicablePermSlot = ((Landlord)Landlord.getInstance()).getFlagManager()
+                .getRegisteredFlags().get(lf.getClass().getSimpleName()).getPermSlot();
         if(UUID.fromString(getOwnerName()).equals(player.getUniqueId())){
             return true;
         } else if (isFriend(player)) {
             String[] subPerms = perms[1];
-            switch (action){
-              case BUILD:
-                  return stringToBool(subPerms[1]);
-              case HARM_ANIMALS:
-                  return stringToBool(subPerms[2]);
-              case OPEN_CONTAINERS:
-                  return stringToBool(subPerms[3]);
-              default:
-                  return false;
-            }
+            return stringToBool(subPerms[applicablePermSlot]);
+
         } else {
             String[] subPerms = perms[0];
             //System.out.println("Is guest");
-            switch (action){
-
-                case BUILD:
-                    return stringToBool(subPerms[1]);
-                case HARM_ANIMALS:
-                    //System.out.println("check harm");
-                    return stringToBool(subPerms[2]);
-                case OPEN_CONTAINERS:
-                    return stringToBool(subPerms[3]);
-                default:
-                    return false;
-
-            }
-
+            return stringToBool(subPerms[applicablePermSlot]);
         }
     }
 
