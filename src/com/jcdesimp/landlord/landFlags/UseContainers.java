@@ -1,8 +1,17 @@
 package com.jcdesimp.landlord.landFlags;
 
 import com.jcdesimp.landlord.landManagement.Landflag;
+import com.jcdesimp.landlord.persistantData.OwnedLand;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Arrays;
 
 /**
  * File created by jcdesimp on 4/16/14.
@@ -59,6 +68,30 @@ public class UseContainers extends Landflag {
      *************************************
      */
 
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void storageOpenCropTrample(PlayerInteractEvent event){
+        //System.out.println(event.getAction().toString());
+        //System.out.println(event.getClickedBlock().getType().toString());
+        String[] blockAccess = {"CHEST","TRAPPED_CHEST","BURNING_FURNACE","FURNACE","ANVIL","DROPPER","DISPENSER","HOPPER","BREWING_STAND","SOIL","BEACON"};
+        //System.out.println(event.getClickedBlock().getType());
+
+        if(!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))){
+            return;
+        }
+        if(!Arrays.asList(blockAccess).contains(event.getClickedBlock().getType().toString())){
+            return;
+        }
+        OwnedLand land = OwnedLand.getApplicableLand(event.getClickedBlock().getLocation());
+        if(land == null){
+            return;
+        }
+        Player p = event.getPlayer();
+        if(!land.hasPermTo(p, this)){
+            p.sendMessage(ChatColor.RED + "You are not allowed to use containers on this land.");
+            event.setCancelled(true);
+        }
+    }
 
 
 
