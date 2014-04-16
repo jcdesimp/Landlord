@@ -18,10 +18,14 @@ import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.Arrays;
+*//*
+
 */
 /**
  * File created by jcdesimp on 3/4/14.
  *//*
+*/
+/*
 
 
 public class LandListener implements Listener {
@@ -34,11 +38,14 @@ public class LandListener implements Listener {
 
 
 
+*//*
+
 */
 /**
      * Event handler for animal damage
      * @param event being triggered
      *//*
+
 
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -106,12 +113,6 @@ public class LandListener implements Listener {
     }
 
 
-
-    */
-/**
-     * Event handler for block placements
-     * @param event that happened
-     *//*
 
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -271,17 +272,4 @@ public class LandListener implements Listener {
         }
     }
 
-
-*/
-/*
-    @EventHandler
-    public void playerJoin(PlayerLoginEvent e){
-        System.out.println("PLAYER UUID: "+e.getPlayer().getUniqueId().toString().replace("-",""));
-    }
-    *//*
-
-
-
-
-}
 */

@@ -6,13 +6,16 @@ import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
@@ -101,7 +104,7 @@ public class Build extends Landflag {
      *************************************
      * Of course u can register as many
      * event listeners as you need for your flag
-     * to fo it's job
+     * to do it's job
      *************************************
      */
     @EventHandler(priority = EventPriority.HIGH)
@@ -253,6 +256,41 @@ public class Build extends Landflag {
             event.setCancelled(true);
         }
 
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void paintingFramePlace(HangingPlaceEvent event){
+        org.bukkit.entity.Entity placer = event.getPlayer();
+        OwnedLand land = OwnedLand.getApplicableLand(event.getBlock().getLocation());
+        if(land == null){
+            return;
+        }
+        if(placer.getType().toString().equals("PLAYER")){
+            Player p = (Player)placer;
+            if(!land.hasPermTo(p, this)){
+                p.sendMessage(ChatColor.RED+"You cannot place that on this land.");
+                event.setCancelled(true);
+            }
+
+        }
+
+    }
+
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void storageOpenCropTrample(PlayerInteractEvent event) {
+        Chunk loc = event.getClickedBlock().getLocation().getChunk();
+        OwnedLand land = OwnedLand.getLandFromDatabase(loc.getX(), loc.getZ(), loc.getWorld().getName());
+        if (land == null) {
+            return;
+        }
+        Player p = event.getPlayer();
+
+        if (event.getAction().equals(Action.PHYSICAL) && !land.hasPermTo(p, this)) {
+            p.sendMessage(ChatColor.RED + "You are not allowed to destroy crops on this land.");
+            event.setCancelled(true);
+            return;
+        }
     }
 
 
