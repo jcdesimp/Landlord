@@ -275,7 +275,7 @@ public class OwnedLand {
             return true;
         }
         String[][] perms = getLandPerms();
-        int applicablePermSlot = ((Landlord)Landlord.getInstance()).getFlagManager()
+        int applicablePermSlot = (Landlord.getInstance()).getFlagManager()
                 .getRegisteredFlags().get(lf.getClass().getSimpleName()).getPermSlot();
         if(UUID.fromString(getOwnerName()).equals(player.getUniqueId())){
             return true;
@@ -288,6 +288,15 @@ public class OwnedLand {
             //System.out.println("Is guest");
             return stringToBool(subPerms[applicablePermSlot]);
         }
+    }
+
+    public boolean canEveryone(Landflag lf){
+        String[][] perms = getLandPerms();
+        int applicablePermSlot = (Landlord.getInstance()).getFlagManager()
+                .getRegisteredFlags().get(lf.getClass().getSimpleName()).getPermSlot();
+        String[] subPerms = perms[0];
+        //System.out.println("Is guest");
+        return stringToBool(subPerms[applicablePermSlot]);
     }
 
 

@@ -75,7 +75,7 @@ public class UseContainers extends Landflag {
 
         String[] blockAccess = {"CHEST","TRAPPED_CHEST","BURNING_FURNACE","FURNACE","ANVIL","DROPPER","DISPENSER","HOPPER","BREWING_STAND","SOIL","BEACON","JUKEBOX","CAULDRON"};
 
-        if(!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) || !event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
+        if(!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))){
             return;
         }
         //System.out.println(event.getAction().toString());

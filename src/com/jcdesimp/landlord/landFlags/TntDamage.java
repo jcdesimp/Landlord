@@ -1,8 +1,20 @@
 package com.jcdesimp.landlord.landFlags;
 
 import com.jcdesimp.landlord.landManagement.Landflag;
+import com.jcdesimp.landlord.persistantData.OwnedLand;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Arrays;
 
 /**
  * File created by jcdesimp on 4/16/14.
@@ -56,7 +68,53 @@ public class TntDamage extends Landflag {
      * to fo it's job
      *************************************
      */
+    @EventHandler(priority = EventPriority.HIGH)
+    public void tntExplode( EntityExplodeEvent event ){
+        if(!event.getEntityType().equals(EntityType.PRIMED_TNT)){
+            return;
+        }
+        TNTPrimed tnt = (TNTPrimed)event.getEntity();
+        OwnedLand land = OwnedLand.getApplicableLand(event.getLocation());
+        if(land == null){
+            return;
+        }
+        if(tnt.getSource() != null && tnt.getSource().getType().equals(EntityType.PLAYER)){
+            Player p = (Player)tnt.getSource();
+            if(!land.hasPermTo(p,this)){
+                event.setCancelled(true);
+                p.sendMessage(ChatColor.RED+"You cannot detonate TNT on this land.");
+                event.setCancelled(true);
+                return;
+            }
 
+        } else if(!land.canEveryone(this)){
+            event.setCancelled(true);
+        }
+
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void igniteTnt(PlayerInteractEvent event){
+
+        if(!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))){
+            return;
+        }
+        System.out.println(event.getAction().toString());
+        System.out.println(event.getClickedBlock().getType().toString());
+        System.out.println(event.getItem());
+        if(!(event.getClickedBlock().getType().equals(Material.TNT)) && event.getItem().getType().equals(Material.FLINT_AND_STEEL)){
+            return;
+        }
+        OwnedLand land = OwnedLand.getApplicableLand(event.getClickedBlock().getLocation());
+        if(land == null){
+            return;
+        }
+        Player p = event.getPlayer();
+        if(!land.hasPermTo(p, this)){
+            p.sendMessage(ChatColor.RED + "You are not allowed to ignite tnt on this land.");
+            event.setCancelled(true);
+        }
+    }
 
 
 
