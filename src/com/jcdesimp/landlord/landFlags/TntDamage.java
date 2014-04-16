@@ -99,9 +99,9 @@ public class TntDamage extends Landflag {
         if(!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))){
             return;
         }
-        System.out.println(event.getAction().toString());
-        System.out.println(event.getClickedBlock().getType().toString());
-        System.out.println(event.getItem().getType());
+        //System.out.println(event.getAction().toString());
+        //System.out.println(event.getClickedBlock().getType().toString());
+        //System.out.println(event.getItem().getType());
         if((event.getClickedBlock().getType().equals(Material.TNT)) && event.getItem() != null &&event.getItem().getType().equals(Material.FLINT_AND_STEEL)) {
 
             OwnedLand land = OwnedLand.getApplicableLand(event.getClickedBlock().getLocation());
