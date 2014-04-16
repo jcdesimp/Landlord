@@ -43,9 +43,16 @@ public class LandManagerView implements Listener {
         this.mLand = mLand;
         this.perms = mLand.getLandPerms();
         this.ui = Bukkit.createInventory(null, 36, "Land Manager");
+        int numPages = (int)ceil(permCols.size()/8);
+        if(numPages==0){
+            this.ui = Bukkit.createInventory(null, 27, "Land Manager");
+        }
         this.updateUIData();
         this.buildUI();
         this.setToggles();
+
+
+
         //this.showUI();
     }
 

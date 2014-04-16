@@ -35,7 +35,7 @@ public class UseContainers extends Landflag {
                         "chests, furnaces, anvils, hoppers,|" +           //Description (Lore of headerItem '|' will seperate lines of lore.)
                         "droppers, dispensers, beacons,|" +
                         "brewing stands, cauldrons,|" +
-                        "and Jukeboxes",
+                        "and Jukeboxes.",
                 new ItemStack(Material.CHEST),                      //Itemstack (represented in and manager)
                 "Allowed Container Usage",                              //Text shown in manager for granted permission
                 "can use containers.",                                  //Description in manager for granted permission (ex: Friendly players <desc>)
@@ -64,8 +64,8 @@ public class UseContainers extends Landflag {
     /*
      *************************************
      * Of course u can register as many
-     * event listeners as you need for your flag
-     * to fo it's job
+     * event listeners as you need for
+     * your flag to do it's job
      *************************************
      */
 

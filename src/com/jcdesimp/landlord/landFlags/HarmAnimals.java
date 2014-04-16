@@ -86,6 +86,9 @@ public class HarmAnimals extends Landflag {
         if(attacker.getType().toString().equals("PLAYER")){
             Player p = (Player)attacker;
             OwnedLand land = OwnedLand.getApplicableLand(victim.getLocation());
+            if(land==null){
+                return;
+            }
             if(!land.hasPermTo(p, this)){
 
                     p.sendMessage(ChatColor.RED+"You cannot harm animals on this land.");
@@ -100,6 +103,9 @@ public class HarmAnimals extends Landflag {
             if(a.getShooter() instanceof Player){
                 OwnedLand land = OwnedLand.getApplicableLand(victim.getLocation());
                 p = (Player)a.getShooter();
+                if(land==null){
+                    return;
+                }
                 //System.out.println(a.getType());
                 if(!land.hasPermTo(p, this)){
                     if(a.getType().toString().equals("ARROW")) {

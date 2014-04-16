@@ -43,7 +43,10 @@ public class Build extends Landflag {
     public Build() {
         super(
                 "Build",                                       //Display name (will be displayed to players)
-                "Gives permission to place|and break blocks",  //Description (Lore of headerItem '|' will seperate lines of lore.)
+                "Gives permission to place|" +
+                        "and break blocks and edit|" +
+                        "things like item frames and|" +       //Description (Lore of headerItem '|' will seperate lines of lore.)
+                        "note blocks.",
                 new ItemStack(Material.COBBLESTONE),           //Itemstack (represented in and manager)
                 "Allowed Build",                               //Text shown in manager for granted permission
                 "can build.",                                  //Description in manager for granted permission (ex: Friendly players <desc>)
@@ -282,26 +285,62 @@ public class Build extends Landflag {
         if(event.getClickedBlock()==null){
             return;
         }
-        Chunk loc = event.getClickedBlock().getLocation().getChunk();
-        OwnedLand land = OwnedLand.getLandFromDatabase(loc.getX(), loc.getZ(), loc.getWorld().getName());
-        if (land == null) {
-            return;
-        }
+
+
         Player p = event.getPlayer();
 
         //trampling crops
-        if (p!=null && event.getAction().equals(Action.PHYSICAL) && event.getClickedBlock().getType().toString().equals("SOIL")
-                && !land.hasPermTo(p, this)) {
+        if (p!=null && event.getAction().equals(Action.PHYSICAL) && event.getClickedBlock().getType().toString().equals("SOIL")) {
+            OwnedLand land = OwnedLand.getApplicableLand(event.getClickedBlock().getLocation());
+            if (land == null) {
+                return;
+            }
+            if(land.hasPermTo(p, this)){
+                return;
+            }
             p.sendMessage(ChatColor.RED + "You are not allowed to destroy crops on this land.");
             event.setCancelled(true);
             return;
         }
 
         //Using fire charge
-        if (p!=null && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.getItem().getType().equals(Material.FIREBALL) && !land.hasPermTo(p, this)) {
+        ItemStack item = event.getItem();
+        if (p!=null && item!=null && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.getItem().getType().equals(Material.FIREBALL)) {
+            OwnedLand land = OwnedLand.getApplicableLand(event.getClickedBlock().getLocation());
+            if (land == null) {
+                return;
+            }
+            if(land.hasPermTo(p, this)){
+                return;
+            }
             p.sendMessage(ChatColor.RED + "You cannot do that on this land.");
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void protectBlockStates(PlayerInteractEvent event){
+        Material[] blockedItems = {Material.NOTE_BLOCK, Material.REDSTONE_COMPARATOR_OFF, Material.REDSTONE_COMPARATOR_ON,
+                Material.DIODE_BLOCK_OFF, Material.DIODE_BLOCK_ON, Material.FLOWER_POT, Material.CAKE_BLOCK};
+        if(event.getClickedBlock()==null){
+            return;
+        }
+        Player p = event.getPlayer();
+        //System.out.println(event.getClickedBlock().getType());
+        if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) &&
+                Arrays.asList(blockedItems).contains(event.getClickedBlock().getType())){
+            OwnedLand land = OwnedLand.getApplicableLand(event.getClickedBlock().getLocation());
+            if (land == null) {
+                return;
+            }
+            if(land.hasPermTo(p,this)){
+                return;
+            }
+
+            p.sendMessage(ChatColor.RED+"You cannot do that on this land.");
+            event.setCancelled(true);
+        }
+
     }
 
 

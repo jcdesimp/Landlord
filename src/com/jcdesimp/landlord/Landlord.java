@@ -2,10 +2,7 @@ package com.jcdesimp.landlord;
 
 import com.avaje.ebean.EbeanServer;
 //import com.lennardf1989.bukkitex.MyDatabase;
-import com.jcdesimp.landlord.landFlags.Build;
-import com.jcdesimp.landlord.landFlags.HarmAnimals;
-import com.jcdesimp.landlord.landFlags.TntDamage;
-import com.jcdesimp.landlord.landFlags.UseContainers;
+import com.jcdesimp.landlord.landFlags.*;
 import com.jcdesimp.landlord.landManagement.FlagManager;
 //import com.jcdesimp.landlord.landManagement.LandListener;
 import com.jcdesimp.landlord.landMap.MapManager;
@@ -127,6 +124,8 @@ public final class Landlord extends JavaPlugin {
         flagManager.registerFlag(new HarmAnimals());
         flagManager.registerFlag(new UseContainers());
         flagManager.registerFlag(new TntDamage());
+        flagManager.registerFlag(new UseRedstone());
+        flagManager.registerFlag(new OpenDoor());
 
 
     }
