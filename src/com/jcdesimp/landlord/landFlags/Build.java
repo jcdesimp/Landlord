@@ -180,7 +180,7 @@ public class Build extends Landflag {
         }
         Player p;
         Entity attacker = event.getDamager();
-        System.out.println("Attacker: "+attacker.getType().toString());
+        //System.out.println("Attacker: "+attacker.getType().toString());
         if(attacker.getType().toString().equals("PLAYER")) {
             p = (Player) attacker;
 
@@ -278,7 +278,10 @@ public class Build extends Landflag {
 
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void storageOpenCropTrample(PlayerInteractEvent event) {
+    public void CropTrample(PlayerInteractEvent event) {
+        if(event.getClickedBlock()==null){
+            return;
+        }
         Chunk loc = event.getClickedBlock().getLocation().getChunk();
         OwnedLand land = OwnedLand.getLandFromDatabase(loc.getX(), loc.getZ(), loc.getWorld().getName());
         if (land == null) {
