@@ -34,7 +34,8 @@ public class UseContainers extends Landflag {
                 "Gives permission to use trap chests|" +
                         "chests, furnaces, anvils, hoppers,|" +           //Description (Lore of headerItem '|' will seperate lines of lore.)
                         "droppers, dispensers, beacons,|" +
-                        "and brewing stands.",
+                        "brewing stands, cauldrons,|" +
+                        "and Jukeboxes",
                 new ItemStack(Material.CHEST),                      //Itemstack (represented in and manager)
                 "Allowed Container Usage",                              //Text shown in manager for granted permission
                 "can use containers.",                                  //Description in manager for granted permission (ex: Friendly players <desc>)
@@ -70,15 +71,16 @@ public class UseContainers extends Landflag {
 
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void storageOpenCropTrample(PlayerInteractEvent event){
-        //System.out.println(event.getAction().toString());
-        //System.out.println(event.getClickedBlock().getType().toString());
-        String[] blockAccess = {"CHEST","TRAPPED_CHEST","BURNING_FURNACE","FURNACE","ANVIL","DROPPER","DISPENSER","HOPPER","BREWING_STAND","SOIL","BEACON"};
-        //System.out.println(event.getClickedBlock().getType());
+    public void useContainer(PlayerInteractEvent event){
 
-        if(!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))){
+        String[] blockAccess = {"CHEST","TRAPPED_CHEST","BURNING_FURNACE","FURNACE","ANVIL","DROPPER","DISPENSER","HOPPER","BREWING_STAND","SOIL","BEACON","JUKEBOX","CAULDRON"};
+
+        if(!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) || !event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
             return;
         }
+        //System.out.println(event.getAction().toString());
+        //System.out.println(event.getClickedBlock().getType().toString());
+        //System.out.println(event.getItem());
         if(!Arrays.asList(blockAccess).contains(event.getClickedBlock().getType().toString())){
             return;
         }
