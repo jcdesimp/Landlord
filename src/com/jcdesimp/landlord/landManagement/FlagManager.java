@@ -55,5 +55,9 @@ public class FlagManager {
 
     }
 
+    public int numStoredPerms() {
+        return plugin.getDatabase().find(LandFlagPerm.class).findList().size();
+    }
+
 }
 

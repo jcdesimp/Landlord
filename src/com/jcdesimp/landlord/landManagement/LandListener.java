@@ -1,4 +1,5 @@
 /*
+
 package com.jcdesimp.landlord.landManagement;
 
 import com.jcdesimp.landlord.persistantData.OwnedLand;
@@ -22,6 +23,7 @@ import java.util.Arrays;
  * File created by jcdesimp on 3/4/14.
  *//*
 
+
 public class LandListener implements Listener {
 
     JavaPlugin plugin;
@@ -31,11 +33,13 @@ public class LandListener implements Listener {
     }
 
 
-    */
+
+*/
 /**
      * Event handler for animal damage
      * @param event being triggered
      *//*
+
 
     @EventHandler(priority = EventPriority.HIGH)
     public void animalKill(EntityDamageByEntityEvent event){
@@ -102,11 +106,13 @@ public class LandListener implements Listener {
     }
 
 
+
     */
 /**
      * Event handler for block placements
      * @param event that happened
      *//*
+
 
     @EventHandler(priority = EventPriority.HIGH)
     public void blockPlace(BlockPlaceEvent event){
@@ -265,13 +271,15 @@ public class LandListener implements Listener {
         }
     }
 
-    */
+
+*/
 /*
     @EventHandler
     public void playerJoin(PlayerLoginEvent e){
         System.out.println("PLAYER UUID: "+e.getPlayer().getUniqueId().toString().replace("-",""));
     }
     *//*
+
 
 
 

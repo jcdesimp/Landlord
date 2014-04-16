@@ -202,7 +202,7 @@ public class LandManagerView implements Listener {
             //System.out.println(event.getSlot() +"");
             event.setCancelled(true);
             //System.out.println("ClickedSlot: "+event.getRawSlot());
-            int slot = event.getSlot();
+            int slot = event.getRawSlot();
 
             HashMap<String, Landflag>  pSlots = Landlord.getInstance().getFlagManager().getRegisteredFlags();
 

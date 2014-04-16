@@ -202,7 +202,7 @@ public class OwnedLand {
         ArrayList<String> friendsPerms = new ArrayList<String>();
         guestPerms.add("1");
         friendsPerms.add("1");
-        for(int i = 0; i<((Landlord)Landlord.getInstance()).getFlagManager().getRegisteredFlags().size(); i++){
+        for(int i = 0; i<((Landlord)Landlord.getInstance()).getFlagManager().numStoredPerms(); i++){
             guestPerms.add("0");
             friendsPerms.add("1");
         }
@@ -249,6 +249,18 @@ public class OwnedLand {
         for (String s : permString){
             newPermString.add(Integer.toBinaryString(Integer.parseInt(s)));
         }
+
+        String ePerms = newPermString.get(0);
+        while(ePerms.length()<Landlord.getInstance().getFlagManager().numStoredPerms()+1){
+            ePerms += "0";
+        }
+        newPermString.set(0, ePerms);
+        String fPerms = newPermString.get(1);
+        while(fPerms.length()<Landlord.getInstance().getFlagManager().numStoredPerms()+1){
+            fPerms += "1";
+        }
+        newPermString.set(1, fPerms);
+
         String[][] permArray = new String[newPermString.size()][];
         for(int i = 0; i<newPermString.size(); i++){
             //permArray.add(permString[i].split(""));
@@ -396,6 +408,8 @@ public class OwnedLand {
         //BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 
         for (Location edgeBlock : edgeBlocks) {
+            edgeBlock.setZ(edgeBlock.getBlockZ()+.5);
+            edgeBlock.setX(edgeBlock.getBlockX()+.5);
             e.display(edgeBlock, 0.2f, 0.2f, 0.2f, 9.2f, amt, p);
             //p.playEffect(edgeBlocks.get(i), e, null);
         }
