@@ -278,7 +278,7 @@ public class Build extends Landflag {
 
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void CropTrample(PlayerInteractEvent event) {
+    public void CropTrampleorFireCharge(PlayerInteractEvent event) {
         if(event.getClickedBlock()==null){
             return;
         }
@@ -289,11 +289,18 @@ public class Build extends Landflag {
         }
         Player p = event.getPlayer();
 
+        //trampling crops
         if (p!=null && event.getAction().equals(Action.PHYSICAL) && event.getClickedBlock().getType().toString().equals("SOIL")
                 && !land.hasPermTo(p, this)) {
             p.sendMessage(ChatColor.RED + "You are not allowed to destroy crops on this land.");
             event.setCancelled(true);
             return;
+        }
+
+        //Using fire charge
+        if (p!=null && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.getItem().getType().equals(Material.FIREBALL) && !land.hasPermTo(p, this)) {
+            p.sendMessage(ChatColor.RED + "You cannot do that on this land.");
+            event.setCancelled(true);
         }
     }
 

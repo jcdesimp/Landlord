@@ -101,18 +101,18 @@ public class TntDamage extends Landflag {
         }
         System.out.println(event.getAction().toString());
         System.out.println(event.getClickedBlock().getType().toString());
-        System.out.println(event.getItem());
-        if(!(event.getClickedBlock().getType().equals(Material.TNT)) && event.getItem().getType().equals(Material.FLINT_AND_STEEL)){
-            return;
-        }
-        OwnedLand land = OwnedLand.getApplicableLand(event.getClickedBlock().getLocation());
-        if(land == null){
-            return;
-        }
-        Player p = event.getPlayer();
-        if(!land.hasPermTo(p, this)){
-            p.sendMessage(ChatColor.RED + "You are not allowed to ignite tnt on this land.");
-            event.setCancelled(true);
+        System.out.println(event.getItem().getType());
+        if((event.getClickedBlock().getType().equals(Material.TNT)) && event.getItem() != null &&event.getItem().getType().equals(Material.FLINT_AND_STEEL)) {
+
+            OwnedLand land = OwnedLand.getApplicableLand(event.getClickedBlock().getLocation());
+            if (land == null) {
+                return;
+            }
+            Player p = event.getPlayer();
+            if (!land.hasPermTo(p, this)) {
+                p.sendMessage(ChatColor.RED + "You are not allowed to ignite tnt on this land.");
+                event.setCancelled(true);
+            }
         }
     }
 
