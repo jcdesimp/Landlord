@@ -286,7 +286,8 @@ public class Build extends Landflag {
         }
         Player p = event.getPlayer();
 
-        if (event.getAction().equals(Action.PHYSICAL) && !land.hasPermTo(p, this)) {
+        if (p!=null && event.getAction().equals(Action.PHYSICAL) && event.getClickedBlock().getType().toString().equals("SOIL")
+                && !land.hasPermTo(p, this)) {
             p.sendMessage(ChatColor.RED + "You are not allowed to destroy crops on this land.");
             event.setCancelled(true);
             return;
