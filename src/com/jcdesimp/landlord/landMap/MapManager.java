@@ -87,7 +87,9 @@ public class MapManager implements Listener {
      */
     @EventHandler
     public void playerTeleportKeepMap(PlayerTeleportEvent event){
-        final Player p = event.getPlayer();
+        Player p = event.getPlayer();
+        mapList.get(p.getName()).updateMap();
+        /*
         if (mapList.containsKey(event.getPlayer().getName())) {
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Landlord.getInstance(), new Runnable() {
                 @Override
@@ -96,6 +98,7 @@ public class MapManager implements Listener {
                 }
             }, 1L);
         }
+        */
     }
 
 
