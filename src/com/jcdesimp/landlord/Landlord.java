@@ -58,7 +58,7 @@ public final class Landlord extends JavaPlugin {
         Map<String,Object> oldConfig = getConfig().getValues(true);
         //Generates new config file if not present
         saveDefaultConfig();
-        String header = getConfig().options().header();
+        //String header = getConfig().options().header();
         FileConfiguration config = getConfig();
 
 
@@ -120,12 +120,24 @@ public final class Landlord extends JavaPlugin {
 
 
         //Register default flags
-        flagManager.registerFlag(new Build());
-        flagManager.registerFlag(new HarmAnimals());
-        flagManager.registerFlag(new UseContainers());
-        flagManager.registerFlag(new TntDamage());
-        flagManager.registerFlag(new UseRedstone());
-        flagManager.registerFlag(new OpenDoor());
+        if(getConfig().getBoolean("enabled-flags.build")) {
+            flagManager.registerFlag(new Build());
+        }
+        if(getConfig().getBoolean("enabled-flags.harmAnimals")) {
+            flagManager.registerFlag(new HarmAnimals());
+        }
+        if(getConfig().getBoolean("enabled-flags.useContainers")) {
+            flagManager.registerFlag(new UseContainers());
+        }
+        if(getConfig().getBoolean("enabled-flags.tntDamage")) {
+            flagManager.registerFlag(new TntDamage());
+        }
+        if(getConfig().getBoolean("enabled-flags.useRedstone")) {
+            flagManager.registerFlag(new UseRedstone());
+        }
+        if(getConfig().getBoolean("enabled-flags.openDoor")) {
+            flagManager.registerFlag(new OpenDoor());
+        }
 
 
     }

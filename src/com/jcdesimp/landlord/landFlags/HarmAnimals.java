@@ -23,27 +23,27 @@ import java.util.Arrays;
  */
 public class HarmAnimals extends Landflag {
  /*
-  **********************
+  ************************************************************
   * IMPORTANT!!!! Landlord will take care of registering
   * the listeners, all you need to do is register the
   * class with landlord's flagManager!!!
-  **********************
+  ************************************************************
   */
 
-    /**
+    /*
      * Constructor needs to be defined and properly call super()
      */
     public HarmAnimals() {
         super(
-                "Harm Animals",                                       //Display name (will be displayed to players)
+                "Harm Animals",                                    //Display name (will be displayed to players)
                 "Gives permission to hurt or kill|" +
-                        "pigs, sheep, cows, mooshrooms,|" +           //Description (Lore of headerItem '|' will seperate lines of lore.)
+                        "pigs, sheep, cows, mooshrooms,|" +        //Description (Lore of headerItem '|' will seperate lines of lore.)
                         "chickens, horses, dogs, and cats.",
-                new ItemStack(Material.LEATHER),                      //Itemstack (represented in and manager)
-                "Allowed Animal Damage",                              //Text shown in manager for granted permission
-                "can harm animals.",                                  //Description in manager for granted permission (ex: Friendly players <desc>)
-                "Denied Animal Damage",                               //Text shown in manager for denied permission
-                "cannot harm animals."                                //Desciption in manager for denied permission (ex: Regular players <desc>)
+                new ItemStack(Material.LEATHER),                   //Itemstack (represented in land manager)
+                "Allowed Animal Damage",                           //Text shown in manager for granted permission
+                "can harm animals.",                               //Description in manager for granted permission (ex: Friendly players <desc>)
+                "Denied Animal Damage",                            //Text shown in manager for denied permission
+                "cannot harm animals."                             //Desciption in manager for denied permission (ex: Regular players <desc>)
         );
     }
 
@@ -67,8 +67,8 @@ public class HarmAnimals extends Landflag {
     /*
      *************************************
      * Of course u can register as many
-     * event listeners as you need for your flag
-     * to fo it's job
+     * event listeners as you need for
+     * your flag to do it's job
      *************************************
      */
 

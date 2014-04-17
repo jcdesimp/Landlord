@@ -32,7 +32,7 @@ public class OpenDoor extends Landflag {
         super(
                 "Open Doors",                                       //Display name (will be displayed to players)
                 "Gives permission to open/close doors.",            //Description (Lore of headerItem '|' will seperate lines of lore.)
-                new ItemStack(Material.WOOD_DOOR),                //Itemstack (represented in and manager)
+                new ItemStack(Material.WOOD_DOOR),                  //Itemstack (represented in and manager)
                 "Allowed to Open Doors",                            //Text shown in manager for granted permission
                 "can open doors.",                                  //Description in manager for granted permission (ex: Friendly players <desc>)
                 "Not Allowed to Open Doors",                        //Text shown in manager for denied permission

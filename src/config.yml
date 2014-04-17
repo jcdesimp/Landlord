@@ -11,12 +11,16 @@
 #    enableMap: true
 #    #Regenerate a chunk when it is unclaimed (Removes all builds and changes)
 #    regenOnUnclaim: false
-# Limits on owned land
+# Limits on amount of owned land
 # limits:
 #    #Max land a regular player can own (-1 for no limit).
 #    landLimit: 10
-#    #Extra land a player with "landlord.limit.extra" can own (Gets added to landLimit).
+#    #Extra land that players with "landlord.limit.extra","landlord.limit.extra2", etc. can own (Gets added to landLimit).
 #    extra: 10
+#    extra2: 20
+#    extra3: 30
+#    extra4: 40
+#    extra5: 50
 # Economy settings (Requires Vault)
 # economy:
 #    #Enable economy integration features
@@ -30,6 +34,14 @@
 #    #Prevent players from claiming chunks that intersect with worldguard regions,
 #    #UNLESS they have build permissions within that region.
 #    blockRegionClaim: true
+# Here you can enable/disable the built-in land flags.
+# enabled-flags:
+#    build: true
+#    harmAnimals: true
+#    openDoor: true
+#    tntDamage: true
+#    useContainers: true
+#    useRedstone: true
 # #### CONFIGURE OPTIONS BELOW ####
 
 options:
@@ -40,9 +52,24 @@ options:
 limits:
   landLimit: 10
   extra: 10
+  extra2: 20
+  extra3: 30
+  extra4: 40
+  extra5: 50
 economy:
   enable: false
   buyPrice: 100
   sellPrice: 50
 worldguard:
   blockRegionClaim: true
+enabled-flags:
+  build: true
+  harmAnimals: true
+  openDoor: true
+  tntDamage: true
+  useContainers: true
+  useRedstone: true
+
+
+
+

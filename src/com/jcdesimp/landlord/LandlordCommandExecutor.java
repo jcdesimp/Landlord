@@ -688,6 +688,10 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 player.sendMessage(ChatColor.RED+"You do not have permission.");
                 return true;
             }
+            if(plugin.getFlagManager().getRegisteredFlags().size() <= 0){
+                player.sendMessage(ChatColor.RED+"There is nothing to manage!");
+                return true;
+            }
             Chunk currChunk = player.getLocation().getChunk();
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
             if( land == null || ( !land.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.manage") ) ){
