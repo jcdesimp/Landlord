@@ -38,7 +38,7 @@ public class ViewManager {
         }
     }
 
-    public void NoClosedeactivateView(Player p){
+    public void NoCloseDeactivateView(Player p){
         if(activeViews.containsKey(p.getName())){
             activeViews.remove(p.getName());
         }

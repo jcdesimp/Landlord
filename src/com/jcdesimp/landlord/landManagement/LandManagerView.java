@@ -196,7 +196,7 @@ public class LandManagerView implements Listener {
             }
             mLand.highlightLand(player, ParticleEffect.DRIP_LAVA);
             //InventoryCloseEvent.getHandlerList().unregister(this);
-            Landlord.getInstance().getManageViewManager().NoClosedeactivateView(player);
+            Landlord.getInstance().getManageViewManager().NoCloseDeactivateView(player);
             HandlerList.unregisterAll(this);
         }
         //isOpen = true;
