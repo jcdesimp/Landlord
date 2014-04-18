@@ -68,6 +68,10 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
                 //landlord addfriend
                 return landlord_addfriend(sender, args);
+            } else if(args[0].equalsIgnoreCase("friendall")) {
+
+                //landlord addfriend
+                return landlord_friendall(sender, args);
             } else if(args[0].equalsIgnoreCase("remfriend") || args[0].equalsIgnoreCase("unfriend")) {
 
                 return landlord_remfriend(sender, args);
@@ -90,10 +94,10 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
             } else if(args[0].equalsIgnoreCase("reload")) {
 
-                return landlord_reload(sender,args,label);
+                return landlord_reload(sender, args, label);
             } else if(args[0].equalsIgnoreCase("info")) {
 
-                return landlord_info(sender,args,label);
+                return landlord_info(sender, args, label);
             } else if(args[0].equalsIgnoreCase("friends")) {
 
                 return landlord_friends(sender,args,label);
@@ -105,6 +109,8 @@ public class LandlordCommandExecutor implements CommandExecutor {
         // If this hasn't happened the value of false will be returned.
         return false;
     }
+
+
 
 
 
@@ -174,6 +180,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
         helpList.add(ChatColor.DARK_AQUA+"/"+label + " addfriend <player>" + ChatColor.RESET + " - Add friend to this land.\n");
         helpList.add(ChatColor.DARK_AQUA+"/"+label + " unfriend <player>" + ChatColor.RESET + " - Remove friend from this land.\n");
+        helpList.add(ChatColor.DARK_AQUA+"/"+label + " friendall <player>" + ChatColor.RESET + " - Add friend to all your land.\n");
         helpList.add(ChatColor.DARK_AQUA+"/"+label + " friends" + ChatColor.RESET + " - List friends of this land.\n");
         helpList.add(ChatColor.DARK_AQUA+"/"+label + " manage" + ChatColor.RESET + " - Manage permissions for this land.\n");
         helpList.add(ChatColor.DARK_AQUA+"/"+label + " list" + ChatColor.RESET + " - List all your owned land.\n");
@@ -488,6 +495,42 @@ public class LandlordCommandExecutor implements CommandExecutor {
         return true;
     }
 
+    private boolean landlord_friendall(CommandSender sender, String[] args) {
+        //is sender a player
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
+        } else {
+            if (args.length < 2) {
+                sender.sendMessage(ChatColor.RED + "usage: /land friendall <player>");
+                return true;
+            }
+            Player player = (Player) sender;
+            if (!player.hasPermission("landlord.player.own")) {
+                player.sendMessage(ChatColor.RED + "You do not have permission.");
+                return true;
+            }
+
+            List<OwnedLand> pLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId()).findList();
+
+            if (!getOfflinePlayer(args[1]).hasPlayedBefore()) {
+                player.sendMessage(ChatColor.RED + "That player is not recognized.");
+                return true;
+            }
+
+            Friend friend = Friend.friendFromOfflinePlayer(getOfflinePlayer(args[1]));
+            if (pLand.size() > 0){
+                for(OwnedLand l : pLand){
+                    l.addFriend(friend);
+                }
+                player.sendMessage(ChatColor.GREEN+args[1]+" has been added as a friend to all of your land.");
+                return true;
+            } else {
+                player.sendMessage(ChatColor.YELLOW+"You do not own any land!");
+            }
+
+        }
+        return true;
+    }
 
     /**
      * Removes a friend from an owned chunk
