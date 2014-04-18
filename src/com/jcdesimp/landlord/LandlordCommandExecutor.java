@@ -68,15 +68,11 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
                 //landlord addfriend
                 return landlord_addfriend(sender, args);
-            } else if(args[0].equalsIgnoreCase("remfriend")) {
+            } else if(args[0].equalsIgnoreCase("remfriend") || args[0].equalsIgnoreCase("unfriend")) {
 
                 return landlord_remfriend(sender, args);
             } else if(args[0].equalsIgnoreCase("map")) {
-                /*
-                 *
-                 * Make sure to change back!!!
-                 *
-                 */
+
                 return landlord_map(sender, args);
                 //sender.sendMessage(ChatColor.RED+"Land map is temporarily disabled!");
                 //return true;
@@ -137,23 +133,6 @@ public class LandlordCommandExecutor implements CommandExecutor {
     }
 
     private boolean landlord_help(CommandSender sender, String[] args, String label) {
-        /*String helpMsg = "";
-        helpMsg+=ChatColor.DARK_GREEN + "--|| Landlord v"+Landlord.getInstance().getDescription().getVersion() +
-                " Created by " + ChatColor.BLUE+"Jcdesimp "+ChatColor.DARK_GREEN +"||--\n"+
-                ChatColor.GRAY+"(Aliases: /landlord, /land, or /ll)\n"+
-                ChatColor.DARK_AQUA+"/"+label + " help" + ChatColor.RESET + " - Show this help message.\n"+
-                ChatColor.DARK_AQUA+"/"+label + " claim (or "+"/"+label +" buy)" + ChatColor.RESET + " - Claim this chunk.\n"+
-                ChatColor.DARK_AQUA+"/"+label + " unclaim [x,z] [world] (or "+"/"+label +" sell)" + ChatColor.RESET + " - Unclaim this chunk.\n"+
-                ChatColor.DARK_AQUA+"/"+label + " addfriend <player name>" + ChatColor.RESET + " - Add a friend to this land.\n"+
-                ChatColor.DARK_AQUA+"/"+label + " remfriend <player name>" + ChatColor.RESET + " - Remove a friend from this land.\n"+
-                ChatColor.DARK_AQUA+"/"+label + " manage" + ChatColor.RESET + " - Manage permissions for this land.\n"
-        ;
-        helpMsg+=ChatColor.DARK_AQUA+"/"+label + " map" + ChatColor.RESET + " - Toggle the land map.\n";
-        helpMsg+=ChatColor.DARK_AQUA+"/"+label + " list" + ChatColor.RESET + " - List all your owned land.\n";
-        sender.sendMessage(helpMsg);
-        return true;*/
-
-
         //check if page number is valid
         int pageNumber = 1;
         if (args.length > 1 && args[0].equals("help")){
@@ -193,8 +172,8 @@ public class LandlordCommandExecutor implements CommandExecutor {
         }
         helpList.add(unclaim);
 
-        helpList.add(ChatColor.DARK_AQUA+"/"+label + " addfriend <player name>" + ChatColor.RESET + " - Add friend to this land.\n");
-        helpList.add(ChatColor.DARK_AQUA+"/"+label + " remfriend <player name>" + ChatColor.RESET + " - Remove friend from this land.\n");
+        helpList.add(ChatColor.DARK_AQUA+"/"+label + " addfriend <player>" + ChatColor.RESET + " - Add friend to this land.\n");
+        helpList.add(ChatColor.DARK_AQUA+"/"+label + " unfriend <player>" + ChatColor.RESET + " - Remove friend from this land.\n");
         helpList.add(ChatColor.DARK_AQUA+"/"+label + " friends" + ChatColor.RESET + " - List friends of this land.\n");
         helpList.add(ChatColor.DARK_AQUA+"/"+label + " manage" + ChatColor.RESET + " - Manage permissions for this land.\n");
         helpList.add(ChatColor.DARK_AQUA+"/"+label + " list" + ChatColor.RESET + " - List all your owned land.\n");
@@ -464,7 +443,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
 
             //Does land exist, and if so does player own it
-            if( land == null || !land.ownerUUID().equals(player.getUniqueId()) ){
+            if( land == null || (!land.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.modifyfriends")) ){
                 player.sendMessage(ChatColor.RED + "You do not own this land.");
                 return true;
             }
@@ -512,7 +491,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
         } else {
             if (args.length < 2){
-                sender.sendMessage(ChatColor.RED + "usage: /land remfriend <player>");
+                sender.sendMessage(ChatColor.RED + "usage: /land unfriend <player>");
                 return true;
             }
             Player player = (Player) sender;
@@ -529,7 +508,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
              */
             Friend frd = Friend.friendFromOfflinePlayer(getOfflinePlayer(args[1]));
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
-            if( land == null || !land.ownerUUID().equals(player.getUniqueId()) ){
+            if( land == null || (!land.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.modifyfriends")) ){
                 player.sendMessage(ChatColor.RED + "You do not own this land.");
                 return true;
             }

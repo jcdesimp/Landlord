@@ -84,6 +84,9 @@ permissions:
     landlord.admin.friends:
         description: view friends of any land
         default: op
+    landlord.admin.modifyfriends:
+            description: add/remove friends of any land
+            default: op
     landlord.admin.convertdb:
             description: run /land convertdb to convert from playernames to UUIDs
             default: op

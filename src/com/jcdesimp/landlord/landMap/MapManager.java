@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.HashMap;
@@ -40,7 +41,7 @@ public class MapManager implements Listener {
     }
 
     public void remMap(String pName){
-        //System.out.println("Before Rem: "+mapList.toString());
+
         if( mapList.containsKey(pName) ){
             LandMap curr = mapList.get(pName);
             curr.removeMap();
@@ -87,18 +88,38 @@ public class MapManager implements Listener {
      */
     @EventHandler
     public void playerTeleportKeepMap(PlayerTeleportEvent event){
-        Player p = event.getPlayer();
-        mapList.get(p.getName()).updateMap();
-        /*
+        final Player p = event.getPlayer();
+        //mapList.get(p.getName()).updateMap();
+
         if (mapList.containsKey(event.getPlayer().getName())) {
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Landlord.getInstance(), new Runnable() {
                 @Override
                 public void run() {
-                    mapList.get(p.getName()).updateMap();
+                    if (mapList.containsKey(p.getName())) {
+                        mapList.get(p.getName()).updateMap();
+                        System.out.println("Updating map for " + p.getName() + " after TP.");
+
+                    }
                 }
-            }, 1L);
+            }, 15L);
         }
-        */
+    }
+
+    @EventHandler
+    public void playerRespawn(PlayerRespawnEvent event){
+        final Player p = event.getPlayer();
+        if (mapList.containsKey(event.getPlayer().getName())) {
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Landlord.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    if (mapList.containsKey(p.getName())) {
+                        mapList.get(p.getName()).updateMap();
+                        System.out.println("Updating map for " + p.getName() + " after TP.");
+
+                    }
+                }
+            }, 15L);
+        }
     }
 
 
