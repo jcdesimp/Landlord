@@ -11,7 +11,6 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * File created by jcdesimp on 3/10/14.
@@ -51,7 +50,6 @@ public class MapManager implements Listener {
     }
 
     public void removeAllMaps(){
-        Iterator it = mapList.entrySet().iterator();
         for (String k : mapList.keySet()){
             mapList.get(k).removeMap();
         }
@@ -59,7 +57,6 @@ public class MapManager implements Listener {
     }
 
     public void updateAll(){
-        Iterator it = mapList.entrySet().iterator();
         for (String k : mapList.keySet()){
             mapList.get(k).updateMap();
         }
@@ -84,7 +81,7 @@ public class MapManager implements Listener {
 
     /**
      * Update map when player teleports
-     * @param event
+     * @param event that was triggered
      */
     @EventHandler
     public void playerTeleportKeepMap(PlayerTeleportEvent event){
