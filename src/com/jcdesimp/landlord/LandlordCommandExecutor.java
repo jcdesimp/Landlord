@@ -680,8 +680,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             if(!land.ownerUUID().equals(player.getUniqueId())){
                 player.sendMessage(ChatColor.YELLOW+"Managing someone else's land.");
             }
-            LandManagerView ui = new LandManagerView(player, land);
-            ui.showUI();
+            plugin.getManageViewManager().activateView(player, land);
 
 
         }

@@ -5,6 +5,7 @@ import com.avaje.ebean.EbeanServer;
 import com.jcdesimp.landlord.landFlags.*;
 import com.jcdesimp.landlord.landManagement.FlagManager;
 //import com.jcdesimp.landlord.landManagement.LandListener;
+import com.jcdesimp.landlord.landManagement.ViewManager;
 import com.jcdesimp.landlord.landMap.MapManager;
 import com.jcdesimp.landlord.persistantData.*;
 import com.jcdesimp.landlord.pluginHooks.VaultHandler;
@@ -38,6 +39,8 @@ public final class Landlord extends JavaPlugin {
     private WorldguardHandler wgHandler;
     private VaultHandler vHandler;
     private FlagManager flagManager;
+    private ViewManager manageViewManager;
+
 
 
 
@@ -47,6 +50,7 @@ public final class Landlord extends JavaPlugin {
         //listner = new LandListener();
         //getServer().getPluginManager().registerEvents(new LandListener(this), this);
         flagManager = new FlagManager(this);
+        manageViewManager = new ViewManager();
         getServer().getPluginManager().registerEvents(mapManager, this);
 
 
@@ -146,6 +150,7 @@ public final class Landlord extends JavaPlugin {
     public void onDisable() {
         getLogger().info(getDescription().getName() + " has been disabled!");
         mapManager.removeAllMaps();
+        manageViewManager.deactivateAll();
     }
 
 
@@ -155,6 +160,10 @@ public final class Landlord extends JavaPlugin {
 
     public MapManager getMapManager() {
         return mapManager;
+    }
+
+    public ViewManager getManageViewManager() {
+        return manageViewManager;
     }
 
     public static Landlord getInstance() {
