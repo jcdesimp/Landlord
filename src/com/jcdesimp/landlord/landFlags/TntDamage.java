@@ -4,6 +4,7 @@ import com.jcdesimp.landlord.landManagement.Landflag;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
@@ -15,6 +16,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * File created by jcdesimp on 4/16/14.
@@ -76,12 +79,10 @@ public class TntDamage extends Landflag {
         TNTPrimed tnt = (TNTPrimed)event.getEntity();
         OwnedLand land = OwnedLand.getApplicableLand(event.getLocation());
         if(land == null){
-            return;
-        }
-        if(tnt.getSource() != null && tnt.getSource().getType().equals(EntityType.PLAYER)){
+
+        } else if(tnt.getSource() != null && tnt.getSource().getType().equals(EntityType.PLAYER)){
             Player p = (Player)tnt.getSource();
             if(!land.hasPermTo(p,this)){
-                event.setCancelled(true);
                 p.sendMessage(ChatColor.RED+"You cannot detonate TNT on this land.");
                 event.setCancelled(true);
                 return;
@@ -89,6 +90,26 @@ public class TntDamage extends Landflag {
 
         } else if(!land.canEveryone(this)){
             event.setCancelled(true);
+            return;
+        }
+        List<Block> destroyed = event.blockList();
+        Iterator<Block> it = destroyed.iterator();
+        while (it.hasNext()) {
+            Block block = it.next();
+            OwnedLand lnd = OwnedLand.getApplicableLand(block.getLocation());
+            if (lnd != null && !lnd.canEveryone(this) ) {
+                if(tnt.getSource()!=null){
+                    Player p = (Player)tnt.getSource();
+                    if(!lnd.hasPermTo(p, this)){
+                        it.remove();
+                    }
+
+                } else {
+                    it.remove();
+                }
+
+            }
+
         }
 
     }
