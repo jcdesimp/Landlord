@@ -73,9 +73,10 @@ public class TntDamage extends Landflag {
      */
     @EventHandler(priority = EventPriority.HIGH)
     public void tntExplode( EntityExplodeEvent event ){
-        if(!event.getEntityType().equals(EntityType.PRIMED_TNT)){
+        if(!(event.getEntityType().equals(EntityType.PRIMED_TNT))){
             return;
         }
+
         TNTPrimed tnt = (TNTPrimed)event.getEntity();
         OwnedLand land = OwnedLand.getApplicableLand(event.getLocation());
         if(land == null){
@@ -98,19 +99,42 @@ public class TntDamage extends Landflag {
             Block block = it.next();
             OwnedLand lnd = OwnedLand.getApplicableLand(block.getLocation());
             if (lnd != null && !lnd.canEveryone(this) ) {
-                if(tnt.getSource()!=null){
-                    Player p = (Player)tnt.getSource();
-                    if(!lnd.hasPermTo(p, this)){
-                        it.remove();
-                    }
-
-                } else {
+                if (!(tnt.getSource() instanceof Player) || !lnd.hasPermTo((Player) tnt.getSource(), this)) {
                     it.remove();
                 }
 
             }
 
         }
+
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void tntMinecartExplode( EntityExplodeEvent event ){
+        if(!event.getEntityType().equals(EntityType.MINECART_TNT)){
+            return;
+        }
+
+        OwnedLand land = OwnedLand.getApplicableLand(event.getLocation());
+        if (land != null) {
+            if(!land.canEveryone(this)){
+                event.setCancelled(true);
+                return;
+            }
+
+        }
+
+        List<Block> destroyed = event.blockList();
+        Iterator<Block> it = destroyed.iterator();
+        while (it.hasNext()) {
+            Block block = it.next();
+            OwnedLand lnd = OwnedLand.getApplicableLand(block.getLocation());
+            if (lnd != null && !lnd.canEveryone(this)) {
+                it.remove();
+            }
+
+        }
+
 
     }
 
