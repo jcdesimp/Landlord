@@ -60,7 +60,7 @@ public abstract class Landflag implements Listener {
         return displayName;
     }
 
-    public String getDescrition() {
+    public String getDescription() {
         return descrition;
     }
 

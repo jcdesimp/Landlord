@@ -142,6 +142,9 @@ public final class Landlord extends JavaPlugin {
         if(getConfig().getBoolean("enabled-flags.openDoor")) {
             flagManager.registerFlag(new OpenDoor());
         }
+        //flagManager.registerFlag(new OpenDoorDUPE1());
+        //flagManager.registerFlag(new OpenDoorDUPE2());
+        //flagManager.registerFlag(new OpenDoorDUPE3());
 
 
     }

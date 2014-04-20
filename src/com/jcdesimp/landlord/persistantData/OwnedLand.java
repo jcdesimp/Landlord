@@ -202,7 +202,7 @@ public class OwnedLand {
         ArrayList<String> friendsPerms = new ArrayList<String>();
         guestPerms.add("1");
         friendsPerms.add("1");
-        for(int i = 0; i<((Landlord)Landlord.getInstance()).getFlagManager().numStoredPerms(); i++){
+        for(int i = 0; i<(Landlord.getInstance()).getFlagManager().numStoredPerms(); i++){
             guestPerms.add("0");
             friendsPerms.add("1");
         }
