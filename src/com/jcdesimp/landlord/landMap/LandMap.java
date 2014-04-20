@@ -89,7 +89,7 @@ public class LandMap {
 
 
             //THIS BETTER NOT STAY!!!!!!
-            class myOfflinePlayer implements OfflinePlayer {
+            /*class myOfflinePlayer implements OfflinePlayer {
                 String name;
 
                 public myOfflinePlayer(String name){
@@ -165,10 +165,10 @@ public class LandMap {
                     return false;
                 }
 
-            }
+            }*/
 
-            //OfflinePlayer ofp = Bukkit.getOfflinePlayer(mapData[i].substring(5,17));
-            OfflinePlayer ofp = new myOfflinePlayer(mapData[i].substring(5,17));
+            OfflinePlayer ofp = Bukkit.getOfflinePlayer(mapData[i].substring(5,17));
+            //OfflinePlayer ofp = new myOfflinePlayer(mapData[i].substring(5,17));
             //String ofp = mapData[i].substring(5,17);
 
 
