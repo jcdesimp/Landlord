@@ -546,7 +546,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
         } else {
             if (args.length < 2) {
-                sender.sendMessage(ChatColor.RED + "usage: /land friendall <player>");
+                sender.sendMessage(ChatColor.RED + "usage: /land unfriendall <player>");
                 return true;
             }
             Player player = (Player) sender;
