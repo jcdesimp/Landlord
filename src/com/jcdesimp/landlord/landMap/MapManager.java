@@ -94,7 +94,7 @@ public class MapManager implements Listener {
                 public void run() {
                     if (mapList.containsKey(p.getName())) {
                         mapList.get(p.getName()).updateMap();
-                        System.out.println("Updating map for " + p.getName() + " after TP.");
+                        //System.out.println("Updating map for " + p.getName() + " after TP.");
 
                     }
                 }
@@ -111,7 +111,7 @@ public class MapManager implements Listener {
                 public void run() {
                     if (mapList.containsKey(p.getName())) {
                         mapList.get(p.getName()).updateMap();
-                        System.out.println("Updating map for " + p.getName() + " after TP.");
+                        //System.out.println("Updating map for " + p.getName() + " after TP.");
 
                     }
                 }
