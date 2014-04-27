@@ -412,7 +412,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 }
             }
             if(!player.getUniqueId().equals(dbLand.ownerUUID())){
-                player.sendMessage(ChatColor.YELLOW+"Unclaimed " + getOfflinePlayer(dbLand.ownerUUID()) + "'s land.");
+                player.sendMessage(ChatColor.YELLOW+"Unclaimed " + getOfflinePlayer(dbLand.ownerUUID()).getName() + "'s land.");
             }
             plugin.getDatabase().delete(dbLand);
             dbLand.highlightLand(player, ParticleEffect.WITCH_MAGIC);
@@ -470,7 +470,8 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 return true;
             }
             //
-            if (!getOfflinePlayer(args[1]).hasPlayedBefore()){
+            OfflinePlayer possible = getOfflinePlayer(args[1]);
+            if (!possible.hasPlayedBefore() && !possible.isOnline()) {
                 player.sendMessage(ChatColor.RED+"That player is not recognized.");
                 return true;
             }
