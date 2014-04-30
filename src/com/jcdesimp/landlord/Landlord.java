@@ -87,7 +87,7 @@ public final class Landlord extends JavaPlugin {
 
         // Registering Alert Listener
         pListen = new PlayerListener();
-        if(getConfig().getBoolean("showLandAlerts",true)) {
+        if(getConfig().getBoolean("options.showLandAlerts",true)) {
             getServer().getPluginManager().registerEvents(pListen, this);
         }
 
