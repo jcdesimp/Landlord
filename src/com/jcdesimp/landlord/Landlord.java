@@ -25,6 +25,7 @@ import java.util.Map;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import static org.bukkit.Bukkit.getOfflinePlayer;
+import static org.bukkit.Bukkit.getServer;
 
 /**
  *
@@ -40,6 +41,7 @@ public final class Landlord extends JavaPlugin {
     private VaultHandler vHandler;
     private FlagManager flagManager;
     private ViewManager manageViewManager;
+    private PlayerListener pListen;
 
 
 
@@ -52,6 +54,7 @@ public final class Landlord extends JavaPlugin {
         flagManager = new FlagManager(this);
         manageViewManager = new ViewManager();
         getServer().getPluginManager().registerEvents(mapManager, this);
+
 
 
         //// CONFIG FILE MANAGEMENT ///
@@ -82,6 +85,11 @@ public final class Landlord extends JavaPlugin {
         ////////////////////////////////
 
 
+        // Registering Alert Listener
+        pListen = new PlayerListener();
+        if(getConfig().getBoolean("showLandAlerts",true)) {
+            getServer().getPluginManager().registerEvents(pListen, this);
+        }
 
         // Database creation, configuration, and maintenance.
         setupDatabase();
@@ -154,6 +162,7 @@ public final class Landlord extends JavaPlugin {
         getLogger().info(getDescription().getName() + " has been disabled!");
         mapManager.removeAllMaps();
         manageViewManager.deactivateAll();
+        pListen.clearPtrack();
     }
 
 

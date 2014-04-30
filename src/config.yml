@@ -11,6 +11,8 @@
 #    enableMap: true
 #    #Regenerate a chunk when it is unclaimed (Removes all builds and changes)
 #    regenOnUnclaim: false
+#    #Show entey/exit messages when players enter/leave owned land.
+#    showLandAlerts: true
 # Limits on amount of owned land
 # limits:
 #    #Max land a regular player can own (-1 for no limit).
@@ -49,6 +51,7 @@ options:
   particleEffects: true
   enableMap: true
   regenOnUnclaim: false
+  showLandAlerts: true
 limits:
   landLimit: 10
   extra: 10
