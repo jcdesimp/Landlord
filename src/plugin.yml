@@ -41,6 +41,8 @@ permissions:
             landlord.admin.clearworld: true
             landlord.admin.bypass: true
             landlord.admin.reload: true
+            landlord.admin.modifyfriends: true
+            landlord.admin.friends: true
 
     landlord.use:
             description: required to use any commands
@@ -98,7 +100,4 @@ permissions:
         default: op
     landlord.admin.modifyfriends:
             description: add/remove friends of any land
-            default: op
-    landlord.admin.convertdb:
-            description: run /land convertdb to convert from playernames to UUIDs
             default: op
