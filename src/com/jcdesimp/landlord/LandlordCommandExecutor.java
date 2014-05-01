@@ -947,7 +947,12 @@ public class LandlordCommandExecutor implements CommandExecutor {
                  * mark for possible change    !!!!!!!!!
                  * *************************************
                  */
-                land = plugin.getDatabase().find(OwnedLand.class).where().ieq("ownerName",getPlayer(args[2]).getUniqueId().toString()).eq("worldName",args[1]).findList();
+                OfflinePlayer possible = getOfflinePlayer(args[2]);
+                if (!possible.hasPlayedBefore() && !possible.isOnline()) {
+                    sender.sendMessage(ChatColor.RED+"That player is not recognized.");
+                    return true;
+                }
+                land = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",possible.getUniqueId().toString()).eq("worldName",args[1]).findList();
             } else {
                 if(sender instanceof Player){
                     sender.sendMessage(ChatColor.RED+"You can only delete entire worlds from the console.");
