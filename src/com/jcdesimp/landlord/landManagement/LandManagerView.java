@@ -244,10 +244,13 @@ public class LandManagerView implements Listener {
             }
             //System.out.println("EndIndex: "+endIndex);
             //System.out.println("StartIndex: "+startIndex);
-            if((col<=(endIndex-startIndex) && col>0)){
+            if((col<=(endIndex-startIndex) && col>0)) {
+
                 if(row == 1) {
+                    player.playSound(player.getLocation(), Sound.CLICK, 1L, 1L);
                     perms[0][permSlots.get((col-1)+((pageNum)*8))] = bSwap(perms[0][permSlots.get((col-1)+((pageNum)*8))]);
                 } else if (row == 2){
+                    player.playSound(player.getLocation(), Sound.CLICK, 1L, 1L);
                     //System.out.println((col-1)+((pageNum)*8));
                     perms[1][permSlots.get((col-1)+((pageNum)*8))] = bSwap(perms[1][permSlots.get((col-1)+((pageNum)*8))]);
                     //System.out.println(perms[1][permSlots.get((col-1)+((pageNum)*8))]);
@@ -259,6 +262,7 @@ public class LandManagerView implements Listener {
 
             if(pageNum < numPages-1 && event.getRawSlot()==35){
                 //35
+                player.playSound(player.getLocation(), Sound.CLICK, 1L, 1L);
                 pageNum++;
                 updateUIData();
                 setToggles();
@@ -266,6 +270,7 @@ public class LandManagerView implements Listener {
             }
             if(pageNum > 0 && event.getRawSlot()==27){
                 //27
+                player.playSound(player.getLocation(), Sound.CLICK, 1L, 1L);
                 pageNum--;
                 updateUIData();
                 setToggles();
