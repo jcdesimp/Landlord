@@ -25,7 +25,6 @@ import java.util.Map;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import static org.bukkit.Bukkit.getOfflinePlayer;
-import static org.bukkit.Bukkit.getServer;
 
 /**
  *
@@ -41,7 +40,7 @@ public final class Landlord extends JavaPlugin {
     private VaultHandler vHandler;
     private FlagManager flagManager;
     private ViewManager manageViewManager;
-    private PlayerListener pListen;
+    private LandAlerter pListen;
 
 
 
@@ -86,7 +85,7 @@ public final class Landlord extends JavaPlugin {
 
 
         // Registering Alert Listener
-        pListen = new PlayerListener();
+        pListen = new LandAlerter();
         if(getConfig().getBoolean("options.showLandAlerts",true)) {
             getServer().getPluginManager().registerEvents(pListen, this);
         }
