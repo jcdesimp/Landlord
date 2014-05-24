@@ -73,7 +73,7 @@ public class HarmAnimals extends Landflag {
      */
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void animalKill(EntityDamageByEntityEvent event){
+    public void animalDamage(EntityDamageByEntityEvent event){
         String[] safeAnimals = {"OCELOT","WOLF","HORSE","COW","PIG","MUSHROOM_COW","SHEEP","CHICKEN"};
         org.bukkit.entity.Entity victim = event.getEntity();
         if(!Arrays.asList(safeAnimals).contains(victim.getType().toString())){

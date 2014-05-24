@@ -44,6 +44,7 @@
 #    tntDamage: true
 #    useContainers: true
 #    useRedstone: true
+#    pvp: true
 # #### CONFIGURE OPTIONS BELOW ####
 
 options:
@@ -72,6 +73,7 @@ enabled-flags:
   tntDamage: true
   useContainers: true
   useRedstone: true
+  pvp: true
 
 
 
