@@ -64,7 +64,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
                 //landlord unclaim
                 return landlord_unclaim(sender, args, label);
-            } else if(args[0].equalsIgnoreCase("addfriend")) {
+            } else if(args[0].equalsIgnoreCase("addfriend") || args[0].equalsIgnoreCase("friend")) {
 
                 //landlord addfriend
                 return landlord_addfriend(sender, args);
@@ -517,8 +517,8 @@ public class LandlordCommandExecutor implements CommandExecutor {
             }
 
             List<OwnedLand> pLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId()).findList();
-
-            if (!getOfflinePlayer(args[1]).hasPlayedBefore()) {
+            OfflinePlayer possible = getOfflinePlayer(args[1]);
+            if (!possible.hasPlayedBefore() && !possible.isOnline()) {
                 player.sendMessage(ChatColor.RED + "That player is not recognized.");
                 return true;
             }
@@ -558,7 +558,8 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
             List<OwnedLand> pLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId()).findList();
 
-            if (!getOfflinePlayer(args[1]).hasPlayedBefore()) {
+            OfflinePlayer possible = getOfflinePlayer(args[1]);
+            if (!possible.hasPlayedBefore() && !possible.isOnline()) {
                 player.sendMessage(ChatColor.RED + "That player is not recognized.");
                 return true;
             }
@@ -890,7 +891,8 @@ public class LandlordCommandExecutor implements CommandExecutor {
          * mark for possible change    !!!!!!!!!
          * *************************************
          */
-        if( !getOfflinePlayer(owner).hasPlayedBefore()){
+        OfflinePlayer possible = getOfflinePlayer(args[1]);
+        if (!possible.hasPlayedBefore() && !possible.isOnline()) {
             sender.sendMessage(ChatColor.YELLOW+ owner +" does not own any land!");
             return true;
         }

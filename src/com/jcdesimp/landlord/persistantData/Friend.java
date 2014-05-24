@@ -71,7 +71,7 @@ public class Friend {
          * *************************************
          */
         OfflinePlayer op = getOfflinePlayer(UUID.fromString(playerName));
-        if (!op.hasPlayedBefore()) {
+        if (!op.hasPlayedBefore() && !op.isOnline()) {
             return ChatColor.ITALIC+"Unknown";
         }
         return op.getName();
