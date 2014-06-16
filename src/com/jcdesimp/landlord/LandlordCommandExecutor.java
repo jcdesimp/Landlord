@@ -926,7 +926,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 for(int i = (numPerPage*pageNumber-numPerPage); i<(numPerPage*pageNumber); i++){
                     pMsg+=landList.get(i);
                 }
-                pMsg+=ChatColor.DARK_GREEN+"--- do"+ChatColor.YELLOW+" /"+label+" list "+(pageNumber+1)+ChatColor.DARK_GREEN+" for next page ---";
+                pMsg+=ChatColor.DARK_GREEN+"--- do"+ChatColor.YELLOW+" /"+label+" listplayer "+(pageNumber+1)+ChatColor.DARK_GREEN+" for next page ---";
             }
 
             sender.sendMessage(pMsg);
