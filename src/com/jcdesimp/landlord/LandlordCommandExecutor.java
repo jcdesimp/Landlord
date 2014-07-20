@@ -824,11 +824,11 @@ public class LandlordCommandExecutor implements CommandExecutor {
             if(myLand.size()==0){
                 player.sendMessage(ChatColor.YELLOW+"You do not own any land!");
             } else {
-                String header = ChatColor.DARK_GREEN+"   | ( X, Z ) - World Name |     \n";
+                String header = ChatColor.DARK_GREEN+" | Coords - Chunk Coords - World Name |     \n";
                 ArrayList<String> landList = new ArrayList<String>();
                 //OwnedLand curr = myLand.get(0);
                 for (OwnedLand aMyLand : myLand) {
-                    landList.add((ChatColor.GOLD + "     (" + aMyLand.getX() + ", " + aMyLand.getZ() + ") - "
+                    landList.add((ChatColor.GOLD + " ("+ aMyLand.getXBlock() +", "+ aMyLand.getZBlock() +") - (" + aMyLand.getX() + ", " + aMyLand.getZ() + ") - "
                             + aMyLand.getWorldName()) + "\n")
                     ;
                 }
@@ -901,11 +901,11 @@ public class LandlordCommandExecutor implements CommandExecutor {
         if(myLand.size()==0){
             sender.sendMessage(ChatColor.YELLOW+ owner +" does not own any land!");
         } else {
-            String header = ChatColor.DARK_GREEN+"   | ( X, Z ) - World Name |     \n";
+            String header = ChatColor.DARK_GREEN+" | Coords - Chunk Coords - World Name |     \n";
             ArrayList<String> landList = new ArrayList<String>();
             //OwnedLand curr = myLand.get(0);
             for (OwnedLand aMyLand : myLand) {
-                landList.add((ChatColor.GOLD + "     (" + aMyLand.getX() + ", " + aMyLand.getZ() + ") - "
+                landList.add((ChatColor.GOLD + " ("+ aMyLand.getXBlock() +", "+ aMyLand.getZBlock() +") - (" + aMyLand.getX() + ", " + aMyLand.getZ() + ") - "
                         + aMyLand.getWorldName()) + "\n")
                 ;
             }
