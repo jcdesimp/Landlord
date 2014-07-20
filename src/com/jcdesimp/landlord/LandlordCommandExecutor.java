@@ -288,18 +288,19 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 return true;
 
             }
+            int orLimit = plugin.getConfig().getInt("limits.landLimit",10);
             int limit = plugin.getConfig().getInt("limits.landLimit",10);
 
             if(player.hasPermission("landlord.limit.extra5")){
-                limit+=limit+=plugin.getConfig().getInt("limits.extra5",0);
+                limit=orLimit+plugin.getConfig().getInt("limits.extra5",0);
             } else if(player.hasPermission("landlord.limit.extra4")){
-                limit+=limit+=plugin.getConfig().getInt("limits.extra4",0);
+                limit=orLimit+plugin.getConfig().getInt("limits.extra4",0);
             } else if(player.hasPermission("landlord.limit.extra3")){
-                limit+=limit+=plugin.getConfig().getInt("limits.extra3",0);
+                limit=orLimit+plugin.getConfig().getInt("limits.extra3",0);
             } else if(player.hasPermission("landlord.limit.extra2")){
-                limit+=limit+=plugin.getConfig().getInt("limits.extra2",0);
+                limit=orLimit+plugin.getConfig().getInt("limits.extra2",0);
             } else if(player.hasPermission("landlord.limit.extra")){
-                limit+=limit+=plugin.getConfig().getInt("limits.extra",0);
+                limit=orLimit+plugin.getConfig().getInt("limits.extra",0);
             }
 
             if(limit >= 0 && !player.hasPermission("landlord.limit.override")){
@@ -309,11 +310,15 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 }
             }                       //
 
+            //Money Handling
             if(plugin.hasVault()){
                 if(plugin.getvHandler().hasEconomy()){
                     Double amt = plugin.getConfig().getDouble("economy.buyPrice", 100.0);
                     if(amt > 0){
-                        if(!plugin.getvHandler().chargeCash(player, amt)){
+                        int numFree = plugin.getConfig().getInt("economy.freeLand", 0);
+                        if (numFree > 0 && plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId().toString()).findRowCount() < numFree) {
+                            //player.sendMessage(ChatColor.YELLOW+"You have been charged " + plugin.getvHandler().formatCash(amt) + " to purchase land.");
+                        } else if(!plugin.getvHandler().chargeCash(player, amt)){
                             player.sendMessage(ChatColor.RED+"It costs " + plugin.getvHandler().formatCash(amt) + " to purchase land.");
                             return true;
                         } else {
@@ -403,7 +408,10 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 if(plugin.getvHandler().hasEconomy()){
                     Double amt = plugin.getConfig().getDouble("economy.sellPrice", 100.0);
                     if(amt > 0){
-                        if(plugin.getvHandler().giveCash(player, amt)){
+                        int numFree = plugin.getConfig().getInt("economy.freeLand", 0);
+                        if (numFree > 0 && plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId().toString()).findRowCount() <= numFree) {
+                            //player.sendMessage(ChatColor.YELLOW+"You have been charged " + plugin.getvHandler().formatCash(amt) + " to purchase land.");
+                        } else if(plugin.getvHandler().giveCash(player, amt)){
                             player.sendMessage(ChatColor.GREEN+"Land sold for " + plugin.getvHandler().formatCash(amt) + ".");
                             //return true;
                         }
@@ -823,11 +831,11 @@ public class LandlordCommandExecutor implements CommandExecutor {
             if(myLand.size()==0){
                 player.sendMessage(ChatColor.YELLOW+"You do not own any land!");
             } else {
-                String header = ChatColor.DARK_GREEN+"   | ( X, Z ) - World Name |     \n";
+                String header = ChatColor.DARK_GREEN+" | Coords - Chunk Coords - World Name |     \n";
                 ArrayList<String> landList = new ArrayList<String>();
                 //OwnedLand curr = myLand.get(0);
                 for (OwnedLand aMyLand : myLand) {
-                    landList.add((ChatColor.GOLD + "     (" + aMyLand.getX() + ", " + aMyLand.getZ() + ") - "
+                    landList.add((ChatColor.GOLD + " ("+ aMyLand.getXBlock() +", "+ aMyLand.getZBlock() +") - (" + aMyLand.getX() + ", " + aMyLand.getZ() + ") - "
                             + aMyLand.getWorldName()) + "\n")
                     ;
                 }
@@ -900,11 +908,11 @@ public class LandlordCommandExecutor implements CommandExecutor {
         if(myLand.size()==0){
             sender.sendMessage(ChatColor.YELLOW+ owner +" does not own any land!");
         } else {
-            String header = ChatColor.DARK_GREEN+"   | ( X, Z ) - World Name |     \n";
+            String header = ChatColor.DARK_GREEN+" | Coords - Chunk Coords - World Name |     \n";
             ArrayList<String> landList = new ArrayList<String>();
             //OwnedLand curr = myLand.get(0);
             for (OwnedLand aMyLand : myLand) {
-                landList.add((ChatColor.GOLD + "     (" + aMyLand.getX() + ", " + aMyLand.getZ() + ") - "
+                landList.add((ChatColor.GOLD + " ("+ aMyLand.getXBlock() +", "+ aMyLand.getZBlock() +") - (" + aMyLand.getX() + ", " + aMyLand.getZ() + ") - "
                         + aMyLand.getWorldName()) + "\n")
                 ;
             }
