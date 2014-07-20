@@ -56,9 +56,7 @@ public final class Landlord extends JavaPlugin {
 
 
 
-        //// CONFIG FILE MANAGEMENT ///
-
-
+        //// CONFIG FILE MANAGEMENT ////
 
 
         Map<String,Object> oldConfig = getConfig().getValues(true);
