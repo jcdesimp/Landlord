@@ -288,18 +288,19 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 return true;
 
             }
+            int orLimit = plugin.getConfig().getInt("limits.landLimit",10);
             int limit = plugin.getConfig().getInt("limits.landLimit",10);
 
             if(player.hasPermission("landlord.limit.extra5")){
-                limit+=limit+=plugin.getConfig().getInt("limits.extra5",0);
+                limit=orLimit+plugin.getConfig().getInt("limits.extra5",0);
             } else if(player.hasPermission("landlord.limit.extra4")){
-                limit+=limit+=plugin.getConfig().getInt("limits.extra4",0);
+                limit=orLimit+plugin.getConfig().getInt("limits.extra4",0);
             } else if(player.hasPermission("landlord.limit.extra3")){
-                limit+=limit+=plugin.getConfig().getInt("limits.extra3",0);
+                limit=orLimit+plugin.getConfig().getInt("limits.extra3",0);
             } else if(player.hasPermission("landlord.limit.extra2")){
-                limit+=limit+=plugin.getConfig().getInt("limits.extra2",0);
+                limit=orLimit+plugin.getConfig().getInt("limits.extra2",0);
             } else if(player.hasPermission("landlord.limit.extra")){
-                limit+=limit+=plugin.getConfig().getInt("limits.extra",0);
+                limit=orLimit+plugin.getConfig().getInt("limits.extra",0);
             }
 
             if(limit >= 0 && !player.hasPermission("landlord.limit.override")){
