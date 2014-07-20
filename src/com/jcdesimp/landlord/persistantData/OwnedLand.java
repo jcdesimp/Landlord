@@ -162,6 +162,14 @@ public class OwnedLand {
         return z;
     }
 
+    public int getXBlock() {
+        return getChunk().getBlock(0,0,0).getX();
+    }
+
+    public int getZBlock() {
+        return getChunk().getBlock(0,0,0).getZ();
+    }
+
     public String getPermissions() {
         return permissions;
     }
