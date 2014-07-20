@@ -27,6 +27,8 @@
 # economy:
 #    #Enable economy integration features
 #    enable: false
+#    #Amount of free land a player can own before being charged
+#    freeLand: 0
 #    #Cost of claiming land
 #    buyPrice: 100
 #    #Money given to player when unclaiming land
@@ -62,6 +64,7 @@ limits:
   extra5: 50
 economy:
   enable: false
+  freeLand: 0
   buyPrice: 100
   sellPrice: 50
 worldguard:

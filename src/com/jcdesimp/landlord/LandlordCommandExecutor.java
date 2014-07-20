@@ -310,11 +310,15 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 }
             }                       //
 
+            //Money Handling
             if(plugin.hasVault()){
                 if(plugin.getvHandler().hasEconomy()){
                     Double amt = plugin.getConfig().getDouble("economy.buyPrice", 100.0);
                     if(amt > 0){
-                        if(!plugin.getvHandler().chargeCash(player, amt)){
+                        int numFree = plugin.getConfig().getInt("economy.freeLand", 0);
+                        if (numFree > 0 && plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId().toString()).findRowCount() < numFree) {
+                            //player.sendMessage(ChatColor.YELLOW+"You have been charged " + plugin.getvHandler().formatCash(amt) + " to purchase land.");
+                        } else if(!plugin.getvHandler().chargeCash(player, amt)){
                             player.sendMessage(ChatColor.RED+"It costs " + plugin.getvHandler().formatCash(amt) + " to purchase land.");
                             return true;
                         } else {
@@ -404,7 +408,10 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 if(plugin.getvHandler().hasEconomy()){
                     Double amt = plugin.getConfig().getDouble("economy.sellPrice", 100.0);
                     if(amt > 0){
-                        if(plugin.getvHandler().giveCash(player, amt)){
+                        int numFree = plugin.getConfig().getInt("economy.freeLand", 0);
+                        if (numFree > 0 && plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId().toString()).findRowCount() <= numFree) {
+                            //player.sendMessage(ChatColor.YELLOW+"You have been charged " + plugin.getvHandler().formatCash(amt) + " to purchase land.");
+                        } else if(plugin.getvHandler().giveCash(player, amt)){
                             player.sendMessage(ChatColor.GREEN+"Land sold for " + plugin.getvHandler().formatCash(amt) + ".");
                             //return true;
                         }
