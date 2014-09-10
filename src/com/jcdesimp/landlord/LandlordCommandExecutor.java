@@ -260,11 +260,17 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
 
 
-
             //sender.sendMessage(ChatColor.GOLD + "Current Location: " + player.getLocation().toString());
             Chunk currChunk = player.getLocation().getChunk();
 
-
+            List<String> disabledWorlds = plugin.getConfig().getStringList("disabled-worlds");
+            for (String s : disabledWorlds) {
+                if (s.equalsIgnoreCase(currChunk.getWorld().getName())) {
+                    player.sendMessage(ChatColor.RED+"You cannot claim in this world.");
+                    return true;
+                }
+            }
+            
             if(plugin.hasWorldGuard()){
                 if(!plugin.getWgHandler().canClaim(player,currChunk)){
                     player.sendMessage(ChatColor.RED+"You cannot claim here.");
@@ -371,6 +377,15 @@ public class LandlordCommandExecutor implements CommandExecutor {
             int z = currChunk.getZ();
             String worldname = currChunk.getWorld().getName();
 
+            List<String> disabledWorlds = plugin.getConfig().getStringList("disabled-worlds");
+            for (String s : disabledWorlds) {
+                if (s.equalsIgnoreCase(currChunk.getWorld().getName())) {
+                    player.sendMessage(ChatColor.RED+"You cannot claim in this world.");
+                    return true;
+                }
+            }            
+            
+            
             if(args.length>1){
                 try{
                     String[] coords = args[1].split(",");
