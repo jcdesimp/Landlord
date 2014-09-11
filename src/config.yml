@@ -47,6 +47,10 @@
 #    useContainers: true
 #    useRedstone: true
 #    pvp: true
+# Here you can disable worlds where player should not claim/unclaim
+# disabled-worlds:
+# - world_nether
+# - world_the_end
 # #### CONFIGURE OPTIONS BELOW ####
 
 options:
@@ -77,7 +81,6 @@ enabled-flags:
   useContainers: true
   useRedstone: true
   pvp: true
-
-
-
-
+disabled-worlds:
+- world_nether
+- world_the_end
