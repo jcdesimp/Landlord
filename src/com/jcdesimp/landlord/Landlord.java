@@ -115,7 +115,7 @@ public final class Landlord extends JavaPlugin {
         }
 
         //Vault Check
-        if(!hasVault() && this.getConfig().getBoolean("economy.enable", true)){
+        if(!hasVault() || this.getConfig().getBoolean("economy.enable", true)){
             getLogger().warning("Vault not found, economy features disabled.");
         } else {
             getLogger().info("Vault found!");

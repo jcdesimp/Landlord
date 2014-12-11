@@ -56,7 +56,8 @@ public class WorldguardHandler {
                         return false;
                     }
                 }
-            } catch (UnsupportedIntersectionException e) {
+            } catch (Exception e) {
+                //todo confront this
                 e.printStackTrace();
             }
 
