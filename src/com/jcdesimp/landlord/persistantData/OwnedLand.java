@@ -4,7 +4,7 @@ package com.jcdesimp.landlord.persistantData;
  * File created by jcdesimp on 2/28/14.
  * This class represents a plot of owned land.
  */
-import com.jcdesimp.landlord.DarkBladee12.ParticleAPI.ParticleEffect;
+//import com.jcdesimp.landlord.DarkBladee12.ParticleAPI.ParticleEffect;
 import com.avaje.ebean.validation.NotNull;
 import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.landManagement.Landflag;
@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.bukkit.Bukkit.getOfflinePlayer;
+import static org.bukkit.Bukkit.getPlayer;
 
 
 @SuppressWarnings("UnusedDeclaration")
@@ -402,11 +403,11 @@ public class OwnedLand {
      * @param p player
      * @param e effect to play
      */
-    public void highlightLand(Player p, ParticleEffect e){
+    public void highlightLand(Player p, Effect e){
         highlightLand(p, e, 5);
 
     }
-    public void highlightLand(Player p, ParticleEffect e, int amt){
+    public void highlightLand(Player p, Effect e, int amt){
         if(!Landlord.getInstance().getConfig().getBoolean("options.particleEffects",true)){
             return;
         }
@@ -414,6 +415,7 @@ public class OwnedLand {
         ArrayList<Location> edgeBlocks = new ArrayList<Location>();
         for(int i = 0; i<16; i++){
             for(int ii = -1; ii<=10; ii++){
+
                 edgeBlocks.add(chunk.getBlock(i, (int) (p.getLocation().getY())+ii, 15).getLocation());
                 edgeBlocks.add(chunk.getBlock(i, (int) (p.getLocation().getY())+ii, 0).getLocation());
                 edgeBlocks.add(chunk.getBlock(0, (int) (p.getLocation().getY())+ii, i).getLocation());
@@ -426,8 +428,11 @@ public class OwnedLand {
 
         for (Location edgeBlock : edgeBlocks) {
             edgeBlock.setZ(edgeBlock.getBlockZ()+.5);
-            edgeBlock.setX(edgeBlock.getBlockX()+.5);
-            e.display(edgeBlock, 0.2f, 0.2f, 0.2f, 9.2f, amt, p);
+            edgeBlock.setX(edgeBlock.getBlockX() + .5);
+
+            p.spigot().playEffect(edgeBlock, e, 0, 0, 0.2f, 0.2f, 0.2f, 0.2f, amt, 9);
+
+            //e.display(edgeBlock, 0.2f, 0.2f, 0.2f, 9.2f, amt, p);
             //p.playEffect(edgeBlocks.get(i), e, null);
         }
 

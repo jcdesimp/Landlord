@@ -8,7 +8,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import com.jcdesimp.landlord.DarkBladee12.ParticleAPI.ParticleEffect;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -335,7 +334,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 }
             }
             Landlord.getInstance().getDatabase().save(land);
-            land.highlightLand(player, ParticleEffect.HAPPY_VILLAGER);
+            land.highlightLand(player, Effect.HAPPY_VILLAGER);
             sender.sendMessage(
                     ChatColor.GREEN + "Successfully claimed chunk (" + currChunk.getX() + ", " +
                             currChunk.getZ() + ") in world \'" + currChunk.getWorld().getName() + "\'." );
@@ -438,7 +437,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 player.sendMessage(ChatColor.YELLOW+"Unclaimed " + getOfflinePlayer(dbLand.ownerUUID()).getName() + "'s land.");
             }
             plugin.getDatabase().delete(dbLand);
-            dbLand.highlightLand(player, ParticleEffect.WITCH_MAGIC);
+            dbLand.highlightLand(player, Effect.WITCH_MAGIC);
 
             sender.sendMessage(
                     ChatColor.YELLOW + "Successfully unclaimed chunk (" + currChunk.getX() + ", " +
@@ -510,7 +509,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 return true;
             }
             if(plugin.getConfig().getBoolean("options.particleEffects",true)){
-                land.highlightLand(player, ParticleEffect.HEART, 2);
+                land.highlightLand(player, Effect.HEART, 2);
             }
 
             plugin.getDatabase().save(land);
@@ -643,7 +642,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 return true;
             }
             if(plugin.getConfig().getBoolean("options.particleEffects",true)) {
-                land.highlightLand(player, ParticleEffect.ANGRY_VILLAGER, 2);
+                land.highlightLand(player, Effect.VILLAGER_THUNDERCLOUD, 2);
             }
                 plugin.getDatabase().save(land);
             if(plugin.getConfig().getBoolean("options.soundEffects",true)){
@@ -677,7 +676,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 //player.sendMessage(ChatColor.YELLOW+"Viewing friends of someone else's land.");
             }
             if(plugin.getConfig().getBoolean("options.particleEffects",true)) {
-                land.highlightLand(player, ParticleEffect.HEART, 3);
+                land.highlightLand(player, Effect.HEART, 3);
             }
             //check if page number is valid
             int pageNumber = 1;
@@ -1044,7 +1043,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             }
 
             if(plugin.getConfig().getBoolean("options.particleEffects")){
-                land.highlightLand(player, ParticleEffect.DRIP_LAVA);
+                land.highlightLand(player, Effect.LAVADRIP);
             }
             String msg = ChatColor.DARK_GREEN + "--- You are in chunk " + ChatColor.GOLD + "(" + currChunk.getX() + ", " + currChunk.getZ() + ") " +
                     ChatColor.DARK_GREEN + " in world \"" + ChatColor.GOLD + currChunk.getWorld().getName()  + ChatColor.DARK_GREEN + "\"\n"+ "----- Owned by: " +
