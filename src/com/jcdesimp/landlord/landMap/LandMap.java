@@ -38,7 +38,9 @@ public class LandMap {
         //displayMap(mapViewer);
         this.currDir = getPlayerDirection(mapViewer);
         displayMap(mapViewer);
-        this.schedulerId = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Landlord.getInstance(), new BukkitRunnable() {
+
+
+        /*this.schedulerId = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Landlord.getInstance(), new BukkitRunnable() {
             @Override
             public void run() {
                 if(!currDir.equals(getPlayerDirection(mapViewer)) || !currChunk.equals(mapViewer.getLocation().getChunk())){
@@ -47,7 +49,18 @@ public class LandMap {
                 }
 
             }
-        }, 0L, 7L);
+        }, 0L, 7L);*/
+
+        this.schedulerId = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if(!currDir.equals(getPlayerDirection(mapViewer)) || !currChunk.equals(mapViewer.getLocation().getChunk())){
+                    displayMap(mapViewer);
+                    currDir = getPlayerDirection(mapViewer);
+                }
+
+            }
+        }.runTaskTimer(Landlord.getInstance(), 0L, 7L).getTaskId();
 
         displayMap(this.mapViewer);
 
@@ -156,7 +169,9 @@ public class LandMap {
                 public long getLastPlayed(){
                     return 0;
                 }
+
                 @Override
+                @Deprecated
                 public void setBanned(boolean b) {
                     return;
                 }
@@ -171,8 +186,7 @@ public class LandMap {
             OfflinePlayer ofp = new myOfflinePlayer(mapData[i].substring(5,17));
             //String ofp = mapData[i].substring(5,17);
 
-
-            Score score = objective.getScore(ofp);
+            Score score = objective.getScore(ofp.getName());
 
             score.setScore(mapData.length - i);
 

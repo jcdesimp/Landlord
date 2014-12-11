@@ -1,7 +1,6 @@
 package com.jcdesimp.landlord.pluginHooks;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.UnsupportedIntersectionException;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
@@ -46,20 +45,19 @@ public class WorldguardHandler {
             ProtectedRegion check = new ProtectedCuboidRegion("check", toVector(currChunk.getBlock(0,0,0)),toVector(currChunk.getBlock(15,127,15)));
             //System.out.println(check.getMinimumPoint() +" " + check.getMaximumPoint());
 
-            try {
-                //System.out.println("in try!");
-                List<ProtectedRegion> intersects = check.getIntersectingRegions(new ArrayList<ProtectedRegion>(regionManager.getRegions().values()));
-                //System.out.println("got intersects");
-                for (ProtectedRegion intersect : intersects) {
-                    //System.out.println(intersects.get(i).toString());
-                    if (!regionManager.getApplicableRegions(intersect).canBuild(worldguard.wrapPlayer(player))) {
-                        return false;
-                    }
+
+            //System.out.println("in try!");
+            List<ProtectedRegion> intersects = check.getIntersectingRegions(new ArrayList<ProtectedRegion>(regionManager.getRegions().values()));
+            //System.out.println("got intersects");
+            for (ProtectedRegion intersect : intersects) {
+                //System.out.println(intersects.get(i).toString());
+
+                //todo confront deprecation
+                if (!regionManager.getApplicableRegions(intersect).canBuild(worldguard.wrapPlayer(player))) {
+                    return false;
                 }
-            } catch (Exception e) {
-                //todo confront this
-                e.printStackTrace();
             }
+
 
         }
         return true;

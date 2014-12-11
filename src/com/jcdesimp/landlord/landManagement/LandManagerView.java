@@ -1,6 +1,5 @@
 package com.jcdesimp.landlord.landManagement;
 
-import com.jcdesimp.landlord.DarkBladee12.ParticleAPI.ParticleEffect;
 import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.*;
@@ -206,7 +205,7 @@ public class LandManagerView implements Listener {
             if(Landlord.getInstance().getConfig().getBoolean("options.soundEffects",true)){
                 player.playSound(player.getLocation(),Sound.FIZZ,10,10);
             }
-            mLand.highlightLand(player, ParticleEffect.DRIP_LAVA);
+            mLand.highlightLand(player, Effect.LAVADRIP);
             //InventoryCloseEvent.getHandlerList().unregister(this);
             Landlord.getInstance().getManageViewManager().NoCloseDeactivateView(player);
             HandlerList.unregisterAll(this);
