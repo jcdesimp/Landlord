@@ -228,11 +228,11 @@ public final class Landlord extends JavaPlugin {
         if (plugin == null || !(plugin instanceof WorldGuardPlugin) || !this.getConfig().getBoolean("worldguard.blockRegionClaim", true)) {
             return false;
         }
-        if(plugin.toString().contains("6.0.0-beta")) {
-            //todo remove when necessary
+        /*if(plugin.toString().contains("6.0.0-beta")) {
+
             getLogger().warning("This WorldGuard version \'6.0.0-beta\' does not work with Landlord, please update it.");
             return false;
-        }
+        }*/
 
         return true;
     }
