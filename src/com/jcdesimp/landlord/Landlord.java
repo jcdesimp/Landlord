@@ -88,10 +88,12 @@ public final class Landlord extends JavaPlugin {
             getServer().getPluginManager().registerEvents(pListen, this);
         }
 
+
         // Database creation, configuration, and maintenance.
         setupDatabase();
         //getLogger().info(getDescription().getName() + ": Created by Jcdesimp");
         getLogger().info("Created by Jcdesimp!");
+
 
         //Plugin Metrics
         try {
@@ -109,15 +111,15 @@ public final class Landlord extends JavaPlugin {
         //Worldguard Check
         if(!hasWorldGuard() && this.getConfig().getBoolean("worldguard.blockRegionClaim", true)){
             getLogger().warning("Worldguard not found, worldguard features disabled.");
-        } else {
+        } else if(hasWorldGuard()) {
             getLogger().info("Worldguard found!");
             wgHandler = new WorldguardHandler(getWorldGuard());
         }
 
         //Vault Check
-        if(!hasVault() || this.getConfig().getBoolean("economy.enable", true)){
+        if(!hasVault() && this.getConfig().getBoolean("economy.enable", true)){
             getLogger().warning("Vault not found, economy features disabled.");
-        } else {
+        } else if (hasVault()) {
             getLogger().info("Vault found!");
             vHandler = new VaultHandler();
             if(!vHandler.hasEconomy()){
