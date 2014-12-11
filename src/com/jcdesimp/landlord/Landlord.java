@@ -24,6 +24,7 @@ import java.util.Map;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
+import static org.bukkit.Bukkit.getLogger;
 import static org.bukkit.Bukkit.getOfflinePlayer;
 
 /**
@@ -222,8 +223,14 @@ public final class Landlord extends JavaPlugin {
     public boolean hasWorldGuard() {
         Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
 
+        //System.out.println("-------- " + plugin.toString());
         // WorldGuard may not be loaded
         if (plugin == null || !(plugin instanceof WorldGuardPlugin) || !this.getConfig().getBoolean("worldguard.blockRegionClaim", true)) {
+            return false;
+        }
+        if(plugin.toString().contains("6.0.0-beta")) {
+            //todo remove when necessary
+            getLogger().warning("This WorldGuard version \'6.0.0-beta\' does not work with Landlord, please update it.");
             return false;
         }
 
