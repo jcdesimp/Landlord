@@ -68,7 +68,13 @@ public class OpenDoor extends Landflag {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void protectBlockStates(PlayerInteractEvent event){
-        Material[] blockedItems = {Material.WOOD_DOOR, Material.TRAP_DOOR, Material.WOODEN_DOOR, Material.FENCE_GATE};
+        Material[] blockedItems = {Material.WOOD_DOOR, Material.TRAP_DOOR, Material.WOODEN_DOOR, Material.FENCE_GATE,
+                Material.ACACIA_DOOR, Material.ACACIA_FENCE_GATE,
+                Material.DARK_OAK_DOOR, Material.DARK_OAK_FENCE_GATE,
+                Material.BIRCH_DOOR, Material.BIRCH_FENCE_GATE,
+                Material.JUNGLE_DOOR, Material.JUNGLE_FENCE_GATE,
+                Material.SPRUCE_DOOR, Material.SPRUCE_FENCE_GATE,};
+
         if(event.getClickedBlock()==null){
             return;
         }
