@@ -16,9 +16,7 @@ public class VaultHandler {
         setupEconomy();
     }
 
-
     private boolean setupEconomy(){
-
         RegisteredServiceProvider<Economy> economyProvider = Landlord.getInstance().getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
         if (economyProvider != null) {
             economy = economyProvider.getProvider();
@@ -28,7 +26,6 @@ public class VaultHandler {
     }
 
     public boolean hasEconomy(){
-
         if(economy == null){
             return false;
         }
@@ -36,7 +33,7 @@ public class VaultHandler {
     }
 
     private boolean canAfford(Player p, double amt){
-        if(economy.getBalance(p.getName()) >= amt){
+        if(economy.getBalance(p) >= amt){
             return true;
 
         }
@@ -45,20 +42,18 @@ public class VaultHandler {
 
     public boolean chargeCash(Player p, double amt){
         if(canAfford(p,amt)){
-            EconomyResponse r = economy.withdrawPlayer(p.getName(), amt);
+            economy.withdrawPlayer(p, amt);
             return true;
         }
         return false;
     }
 
     public boolean giveCash(Player p, double amt){
-        EconomyResponse r = economy.depositPlayer(p.getName(),amt);
+        economy.depositPlayer(p,amt);
         return true;
     }
 
     public String formatCash(double amt){
         return economy.format(amt);
     }
-
-
 }
