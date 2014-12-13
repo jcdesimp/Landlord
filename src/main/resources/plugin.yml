@@ -1,6 +1,6 @@
-name: Landlord
-main: com.jcdesimp.landlord.Landlord
-version: 1.3
+name: ${project.name}
+main: ${main.class}
+version: ${project.version}
 author: Jcdesimp
 authors: []
 website: http://dev.bukkit.org/bukkit-plugins/landlord/
@@ -16,9 +16,6 @@ commands:
       permission-message: You don't have permission.
 
 permissions:
-
-
-
     landlord.*:
         description: Gives access to all landlord commands
         children:

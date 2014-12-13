@@ -1,6 +1,5 @@
 package com.jcdesimp.landlord;
 
-import com.jcdesimp.landlord.landManagement.LandManagerView;
 import com.jcdesimp.landlord.persistantData.Friend;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.*;
@@ -14,14 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.bukkit.Bukkit.getOfflinePlayer;
-import static org.bukkit.Bukkit.getPlayer;
 import static org.bukkit.Bukkit.getWorld;
 import static org.bukkit.util.NumberConversions.ceil;
 
 /**
  * Command Executor class for LandLord
  */
-@SuppressWarnings("UnusedParameters")
 public class LandlordCommandExecutor implements CommandExecutor {
     private Landlord plugin; //pointer to main class
     public LandlordCommandExecutor(Landlord plugin){
@@ -36,7 +33,6 @@ public class LandlordCommandExecutor implements CommandExecutor {
      * @param args given with command
      * @return boolean
      */
-    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(cmd.getName().equalsIgnoreCase("landlord")){ // If the player typed /land then do the following...
             /*
