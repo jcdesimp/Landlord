@@ -173,19 +173,69 @@ public class Build extends Landflag {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void interactWithArmorStand(PlayerInteractAtEntityEvent event) {
-        //todo implement event handler
+        if (!event.getRightClicked().getType().equals(EntityType.ARMOR_STAND)) {
+            return;
+        }
+
+        OwnedLand land = OwnedLand.getApplicableLand(event.getRightClicked().getLocation());
+        if(land == null){
+            return;
+        }
+
+        if (!land.hasPermTo(event.getPlayer(), this)) {
+            event.getPlayer().sendMessage(ChatColor.RED + "You cannot do that here!");
+            event.setCancelled(true);
+        }
+
+
     }
 
-    //todo check projectiles hit armor stand
-    //todo check creation of armor stand
-    //todo check destruction of armor stand
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void destroyArmorStand(EntityDamageByEntityEvent event) {
+        Entity victim = event.getEntity();
+        //System.out.println("Victim: "+victim);
+        if(!victim.getType().equals(EntityType.ARMOR_STAND)) {
+           return;
+        }
+
+        OwnedLand land = OwnedLand.getApplicableLand(victim.getLocation());
+        if(land == null){
+            return;
+        }
+
+
+        if (event.getDamager().getType().equals(EntityType.PLAYER)) {
+            Player attacker = (Player)event.getDamager();
+            //System.out.println(attacker.getName());
+            if(!land.hasPermTo(attacker ,this)){
+                attacker.sendMessage(ChatColor.RED+"You cannot do that on this land.");
+                event.setCancelled(true);
+            }
+
+        }
+         if (event.getDamager().getType().equals(EntityType.ARROW)) {
+             Arrow projectile = (Arrow)event.getDamager();
+             if(projectile.getShooter() instanceof Player) {
+                 Player attacker = (Player)projectile.getShooter();
+                 if(!land.hasPermTo(attacker ,this)){
+                     attacker.sendMessage(ChatColor.RED+"You cannot do that on this land.");
+                     event.setCancelled(true);
+                 }
+             }
+
+         }
+        //System.out.println(event.getDamager().getType());
+
+    }
 
 
     @EventHandler(priority = EventPriority.HIGH)
     public void removeItemFromFrame(EntityDamageByEntityEvent event) {
         Entity victim = event.getEntity();
 
-        if (!victim.getType().toString().equalsIgnoreCase("ITEM_FRAME")){
+
+        if (!victim.getType().equals(EntityType.ITEM_FRAME)){
             return;
         }
         Player p;
@@ -224,8 +274,6 @@ public class Build extends Landflag {
         }
 
 
-
-        return;
     }
 
     @EventHandler(priority = EventPriority.HIGH)
