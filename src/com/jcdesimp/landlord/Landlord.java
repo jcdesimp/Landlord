@@ -24,6 +24,7 @@ import java.util.Map;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
+import static org.bukkit.Bukkit.getLogger;
 import static org.bukkit.Bukkit.getOfflinePlayer;
 
 /**
@@ -88,10 +89,12 @@ public final class Landlord extends JavaPlugin {
             getServer().getPluginManager().registerEvents(pListen, this);
         }
 
+
         // Database creation, configuration, and maintenance.
         setupDatabase();
         //getLogger().info(getDescription().getName() + ": Created by Jcdesimp");
         getLogger().info("Created by Jcdesimp!");
+
 
         //Plugin Metrics
         try {
@@ -109,7 +112,7 @@ public final class Landlord extends JavaPlugin {
         //Worldguard Check
         if(!hasWorldGuard() && this.getConfig().getBoolean("worldguard.blockRegionClaim", true)){
             getLogger().warning("Worldguard not found, worldguard features disabled.");
-        } else {
+        } else if(hasWorldGuard()) {
             getLogger().info("Worldguard found!");
             wgHandler = new WorldguardHandler(getWorldGuard());
         }
@@ -117,7 +120,7 @@ public final class Landlord extends JavaPlugin {
         //Vault Check
         if(!hasVault() && this.getConfig().getBoolean("economy.enable", true)){
             getLogger().warning("Vault not found, economy features disabled.");
-        } else {
+        } else if (hasVault()) {
             getLogger().info("Vault found!");
             vHandler = new VaultHandler();
             if(!vHandler.hasEconomy()){
@@ -220,10 +223,16 @@ public final class Landlord extends JavaPlugin {
     public boolean hasWorldGuard() {
         Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
 
+        //System.out.println("-------- " + plugin.toString());
         // WorldGuard may not be loaded
         if (plugin == null || !(plugin instanceof WorldGuardPlugin) || !this.getConfig().getBoolean("worldguard.blockRegionClaim", true)) {
             return false;
         }
+        /*if(plugin.toString().contains("6.0.0-beta")) {
+
+            getLogger().warning("This WorldGuard version \'6.0.0-beta\' does not work with Landlord, please update it.");
+            return false;
+        }*/
 
         return true;
     }
@@ -236,6 +245,11 @@ public final class Landlord extends JavaPlugin {
 
     public boolean hasVault(){
         Plugin plugin = getServer().getPluginManager().getPlugin("Vault");
+
+
+
+
+
 
         // WorldGuard may not be loaded
         if (plugin == null || !(plugin instanceof Vault) || !this.getConfig().getBoolean("economy.enable", true)) {
