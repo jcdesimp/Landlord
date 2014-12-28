@@ -12,10 +12,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
-import org.bukkit.event.player.PlayerBucketEmptyEvent;
-import org.bukkit.event.player.PlayerBucketFillEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
@@ -175,6 +172,16 @@ public class Build extends Landflag {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
+    public void interactWithArmorStand(PlayerInteractAtEntityEvent event) {
+        //todo implement event handler
+    }
+
+    //todo check projectiles hit armor stand
+    //todo check creation of armor stand
+    //todo check destruction of armor stand
+
+
+    @EventHandler(priority = EventPriority.HIGH)
     public void removeItemFromFrame(EntityDamageByEntityEvent event) {
         Entity victim = event.getEntity();
 
@@ -268,6 +275,7 @@ public class Build extends Landflag {
         if(land == null){
             return;
         }
+
         if(placer.getType().toString().equals("PLAYER")){
             Player p = (Player)placer;
             if(!land.hasPermTo(p, this)){
@@ -281,7 +289,7 @@ public class Build extends Landflag {
 
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void CropTrampleorFireCharge(PlayerInteractEvent event) {
+    public void CropTrampleOrFireCharge(PlayerInteractEvent event) {
         if(event.getClickedBlock()==null){
             return;
         }

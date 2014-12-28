@@ -4,6 +4,8 @@ import com.jcdesimp.landlord.landManagement.Landflag;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -11,6 +13,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.Arrays;
 
 /**
@@ -74,9 +77,11 @@ public class HarmAnimals extends Landflag {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void animalDamage(EntityDamageByEntityEvent event){
-        String[] safeAnimals = {"OCELOT","WOLF","HORSE","COW","PIG","MUSHROOM_COW","SHEEP","CHICKEN"};
+        //String[] ssafeAnimals = {"OCELOT","WOLF","HORSE","COW","PIG","MUSHROOM_COW","SHEEP","CHICKEN"};
+        EntityType[] safeAnimals = {EntityType.OCELOT, EntityType.WOLF, EntityType.HORSE, EntityType.COW, EntityType.PIG,
+            EntityType.MUSHROOM_COW, EntityType.SHEEP, EntityType.CHICKEN, EntityType.RABBIT};
         org.bukkit.entity.Entity victim = event.getEntity();
-        if(!Arrays.asList(safeAnimals).contains(victim.getType().toString())){
+        if(!Arrays.asList(safeAnimals).contains(victim.getType())){
             return;
         }
 
@@ -91,7 +96,7 @@ public class HarmAnimals extends Landflag {
             }
             if(!land.hasPermTo(p, this)){
 
-                    p.sendMessage(ChatColor.RED+"You cannot harm animals on this land.");
+                p.sendMessage(ChatColor.RED+"You cannot harm animals on this land.");
 
                 event.setCancelled(true);
 
