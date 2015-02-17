@@ -1,5 +1,7 @@
 package com.jcdesimp.landlord;
 
+import com.jcdesimp.landlord.commands.Claim;
+import com.jcdesimp.landlord.commands.LandlordCommand;
 import com.jcdesimp.landlord.landManagement.LandManagerView;
 import com.jcdesimp.landlord.persistantData.Friend;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
@@ -7,9 +9,11 @@ import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.bukkit.Bukkit.getOfflinePlayer;
@@ -22,11 +26,24 @@ import static org.bukkit.util.NumberConversions.ceil;
  */
 @SuppressWarnings("UnusedParameters")
 public class LandlordCommandExecutor implements CommandExecutor {
+
     private Landlord plugin; //pointer to main class
+    private HashMap<String, LandlordCommand> registeredCommands;
+    private ArrayList<String> commandHelp;
+
     public LandlordCommandExecutor(Landlord plugin){
         this.plugin = plugin;
+        this.registeredCommands = new HashMap<String, LandlordCommand>();
+        this.commandHelp = new ArrayList<String>();
+
+
+        //todo CommandRefactor - initially all commands should be .registered()
+        this.register(new Claim(plugin));
 
     }
+
+
+
 
     /**
      * Main command handler
@@ -38,12 +55,23 @@ public class LandlordCommandExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(cmd.getName().equalsIgnoreCase("landlord")){ // If the player typed /land then do the following...
+
+            // Check if the attempted command is registered
+            if (args.length == 0 || !registeredCommands.containsKey(args[0].toLowerCase())) {
+                // if there is no command, or it's not registered, show the help text as the command given is unknown
+                return landlord_help(sender, args, label);
+            } else {
+                // if it is, execute it with the given args
+                return registeredCommands.get(args[0].toLowerCase()).execute(sender, args, label);
+            }
+
+
             /*
              * ****************************************************************
              *   Use private methods below to define command implementation
              *   call those methods from within these cases
              * ****************************************************************
-             */
+
             if(args.length == 0){
 
                 //landlord
@@ -106,13 +134,44 @@ public class LandlordCommandExecutor implements CommandExecutor {
                 return landlord_friends(sender,args,label);
             } else {
                 return landlord_help(sender, args, label);
-            }
+            }*/
 
         } //If this has happened the function will return true.
         // If this hasn't happened the value of false will be returned.
         return false;
     }
 
+
+    /**
+     * Register a new command
+     * @param cmd LandlordCommand to register
+     * @return boolean of success - should fail if a requested label (name, alias) is not available
+     */
+    public boolean register(LandlordCommand cmd) {
+        String[] commandTriggers = cmd.getTriggers();
+
+        // if there are no aliases then fail, command would be impossible to trigger.
+        if (commandTriggers.length <= 0) {
+            return false;
+        }
+
+        // iterate the command aliases
+        for (String trigger : commandTriggers) {
+
+            // Check if the command is taken
+            if(registeredCommands.containsKey(trigger.toLowerCase())) {
+                return false;   // Command name is taken already
+            }
+
+            // register an entry for this command trigger
+            registeredCommands.put(trigger.toLowerCase(), cmd);
+        }
+
+        // add the commands help text to the command help list
+        commandHelp.add(cmd.getHelpText());
+
+        return true;
+    }
 
 
 
@@ -121,7 +180,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
     /*
      * **********************************************************
-     * private methods for handling each command functionality
+     * private methods for handling each command functionality todo move into separate files
      * **********************************************************
      */
 
@@ -142,12 +201,14 @@ public class LandlordCommandExecutor implements CommandExecutor {
     }
 
     private boolean landlord_help(CommandSender sender, String[] args, String label) {
+
         //check if page number is valid
         int pageNumber = 1;
-        if (args.length > 1 && args[0].equals("help")){
+        if (args.length > 1 && args[0].equals("help")) {
             try{
                 pageNumber = Integer.parseInt(args[1]);}
             catch (NumberFormatException e){
+                // Is not a number!
                 sender.sendMessage(ChatColor.RED+"That is not a valid page number.");
                 return true;
             }
