@@ -44,6 +44,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
         this.register(new UnfriendAll(plugin)); // register the unfriendall command
         this.register(new Unfriend(plugin));    // register the unfriend command
         this.register(new Friends(plugin));     // register the friends command
+        this.register(new ShowMap(plugin));     // register the map command
         //todo CommandRefactor - initially all commands should be .registered()
 
     }
@@ -311,38 +312,6 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
 
 
-
-
-
-    /**
-     * Toggles the land map display
-     * @param sender who executed the command
-     * @param args given with command
-     * @return boolean
-     */
-    private boolean landlord_map(CommandSender sender, String[] args) {
-        if(!plugin.getConfig().getBoolean("options.enableMap", true)){
-            sender.sendMessage(ChatColor.YELLOW+"Land Map is disabled.");
-            return true;
-        }
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
-        } else {
-            Player player = (Player) sender;
-            if(!player.hasPermission("landlord.player.map")){
-                player.sendMessage(ChatColor.RED+"You do not have permission.");
-                return true;
-            }
-            try {
-                plugin.getMapManager().toggleMap(player);
-            } catch (Exception e) {
-                sender.sendMessage(ChatColor.RED+"Map unavailable.");
-            }
-
-        }
-        return true;
-
-    }
 
 
 
