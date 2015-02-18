@@ -42,6 +42,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
         this.register(new AddFriend(plugin));   // register the addfriend command
         this.register(new FriendAll(plugin));   // register the friendall command
         this.register(new UnfriendAll(plugin)); // register the unfriendall command
+        this.register(new Unfriend(plugin)); // register the unfriend command
         //todo CommandRefactor - initially all commands should be .registered()
 
     }
@@ -309,57 +310,6 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
 
 
-
-    /**
-     * Removes a friend from an owned chunk
-     * Called when landlord remfriend is executed
-     * @param sender who executed the command
-     * @param args given with command
-     * @return boolean
-     */
-    private boolean landlord_remfriend(CommandSender sender, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
-        } else {
-            if (args.length < 2){
-                sender.sendMessage(ChatColor.RED + "usage: /land unfriend <player>");
-                return true;
-            }
-            Player player = (Player) sender;
-            if(!player.hasPermission("landlord.player.own")){
-                player.sendMessage(ChatColor.RED+"You do not have permission.");
-                return true;
-            }
-
-            Chunk currChunk = player.getLocation().getChunk();
-            /*
-             * *************************************
-             * mark for possible change    !!!!!!!!!
-             * *************************************
-             */
-            Friend frd = Friend.friendFromOfflinePlayer(getOfflinePlayer(args[1]));
-            OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
-            if( land == null || (!land.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.modifyfriends")) ){
-                player.sendMessage(ChatColor.RED + "You do not own this land.");
-                return true;
-            }
-            if(!land.removeFriend(frd)){
-                player.sendMessage(ChatColor.YELLOW + "Player " + args[1] + " is not a friend of this land.");
-                return true;
-            }
-            if(plugin.getConfig().getBoolean("options.particleEffects",true)) {
-                land.highlightLand(player, Effect.VILLAGER_THUNDERCLOUD, 2);
-            }
-                plugin.getDatabase().save(land);
-            if(plugin.getConfig().getBoolean("options.soundEffects",true)){
-                player.playSound(player.getLocation(),Sound.ZOMBIE_INFECT,10,.5f);
-            }
-            player.sendMessage(ChatColor.GREEN + "Player " + args[1] + " is no longer a friend of this land.");
-
-        }
-        return true;
-
-    }
 
 
     private boolean landlord_friends(CommandSender sender, String[] args, String label) {
