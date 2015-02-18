@@ -35,15 +35,15 @@ public class AddFriend implements LandlordCommand {
     public boolean execute(CommandSender sender, String[] args, String label) {
         //is sender a player
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
+            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");       //mess
         } else {
             if (args.length < 2){
-                sender.sendMessage(ChatColor.RED + "usage: /land addfriend <player>");
+                sender.sendMessage(ChatColor.RED + "usage: /land addfriend <player>");      //mess
                 return true;
             }
             Player player = (Player) sender;
             if(!player.hasPermission("landlord.player.own")){
-                player.sendMessage(ChatColor.RED+"You do not have permission.");
+                player.sendMessage(ChatColor.RED+"You do not have permission.");        //mess
                 return true;
             }
 
@@ -53,13 +53,13 @@ public class AddFriend implements LandlordCommand {
 
             //Does land exist, and if so does player own it
             if( land == null || (!land.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.modifyfriends")) ){
-                player.sendMessage(ChatColor.RED + "You do not own this land.");
+                player.sendMessage(ChatColor.RED + "You do not own this land.");    //mess
                 return true;
             }
             //
             OfflinePlayer possible = getOfflinePlayer(args[1]);
             if (!possible.hasPlayedBefore() && !possible.isOnline()) {
-                player.sendMessage(ChatColor.RED+"That player is not recognized.");
+                player.sendMessage(ChatColor.RED+"That player is not recognized."); //mess
                 return true;
             }
             Friend friend = Friend.friendFromOfflinePlayer(getOfflinePlayer(args[1]));
@@ -73,12 +73,12 @@ public class AddFriend implements LandlordCommand {
                 player.sendMessage(ChatColor.YELLOW + "Player " + args[1] + " is already a friend of this land.");  //mess
                 return true;
             }
-            if(plugin.getConfig().getBoolean("options.particleEffects",true)){
+            if(plugin.getConfig().getBoolean("options.particleEffects",true)){      //conf
                 land.highlightLand(player, Effect.HEART, 2);
             }
 
             plugin.getDatabase().save(land);
-            if(plugin.getConfig().getBoolean("options.soundEffects",true)){
+            if(plugin.getConfig().getBoolean("options.soundEffects",true)){     //conf
                 player.playSound(player.getLocation(), Sound.ORB_PICKUP,10,.2f);
             }
             sender.sendMessage(ChatColor.GREEN + "Player " + args[1] +" is now a friend of this land.");    //mess

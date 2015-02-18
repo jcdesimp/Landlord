@@ -1,9 +1,6 @@
 package com.jcdesimp.landlord;
 
-import com.jcdesimp.landlord.commands.AddFriend;
-import com.jcdesimp.landlord.commands.Claim;
-import com.jcdesimp.landlord.commands.LandlordCommand;
-import com.jcdesimp.landlord.commands.Unclaim;
+import com.jcdesimp.landlord.commands.*;
 import com.jcdesimp.landlord.landManagement.LandManagerView;
 import com.jcdesimp.landlord.persistantData.Friend;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
@@ -40,9 +37,10 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
 
         //todo CommandRefactor - initially all commands should be .registered()
-        this.register(new Claim(plugin));
-        this.register(new Unclaim(plugin));
-        this.register(new AddFriend(plugin));
+        this.register(new Claim(plugin));       // register the claim command
+        this.register(new Unclaim(plugin));     // register the unclaim command
+        this.register(new AddFriend(plugin));   // register the addfriend command
+        this.register(new FriendAll(plugin));   // register the friendall command
 
     }
 
@@ -306,49 +304,6 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
 
 
-
-
-
-
-    private boolean landlord_friendall(CommandSender sender, String[] args) {
-        //is sender a player
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
-        } else {
-            if (args.length < 2) {
-                sender.sendMessage(ChatColor.RED + "usage: /land friendall <player>");
-                return true;
-            }
-            Player player = (Player) sender;
-            if (!player.hasPermission("landlord.player.own")) {
-                player.sendMessage(ChatColor.RED + "You do not have permission.");
-                return true;
-            }
-
-            List<OwnedLand> pLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId()).findList();
-            OfflinePlayer possible = getOfflinePlayer(args[1]);
-            if (!possible.hasPlayedBefore() && !possible.isOnline()) {
-                player.sendMessage(ChatColor.RED + "That player is not recognized.");
-                return true;
-            }
-
-            if (pLand.size() > 0){
-                for(OwnedLand l : pLand){
-                    l.addFriend(Friend.friendFromOfflinePlayer(getOfflinePlayer(args[1])));
-                }
-
-                plugin.getDatabase().save(pLand);
-
-
-                player.sendMessage(ChatColor.GREEN+args[1]+" has been added as a friend to all of your land.");
-                return true;
-            } else {
-                player.sendMessage(ChatColor.YELLOW+"You do not own any land!");
-            }
-
-        }
-        return true;
-    }
 
     private boolean landlord_unfriendall(CommandSender sender, String[] args) {
         //is sender a player
