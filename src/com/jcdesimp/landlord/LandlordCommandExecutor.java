@@ -36,11 +36,13 @@ public class LandlordCommandExecutor implements CommandExecutor {
         this.commandHelp = new ArrayList<String>();
 
 
-        //todo CommandRefactor - initially all commands should be .registered()
+        // note order of registration will affect how they show up in the help menu
         this.register(new Claim(plugin));       // register the claim command
         this.register(new Unclaim(plugin));     // register the unclaim command
         this.register(new AddFriend(plugin));   // register the addfriend command
         this.register(new FriendAll(plugin));   // register the friendall command
+        this.register(new UnfriendAll(plugin)); // register the unfriendall command
+        //todo CommandRefactor - initially all commands should be .registered()
 
     }
 
@@ -305,46 +307,8 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
 
 
-    private boolean landlord_unfriendall(CommandSender sender, String[] args) {
-        //is sender a player
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
-        } else {
-            if (args.length < 2) {
-                sender.sendMessage(ChatColor.RED + "usage: /land unfriendall <player>");
-                return true;
-            }
-            Player player = (Player) sender;
-            if (!player.hasPermission("landlord.player.own")) {
-                player.sendMessage(ChatColor.RED + "You do not have permission.");
-                return true;
-            }
-
-            List<OwnedLand> pLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId()).findList();
-
-            OfflinePlayer possible = getOfflinePlayer(args[1]);
-            if (!possible.hasPlayedBefore() && !possible.isOnline()) {
-                player.sendMessage(ChatColor.RED + "That player is not recognized.");
-                return true;
-            }
-
-            if (pLand.size() > 0){
-                for(OwnedLand l : pLand){
-                    l.removeFriend(Friend.friendFromOfflinePlayer(getOfflinePlayer(args[1])));
-                }
-
-                plugin.getDatabase().save(pLand);
 
 
-                player.sendMessage(ChatColor.GREEN+args[1]+" has been removed as a friend from all of your land.");
-                return true;
-            } else {
-                player.sendMessage(ChatColor.YELLOW+"You do not own any land!");
-            }
-
-        }
-        return true;
-    }
 
     /**
      * Removes a friend from an owned chunk

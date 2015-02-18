@@ -14,13 +14,13 @@ import static org.bukkit.Bukkit.getOfflinePlayer;
 
 /**
  * Created by jcdesimp on 2/18/15.
- * Command for a player toi add a friend to all of their land at once.
+ * Command for a user to remove a friend from all land at once.
  */
-public class FriendAll implements LandlordCommand {
+public class UnfriendAll implements LandlordCommand {
 
     Landlord plugin;
 
-    public FriendAll(Landlord plugin) {
+    public UnfriendAll(Landlord plugin) {
         this.plugin = plugin;
     }
 
@@ -28,37 +28,38 @@ public class FriendAll implements LandlordCommand {
     public boolean execute(CommandSender sender, String[] args, String label) {
         //is sender a player
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");   //mess
+            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
         } else {
             if (args.length < 2) {
-                sender.sendMessage(ChatColor.RED + "usage: /land friendall <player>");  //mess
+                sender.sendMessage(ChatColor.RED + "usage: /land unfriendall <player>");
                 return true;
             }
             Player player = (Player) sender;
             if (!player.hasPermission("landlord.player.own")) {
-                player.sendMessage(ChatColor.RED + "You do not have permission.");  //mess
+                player.sendMessage(ChatColor.RED + "You do not have permission.");
                 return true;
             }
 
             List<OwnedLand> pLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId()).findList();
+
             OfflinePlayer possible = getOfflinePlayer(args[1]);
             if (!possible.hasPlayedBefore() && !possible.isOnline()) {
-                player.sendMessage(ChatColor.RED + "That player is not recognized.");       //mess
+                player.sendMessage(ChatColor.RED + "That player is not recognized.");
                 return true;
             }
 
             if (pLand.size() > 0){
                 for(OwnedLand l : pLand){
-                    l.addFriend(Friend.friendFromOfflinePlayer(getOfflinePlayer(args[1])));
+                    l.removeFriend(Friend.friendFromOfflinePlayer(getOfflinePlayer(args[1])));
                 }
 
                 plugin.getDatabase().save(pLand);
 
 
-                player.sendMessage(ChatColor.GREEN+args[1]+" has been added as a friend to all of your land.");     //mess
+                player.sendMessage(ChatColor.GREEN+args[1]+" has been removed as a friend from all of your land.");
                 return true;
             } else {
-                player.sendMessage(ChatColor.YELLOW+"You do not own any land!");        //mess
+                player.sendMessage(ChatColor.YELLOW+"You do not own any land!");
             }
 
         }
@@ -67,11 +68,11 @@ public class FriendAll implements LandlordCommand {
 
     @Override
     public String getHelpText() {
-        return ChatColor.DARK_AQUA+"/#{label} friendall <player>" + ChatColor.RESET + " - Add friend to all your land.";    //mess
+        return ChatColor.DARK_AQUA+"/#{label} unfriendall <player>" + ChatColor.RESET + " - Remove friend from all your land.";
     }
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"friendall","addfriendall"};
+        return new String[]{"unfriendall","remfriendall"};
     }
 }
