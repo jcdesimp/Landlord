@@ -42,7 +42,8 @@ public class LandlordCommandExecutor implements CommandExecutor {
         this.register(new AddFriend(plugin));   // register the addfriend command
         this.register(new FriendAll(plugin));   // register the friendall command
         this.register(new UnfriendAll(plugin)); // register the unfriendall command
-        this.register(new Unfriend(plugin)); // register the unfriend command
+        this.register(new Unfriend(plugin));    // register the unfriend command
+        this.register(new Friends(plugin));     // register the friends command
         //todo CommandRefactor - initially all commands should be .registered()
 
     }
@@ -310,93 +311,6 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
 
 
-
-
-    private boolean landlord_friends(CommandSender sender, String[] args, String label) {
-
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
-        } else {
-            Player player = (Player) sender;
-            if(!player.hasPermission("landlord.player.own")){
-                player.sendMessage(ChatColor.RED+"You do not have permission.");
-                return true;
-            }
-            Chunk currChunk = player.getLocation().getChunk();
-            OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
-            if( land == null || ( !land.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.friends") ) ){
-                player.sendMessage(ChatColor.RED + "You do not own this land.");
-                return true;
-            }
-            if(!land.getOwnerName().equals(player.getUniqueId())){
-                //player.sendMessage(ChatColor.YELLOW+"Viewing friends of someone else's land.");
-            }
-            if(plugin.getConfig().getBoolean("options.particleEffects",true)) {
-                land.highlightLand(player, Effect.HEART, 3);
-            }
-            //check if page number is valid
-            int pageNumber = 1;
-            if (args.length > 1 && args[0].equals("friends")){
-                try {
-                    pageNumber = Integer.parseInt(args[1]);
-                } catch (NumberFormatException e){
-                    player.sendMessage(ChatColor.RED+"That is not a valid page number.");
-                    return true;
-                }
-            }
-
-            //List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getName()).findList();
-
-            String header = ChatColor.DARK_GREEN + "----- Friends of this Land -----\n";
-
-            ArrayList<String> friendList = new ArrayList<String>();
-            if(land.getFriends().isEmpty()){
-                player.sendMessage(ChatColor.YELLOW+"This land has no friends.");
-                return true;
-            }
-            for(Friend f: land.getFriends()){
-                String fr = ChatColor.DARK_GREEN+" - "+ChatColor.GOLD+f.getName()+ChatColor.DARK_GREEN+" - ";
-                /*
-                 * *************************************
-                 * mark for possible change    !!!!!!!!!
-                 * *************************************
-                 */
-                if(Bukkit.getOfflinePlayer(f.getUUID()).isOnline()){
-                    fr+= ChatColor.GREEN+""+ChatColor.ITALIC+" Online";
-                } else {
-                    fr+= ChatColor.RED+""+ChatColor.ITALIC+" Offline";
-                }
-
-                fr+="\n";
-                friendList.add(fr);
-            }
-
-            //Amount to be displayed per page
-            final int numPerPage = 8;
-
-            int numPages = ceil((double)friendList.size()/(double)numPerPage);
-            if(pageNumber > numPages){
-                sender.sendMessage(ChatColor.RED+"That is not a valid page number.");
-                return true;
-            }
-            String pMsg = header;
-            if (pageNumber == numPages){
-                for(int i = (numPerPage*pageNumber-numPerPage); i<friendList.size(); i++){
-                    pMsg+=friendList.get(i);
-                }
-                pMsg+=ChatColor.DARK_GREEN+"------------------------------";
-            } else {
-                for(int i = (numPerPage*pageNumber-numPerPage); i<(numPerPage*pageNumber); i++){
-                    pMsg+=friendList.get(i);
-                }
-                pMsg+=ChatColor.DARK_GREEN+"--- do"+ChatColor.YELLOW+" /"+label+" friends "+(pageNumber+1)+ChatColor.DARK_GREEN+" for next page ---";
-            }
-           player.sendMessage(pMsg);
-
-
-        }
-        return true;
-    }
 
 
 
