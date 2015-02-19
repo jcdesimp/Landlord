@@ -29,12 +29,14 @@ public class LandlordCommandExecutor implements CommandExecutor {
     private Landlord plugin; //pointer to main class
     private HashMap<String, LandlordCommand> registeredCommands;
     private ArrayList<String> commandHelp;
+    private Help helpCommand;
 
     public LandlordCommandExecutor(Landlord plugin){
         this.plugin = plugin;
         this.registeredCommands = new HashMap<String, LandlordCommand>();
         this.commandHelp = new ArrayList<String>();
 
+        this.helpCommand = new Help(plugin);
 
         // note order of registration will affect how they show up in the help menu
         this.register(new Claim(plugin));       // register the claim command
@@ -51,6 +53,8 @@ public class LandlordCommandExecutor implements CommandExecutor {
         this.register(new ClearWorld(plugin));  // register the clearworld command
         this.register(new Reload(plugin));      // register the reload command
         this.register(new Info(plugin));        // register the info command
+
+        this.register(helpCommand);        // register the help command
 
         //todo CommandRefactor - initially all commands should be .registered()
 
@@ -73,84 +77,13 @@ public class LandlordCommandExecutor implements CommandExecutor {
             // Check if the attempted command is registered
             if (args.length == 0 || !registeredCommands.containsKey(args[0].toLowerCase())) {
                 // if there is no command, or it's not registered, show the help text as the command given is unknown
-                return landlord_help(sender, args, label);
+                return helpCommand.execute(sender, new String[]{}, label);
             } else {
                 // if it is, execute it with the given args
                 return registeredCommands.get(args[0].toLowerCase()).execute(sender, args, label);
             }
 
-
-            /*
-             * ****************************************************************
-             *   Use private methods below to define command implementation
-             *   call those methods from within these cases
-             * ****************************************************************
-
-            if(args.length == 0){
-
-                //landlord
-                return landlord_help(sender, args, label);
-
-            } else if(args[0].equalsIgnoreCase("help")) {
-
-                //landlord claim
-                return landlord_help(sender, args, label);
-
-            } else if(args[0].equalsIgnoreCase("claim") || args[0].equalsIgnoreCase("buy")) {
-
-                //landlord claim
-                return landlord_claim(sender, args);
-
-            } else if(args[0].equalsIgnoreCase("unclaim") || args[0].equalsIgnoreCase("sell")) {
-
-                //landlord unclaim
-                return landlord_unclaim(sender, args, label);
-            } else if(args[0].equalsIgnoreCase("addfriend") || args[0].equalsIgnoreCase("friend")) {
-
-                //landlord addfriend
-                return landlord_addfriend(sender, args);
-            } else if(args[0].equalsIgnoreCase("friendall")) {
-
-                //landlord addfriend
-                return landlord_friendall(sender, args);
-            } else if(args[0].equalsIgnoreCase("unfriendall")) {
-
-                //landlord addfriend
-                return landlord_unfriendall(sender, args);
-            } else if(args[0].equalsIgnoreCase("remfriend") || args[0].equalsIgnoreCase("unfriend")) {
-
-                return landlord_remfriend(sender, args);
-            } else if(args[0].equalsIgnoreCase("map")) {
-
-                return landlord_map(sender, args);
-                //sender.sendMessage(ChatColor.RED+"Land map is temporarily disabled!");
-                //return true;
-            } else if(args[0].equalsIgnoreCase("manage")) {
-                return landlord_manage(sender, args);
-
-            } else if(args[0].equalsIgnoreCase("list")) {
-                return landlord_list(sender, args, label);
-
-            } else if(args[0].equalsIgnoreCase("listplayer")) {
-                return landlord_listplayer(sender, args, label);
-
-            } else if(args[0].equalsIgnoreCase("clearworld")) {
-                return landlord_clearWorld(sender, args, label);
-
-            } else if(args[0].equalsIgnoreCase("reload")) {
-
-                return landlord_reload(sender, args, label);
-            } else if(args[0].equalsIgnoreCase("info")) {
-
-                return landlord_info(sender, args, label);
-            } else if(args[0].equalsIgnoreCase("friends")) {
-
-                return landlord_friends(sender,args,label);
-            } else {
-                return landlord_help(sender, args, label);
-            }*/
-
-        } //If this has happened the function will return true.
+        } //If this has happened the function should return true.
         // If this hasn't happened the value of false will be returned.
         return false;
     }
@@ -190,17 +123,6 @@ public class LandlordCommandExecutor implements CommandExecutor {
     }
 
 
-
-
-
-
-    /*
-     * **********************************************************
-     * private methods for handling each command functionality todo move into separate files
-     * **********************************************************
-     */
-
-
     /**
      * Called when base command /landlord or aliases (/ll /land)
      * are executed with no parameters
@@ -216,103 +138,6 @@ public class LandlordCommandExecutor implements CommandExecutor {
         return true;
     }
 
-    private boolean landlord_help(CommandSender sender, String[] args, String label) {
-
-        //check if page number is valid
-        int pageNumber = 1;
-        if (args.length > 1 && args[0].equals("help")) {
-            try{
-                pageNumber = Integer.parseInt(args[1]);}
-            catch (NumberFormatException e){
-                // Is not a number!
-                sender.sendMessage(ChatColor.RED+"That is not a valid page number.");
-                return true;
-            }
-        }
-
-        //List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getName()).findList();
-
-        String header = ChatColor.DARK_GREEN + "--|| Landlord v"+Landlord.getInstance().getDescription().getVersion() +
-                " Created by " + ChatColor.BLUE+"Jcdesimp "+ChatColor.DARK_GREEN +"||--\n"+
-                ChatColor.GRAY+"(Aliases: /landlord, /land, or /ll)\n";
-
-        ArrayList<String> helpList = new ArrayList<String>();
-
-
-        helpList.add(ChatColor.DARK_AQUA+"/"+label + " help [page #]" + ChatColor.RESET + " - Show this help message.\n");
-        String claim = ChatColor.DARK_AQUA+"/"+label + " claim (or "+"/"+label +" buy)" + ChatColor.RESET + " - Claim this chunk.\n";
-        if(plugin.hasVault()){
-            if(plugin.getvHandler().hasEconomy() && plugin.getConfig().getDouble("economy.buyPrice", 100.0)>0){
-                claim += ChatColor.YELLOW+""+ChatColor.ITALIC+" Costs "+plugin.getvHandler().formatCash(plugin.getConfig().getDouble("economy.buyPrice", 100.0))+" to claim.\n";
-            }
-        }
-        helpList.add(claim);
-        String unclaim = ChatColor.DARK_AQUA+"/"+label + " unclaim [x,z] [world] (or "+"/"+label +" sell)" + ChatColor.RESET + " - Unclaim this chunk.\n";
-        if (plugin.hasVault() && plugin.getvHandler().hasEconomy() && plugin.getConfig().getDouble("economy.sellPrice", 50.0) > 0) {
-            if(plugin.getConfig().getBoolean("options.regenOnUnclaim",false)) {
-                unclaim+=ChatColor.RED+""+ChatColor.ITALIC +" Regenerates Chunk!";
-            }
-            unclaim += ChatColor.YELLOW + "" + ChatColor.ITALIC + " Get " + plugin.getvHandler().formatCash(plugin.getConfig().getDouble("economy.sellPrice", 50.0)) + " per unclaim.\n";
-        } else if(plugin.getConfig().getBoolean("options.regenOnUnclaim",false)) {
-            unclaim+=ChatColor.RED+""+ChatColor.ITALIC +" Regenerates Chunk!\n";
-        }
-        helpList.add(unclaim);
-
-        helpList.add(ChatColor.DARK_AQUA+"/"+label + " addfriend <player>" + ChatColor.RESET + " - Add friend to this land.\n");
-        helpList.add(ChatColor.DARK_AQUA+"/"+label + " unfriend <player>" + ChatColor.RESET + " - Remove friend from this land.\n");
-        helpList.add(ChatColor.DARK_AQUA+"/"+label + " friendall <player>" + ChatColor.RESET + " - Add friend to all your land.\n");
-        helpList.add(ChatColor.DARK_AQUA+"/"+label + " unfriendall <player>" + ChatColor.RESET + " - Remove friend from all your land.\n");
-        helpList.add(ChatColor.DARK_AQUA+"/"+label + " friends" + ChatColor.RESET + " - List friends of this land.\n");
-        helpList.add(ChatColor.DARK_AQUA+"/"+label + " manage" + ChatColor.RESET + " - Manage permissions for this land.\n");
-        helpList.add(ChatColor.DARK_AQUA+"/"+label + " list" + ChatColor.RESET + " - List all your owned land.\n");
-        if(sender.hasPermission("landlord.player.map") && plugin.getConfig().getBoolean("options.enableMap",true)){
-            helpList.add(ChatColor.DARK_AQUA+"/"+label + " map" + ChatColor.RESET + " - Toggle the land map.\n");
-        }
-        if(sender.hasPermission("landlord.player.info") && plugin.getConfig().getBoolean("options.enableMap",true)){
-            helpList.add(ChatColor.DARK_AQUA+"/"+label + " info" + ChatColor.RESET + " - View info about this chunk.\n");
-        }
-        if(sender.hasPermission("landlord.admin.list")){
-            helpList.add(ChatColor.DARK_AQUA+"/"+label + " listplayer <player>" + ChatColor.RESET + " - List land owned by another player.\n");
-        }
-        if(sender.hasPermission("landlord.admin.clearworld")){
-            String clearHelp = ChatColor.DARK_AQUA+"/"+label + " clearworld <world> [player]" + ChatColor.RESET + " - Delete all land owned by a player in a world." +
-                    " Delete all land of a world from console.\n";
-            if(plugin.getConfig().getBoolean("options.regenOnUnclaim",false)){
-                clearHelp += ChatColor.YELLOW+""+ChatColor.ITALIC+" Does not regenerate chunks.\n";
-            }
-            helpList.add(clearHelp);
-
-        }
-        if(sender.hasPermission("landlord.admin.reload")){
-            helpList.add(ChatColor.DARK_AQUA+"/"+label + " reload" + ChatColor.RESET + " - Reloads the Landlord config file.\n");
-        }
-        //OwnedLand curr = myLand.get(0);
-
-        //Amount to be displayed per page
-        final int numPerPage = 5;
-
-        int numPages = ceil((double)helpList.size()/(double)numPerPage);
-        if(pageNumber > numPages){
-            sender.sendMessage(ChatColor.RED+"That is not a valid page number.");
-            return true;
-        }
-        String pMsg = header;
-        if (pageNumber == numPages){
-            for(int i = (numPerPage*pageNumber-numPerPage); i<helpList.size(); i++){
-                pMsg+=helpList.get(i);
-            }
-            pMsg+=ChatColor.DARK_GREEN+"------------------------------";
-        } else {
-            for(int i = (numPerPage*pageNumber-numPerPage); i<(numPerPage*pageNumber); i++){
-                pMsg+=helpList.get(i);
-            }
-            pMsg+=ChatColor.DARK_GREEN+"--- do"+ChatColor.YELLOW+" /"+label+" help "+(pageNumber+1)+ChatColor.DARK_GREEN+" for next page ---";
-        }
-
-        sender.sendMessage(pMsg);
-        return true;
-
-    }
 
 
 
