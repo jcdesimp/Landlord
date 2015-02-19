@@ -50,6 +50,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
         this.register(new ListPlayer(plugin));  // register the listplayer command
         this.register(new ClearWorld(plugin));  // register the clearworld command
         this.register(new Reload(plugin));      // register the reload command
+        this.register(new Info(plugin));        // register the info command
 
         //todo CommandRefactor - initially all commands should be .registered()
 
@@ -313,46 +314,6 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
     }
 
-
-
-
-
-    private boolean landlord_info(CommandSender sender, String[] args, String label){
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
-        } else {
-            Player player = (Player) sender;
-            if(!player.hasPermission("landlord.player.info")){
-                player.sendMessage(ChatColor.RED+"You do not have permission.");
-                return true;
-            }
-            Chunk currChunk = player.getLocation().getChunk();
-            OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
-            String owner = ChatColor.GRAY + "" + ChatColor.ITALIC + "None";
-            if( land != null ){
-
-                /*
-                 * *************************************
-                 * mark for possible change    !!!!!!!!!
-                 * *************************************
-                 */
-                owner = ChatColor.GOLD + land.getOwnerUsername();
-            } else {
-                land = OwnedLand.landFromProperties(null,currChunk);
-            }
-
-            if(plugin.getConfig().getBoolean("options.particleEffects")){
-                land.highlightLand(player, Effect.LAVADRIP);
-            }
-            String msg = ChatColor.DARK_GREEN + "--- You are in chunk " + ChatColor.GOLD + "(" + currChunk.getX() + ", " + currChunk.getZ() + ") " +
-                    ChatColor.DARK_GREEN + " in world \"" + ChatColor.GOLD + currChunk.getWorld().getName()  + ChatColor.DARK_GREEN + "\"\n"+ "----- Owned by: " +
-                    owner;
-            player.sendMessage(msg);
-
-        }
-        return true;
-
-    }
 
 
 
