@@ -61,7 +61,12 @@ public class Info implements LandlordCommand {
 
     @Override
     public String getHelpText() {
-        return ChatColor.DARK_AQUA+"/#{label} info" + ChatColor.RESET + " - View info about this chunk.";   //mess
+        //mess
+        String usage = "/#{label} #{cmd}"; // get the base usage string
+        String desc = "View info about this chunk.";   // get the description
+
+        // return the constructed and colorized help string
+        return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
     }
 
     @Override

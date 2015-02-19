@@ -111,7 +111,13 @@ public class ListPlayer implements LandlordCommand {
 
     @Override
     public String getHelpText() {
-        return ChatColor.DARK_AQUA + "/#{label} listplayer <player>" + ChatColor.RESET + " - List land owned by another player.";       //mess
+        //mess
+        String usage = "/#{label} #{cmd} <player>"; // get the base usage string
+        String desc = "List land owned by another player.";   // get the description
+
+        // return the constructed and colorized help string
+        return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
+
     }
 
     @Override

@@ -49,7 +49,13 @@ public class ShowMap implements LandlordCommand {
 
     @Override
     public String getHelpText() {
-        return ChatColor.DARK_AQUA+"/#{label} map" + ChatColor.RESET + " - Toggle the land map.\n"; //mess
+        //mess
+        String usage = "/#{label} #{cmd}"; // get the base usage string
+        String desc = "Toggle the land map.";   // get the description
+
+        // return the constructed and colorized help string
+        return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
+
     }
 
     @Override

@@ -36,7 +36,12 @@ public class Reload implements LandlordCommand {
 
     @Override
     public String getHelpText() {
-        return ChatColor.DARK_AQUA+"/#{label} reload" + ChatColor.RESET + " - Reloads the Landlord config file.";   //mess
+        //mess
+        String usage = "/#{label} #{cmd}"; // get the base usage string
+        String desc = "Reloads the Landlord config file.";   // get the description
+
+        // return the constructed and colorized help string
+        return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
     }
 
     @Override

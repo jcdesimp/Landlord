@@ -57,7 +57,13 @@ public class Manage implements LandlordCommand {
 
     @Override
     public String getHelpText() {
-        return ChatColor.DARK_AQUA+"/#{label} manage" + ChatColor.RESET + " - Manage permissions for this land.";   //mess
+        //mess
+        String usage = "/#{label} #{cmd}"; // get the base usage string
+        String desc = "Manage permissions for this land.";   // get the description
+
+        // return the constructed and colorized help string
+        return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
+
     }
 
     @Override

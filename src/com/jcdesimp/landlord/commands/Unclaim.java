@@ -136,8 +136,14 @@ public class Unclaim implements LandlordCommand {
     @Override
     public String getHelpText() {
 
-        String helptext = "unclaim [x,z] [world] (or "+"/#{label} sell)" + ChatColor.RESET + " - Unclaim this chunk.\n";    //mess #{*} parsing
-        if (plugin.hasVault() && plugin.getvHandler().hasEconomy() && plugin.getConfig().getDouble("economy.sellPrice", 50.0) > 0) {    //conf
+        //mess
+        String usage = "/#{label} #{cmd} [x,z] [world]"; // get the base usage string
+        String desc = "Unclaim this chunk.";   // get the description
+
+        // return the constructed and colorized help string
+        return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
+
+        /*if (plugin.hasVault() && plugin.getvHandler().hasEconomy() && plugin.getConfig().getDouble("economy.sellPrice", 50.0) > 0) {    //conf
             if(plugin.getConfig().getBoolean("options.regenOnUnclaim",false)) {
                 helptext+=ChatColor.RED+""+ChatColor.ITALIC +" Regenerates Chunk!";                         //mess
             }
@@ -146,7 +152,7 @@ public class Unclaim implements LandlordCommand {
             helptext+=ChatColor.RED+""+ChatColor.ITALIC +" Regenerates Chunk!\n";
         }
 
-        return null;
+        return null;*/
     }
 
     @Override

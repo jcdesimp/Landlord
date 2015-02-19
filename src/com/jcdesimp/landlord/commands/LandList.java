@@ -97,7 +97,13 @@ public class LandList implements LandlordCommand {
 
     @Override
     public String getHelpText() {
-        return ChatColor.DARK_AQUA+"/#{label} list" + ChatColor.RESET + " - List all your owned land.";
+        //mess
+        String usage = "/#{label} #{cmd}"; // get the base usage string
+        String desc = "List all your own land.";   // get the description
+
+        // return the constructed and colorized help string
+        return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
+
     }
 
     @Override

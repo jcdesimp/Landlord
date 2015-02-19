@@ -67,7 +67,14 @@ public class FriendAll implements LandlordCommand {
 
     @Override
     public String getHelpText() {
-        return ChatColor.DARK_AQUA+"/#{label} friendall <player>" + ChatColor.RESET + " - Add friend to all your land.";    //mess
+
+        //mess
+        String usage = "/#{label} #{cmd} <player>"; // get the base usage string
+        String desc = "Add friend to all your land.";   // get the description
+
+        // return the constructed and colorized help string
+        return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
+
     }
 
     @Override

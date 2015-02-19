@@ -36,18 +36,19 @@ public class LandlordCommandExecutor implements CommandExecutor {
         this.plugin = plugin;
         this.registeredCommands = new HashMap<String, LandlordCommand>();
 
-        //this.baseCommand = new Base();
 
-        this.helpCommand = new Help(plugin);
+        this.helpCommand = new Help(plugin, this);
 
         // note order of registration will affect how they show up in the help menu
+        this.register(helpCommand);             // register the help command (already instantiated)
+
         this.register(new Claim(plugin));       // register the claim command
         this.register(new Unclaim(plugin));     // register the unclaim command
         this.register(new AddFriend(plugin));   // register the addfriend command
-        this.register(new FriendAll(plugin));   // register the friendall command
-        this.register(new UnfriendAll(plugin)); // register the unfriendall command
         this.register(new Unfriend(plugin));    // register the unfriend command
         this.register(new Friends(plugin));     // register the friends command
+        this.register(new FriendAll(plugin));   // register the friendall command
+        this.register(new UnfriendAll(plugin)); // register the unfriendall command
         this.register(new ShowMap(plugin));     // register the map command
         this.register(new Manage(plugin));      // register the manage command
         this.register(new LandList(plugin));    // register the list command
@@ -55,8 +56,6 @@ public class LandlordCommandExecutor implements CommandExecutor {
         this.register(new ClearWorld(plugin));  // register the clearworld command
         this.register(new Reload(plugin));      // register the reload command
         this.register(new Info(plugin));        // register the info command
-
-        this.register(helpCommand);             // register the help command (already instantiated)
 
     }
 

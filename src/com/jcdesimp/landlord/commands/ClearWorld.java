@@ -67,8 +67,14 @@ public class ClearWorld implements LandlordCommand {
 
     @Override
     public String getHelpText() {
-        return ChatColor.DARK_AQUA+"/#{label} clearworld <world> [player]" + ChatColor.RESET + " - Delete all land owned by a player in a world." +
-                " Delete all land of a world from console.";        //mess
+
+        //mess
+        String usage = "/#{label} #{cmd} <world> [player]"; // get the base usage string
+        String desc = "Delete all land owned by a player in a world. Delete all land of a world (console only).";   // get the description
+
+        // return the constructed and colorized help string
+        return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
+
     }
 
     @Override

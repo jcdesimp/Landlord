@@ -90,11 +90,16 @@ public class AddFriend implements LandlordCommand {
 
     @Override
     public String getHelpText() {
-        return ChatColor.DARK_AQUA+"/#{label} addfriend <player>" + ChatColor.RESET + " - Add friend to this land.\n";      //mess
+        //mess
+        String usage = "/#{label} #{cmd} <player>"; // get the base usage string
+        String desc = "Add friend to this land.";   // get the description
+
+        // return the constructed and colorized help string
+        return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
     }
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"addfriend","friend"};
+        return new String[]{"friend", "addfriend"};
     }
 }

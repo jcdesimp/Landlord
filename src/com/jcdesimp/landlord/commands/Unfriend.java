@@ -78,7 +78,12 @@ public class Unfriend implements LandlordCommand {
 
     @Override
     public String getHelpText() {
-        return ChatColor.DARK_AQUA+"/#{label} unfriend <player>" + ChatColor.RESET + " - Remove friend from this land.";    //mess
+        //mess
+        String usage = "/#{label} #{cmd} unfriend <player>"; // get the base usage string
+        String desc = "Remove friend from this land.";   // get the description
+
+        // return the constructed and colorized help string
+        return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
     }
 
     @Override

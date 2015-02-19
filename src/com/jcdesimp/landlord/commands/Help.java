@@ -1,6 +1,7 @@
 package com.jcdesimp.landlord.commands;
 
 import com.jcdesimp.landlord.Landlord;
+import com.jcdesimp.landlord.LandlordCommandExecutor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -15,23 +16,25 @@ import static org.bukkit.util.NumberConversions.ceil;
 public class Help implements LandlordCommand {
 
     private Landlord plugin;
+    private LandlordCommandExecutor commandHandler;
 
 
-    public Help(Landlord plugin) {
+    public Help(Landlord plugin, LandlordCommandExecutor commandHandler) {
         this.plugin = plugin;
+        this.commandHandler = commandHandler;
     }
 
 
 
-    //mess - Pretty much this entire thing, generic help refactor as well from individual command helptext
+    //mess - Pretty much this entire thing, generic help refactor as well from individual command help text
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
         //check if page number is valid
         int pageNumber = 1;
         if (args.length > 1 && args[0].equals("help")) {
             try{
-                pageNumber = Integer.parseInt(args[1]);}
-            catch (NumberFormatException e){
+                pageNumber = Integer.parseInt(args[1]);
+            } catch (NumberFormatException e){
                 // Is not a number!
                 sender.sendMessage(ChatColor.RED+"That is not a valid page number.");
                 return true;
@@ -123,7 +126,12 @@ public class Help implements LandlordCommand {
 
     @Override
     public String getHelpText() {
-        return ChatColor.DARK_AQUA+"/#{label} help [page #]" + ChatColor.RESET + " - Show this help message.";
+        //mess
+        String usage = "/#{label} #{cmd} [page #]"; // get the base usage string
+        String desc = "Show this help message.";   // get the description
+
+        // return the constructed and colorized help string
+        return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
     }
 
     @Override

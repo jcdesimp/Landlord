@@ -145,7 +145,14 @@ public class Claim implements LandlordCommand {
 
     @Override
     public String getHelpText() {
-        return "claim - "+ ChatColor.RESET + " - Claim this chunk.";    //mess
+
+        //mess
+        String usage = "/#{label} #{cmd}"; // get the base usage string
+        String desc = "Claim this chunk.";   // get the description
+
+        // return the constructed and colorized help string
+        return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
+
     }
 
     @Override
