@@ -48,7 +48,8 @@ public class LandlordCommandExecutor implements CommandExecutor {
         this.register(new Manage(plugin));      // register the manage command
         this.register(new LandList(plugin));    // register the list command
         this.register(new ListPlayer(plugin));  // register the listplayer command
-        this.register(new ClearWorld(plugin));  // register the clearworld plugin
+        this.register(new ClearWorld(plugin));  // register the clearworld command
+        this.register(new Reload(plugin));      // register the reload command
 
         //todo CommandRefactor - initially all commands should be .registered()
 
@@ -313,22 +314,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
     }
 
 
-    /**
-     * Reload landlord configuration file
-     * @param sender who executed the command
-     * @param args given with command
-     * @param label exact command (or alias) run
-     * @return boolean of success
-     */
-    private boolean landlord_reload(CommandSender sender, String[] args, String label){
-        if(sender.hasPermission("landlord.admin.reload")){
-            plugin.reloadConfig();
-            sender.sendMessage(ChatColor.GREEN+"Landlord config reloaded.");
-            return true;
-        }
-        sender.sendMessage(ChatColor.RED+"You do not have permission.");
-        return true;
-    }
+
 
 
     private boolean landlord_info(CommandSender sender, String[] args, String label){
