@@ -15,7 +15,7 @@ import static org.bukkit.Bukkit.getOfflinePlayer;
  */
 public class AddFriend implements LandlordCommand {
 
-    Landlord plugin;
+    private Landlord plugin;
 
     public AddFriend(Landlord plugin) {
         this.plugin = plugin;

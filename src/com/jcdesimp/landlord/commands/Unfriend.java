@@ -18,7 +18,7 @@ import static org.bukkit.Bukkit.getOfflinePlayer;
  */
 public class Unfriend implements LandlordCommand {
 
-    Landlord plugin;
+    private Landlord plugin;
 
     public Unfriend(Landlord plugin) {
         this.plugin = plugin;

@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  */
 public class Manage implements LandlordCommand {
 
-    Landlord plugin;
+    private Landlord plugin;
 
     public Manage(Landlord plugin) {
         this.plugin = plugin;

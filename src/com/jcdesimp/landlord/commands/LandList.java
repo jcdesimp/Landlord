@@ -17,7 +17,7 @@ import static org.bukkit.util.NumberConversions.ceil;
  */
 public class LandList implements LandlordCommand {
 
-    Landlord plugin;
+    private Landlord plugin;
 
 
     public LandList(Landlord plugin) {

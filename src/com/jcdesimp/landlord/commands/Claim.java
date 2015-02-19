@@ -18,7 +18,7 @@ import java.util.List;
 public class Claim implements LandlordCommand {
 
 
-    Landlord plugin;
+    private Landlord plugin;
 
 
     /**

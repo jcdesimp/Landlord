@@ -20,7 +20,7 @@ import static org.bukkit.Bukkit.getWorld;
  */
 public class Unclaim implements LandlordCommand {
 
-    Landlord plugin;
+    private Landlord plugin;
 
     public Unclaim(Landlord plugin) {
         this.plugin = plugin;

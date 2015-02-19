@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
  */
 public class ShowMap implements LandlordCommand {
 
-    Landlord plugin;
+    private Landlord plugin;
 
     public ShowMap(Landlord plugin) {
         this.plugin = plugin;

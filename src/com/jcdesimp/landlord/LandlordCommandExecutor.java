@@ -48,6 +48,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
         this.register(new Manage(plugin));      // register the manage command
         this.register(new LandList(plugin));    // register the list command
         this.register(new ListPlayer(plugin));  // register the listplayer command
+        this.register(new ClearWorld(plugin));  // register the clearworld plugin
 
         //todo CommandRefactor - initially all commands should be .registered()
 
@@ -309,49 +310,6 @@ public class LandlordCommandExecutor implements CommandExecutor {
         sender.sendMessage(pMsg);
         return true;
 
-    }
-
-
-
-    private boolean landlord_clearWorld(CommandSender sender, String[] args, String label){
-        if(!sender.hasPermission("landlord.admin.clearworld")){
-            sender.sendMessage(ChatColor.RED+"You do not have permission.");
-            return true;
-        }
-        if(args.length > 1){
-            List<OwnedLand> land;
-            if(args.length > 2){
-                /*
-                 * *************************************
-                 * mark for possible change    !!!!!!!!!
-                 * *************************************
-                 */
-                OfflinePlayer possible = getOfflinePlayer(args[2]);
-                if (!possible.hasPlayedBefore() && !possible.isOnline()) {
-                    sender.sendMessage(ChatColor.RED+"That player is not recognized.");
-                    return true;
-                }
-                land = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",possible.getUniqueId().toString()).eq("worldName",args[1]).findList();
-            } else {
-                if(sender instanceof Player){
-                    sender.sendMessage(ChatColor.RED+"You can only delete entire worlds from the console.");
-                    return true;
-                }
-                land = plugin.getDatabase().find(OwnedLand.class).where().eq("worldName",args[1]).findList();
-            } 
-            if(land.isEmpty()){
-                sender.sendMessage(ChatColor.RED + "No land to remove.");
-                return true;
-            }
-
-            plugin.getDatabase().delete(land);
-            plugin.getMapManager().updateAll();
-            sender.sendMessage(ChatColor.GREEN+"Land(s) deleted!");
-
-        } else {
-            sender.sendMessage(ChatColor.RED + "format: " + label + " clearworld <world> [<player>]");
-        }
-        return true;
     }
 
 

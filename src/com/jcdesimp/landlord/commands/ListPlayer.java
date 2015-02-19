@@ -18,7 +18,7 @@ import static org.bukkit.util.NumberConversions.ceil;
  */
 public class ListPlayer implements LandlordCommand {
 
-    Landlord plugin;
+    private Landlord plugin;
 
     public ListPlayer(Landlord plugin) {
         this.plugin = plugin;

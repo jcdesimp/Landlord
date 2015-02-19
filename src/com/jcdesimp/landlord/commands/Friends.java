@@ -20,7 +20,7 @@ import static org.bukkit.util.NumberConversions.ceil;
  */
 public class Friends implements LandlordCommand {
 
-    Landlord plugin;
+    private Landlord plugin;
 
     public Friends(Landlord plugin) {
         this.plugin = plugin;
