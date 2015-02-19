@@ -45,6 +45,8 @@ public class LandlordCommandExecutor implements CommandExecutor {
         this.register(new Unfriend(plugin));    // register the unfriend command
         this.register(new Friends(plugin));     // register the friends command
         this.register(new ShowMap(plugin));     // register the map command
+        this.register(new Manage(plugin));      // register the manage command
+
         //todo CommandRefactor - initially all commands should be .registered()
 
     }
@@ -316,41 +318,8 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
 
 
-    /**
-     * Command for managing player land perms
-     * @param sender who executed the command
-     * @param args given with command
-     * @return boolean
-     */
-    private boolean landlord_manage(CommandSender sender, String[] args){
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
-        } else {
-            Player player = (Player) sender;
-            if(!player.hasPermission("landlord.player.own")){
-                player.sendMessage(ChatColor.RED+"You do not have permission.");
-                return true;
-            }
-            if(plugin.getFlagManager().getRegisteredFlags().size() <= 0){
-                player.sendMessage(ChatColor.RED+"There is nothing to manage!");
-                return true;
-            }
-            Chunk currChunk = player.getLocation().getChunk();
-            OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
-            if( land == null || ( !land.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.manage") ) ){
-                player.sendMessage(ChatColor.RED + "You do not own this land.");
-                return true;
-            }
-            if(!land.ownerUUID().equals(player.getUniqueId())){
-                player.sendMessage(ChatColor.YELLOW+"Managing someone else's land.");
-            }
-            plugin.getManageViewManager().activateView(player, land);
 
 
-        }
-        return true;
-
-    }
 
     /**
      * Display a list of all owned land to a player
