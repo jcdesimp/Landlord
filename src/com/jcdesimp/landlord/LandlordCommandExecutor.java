@@ -28,13 +28,15 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
     private Landlord plugin; //pointer to main class
     private HashMap<String, LandlordCommand> registeredCommands;
-    private ArrayList<String> commandHelp;
+
+    //private Base baseCommand;
     private Help helpCommand;
 
     public LandlordCommandExecutor(Landlord plugin){
         this.plugin = plugin;
         this.registeredCommands = new HashMap<String, LandlordCommand>();
-        this.commandHelp = new ArrayList<String>();
+
+        //this.baseCommand = new Base();
 
         this.helpCommand = new Help(plugin);
 
@@ -54,9 +56,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
         this.register(new Reload(plugin));      // register the reload command
         this.register(new Info(plugin));        // register the info command
 
-        this.register(helpCommand);        // register the help command
-
-        //todo CommandRefactor - initially all commands should be .registered()
+        this.register(helpCommand);             // register the help command (already instantiated)
 
     }
 
@@ -108,7 +108,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
             // Check if the command is taken
             if(registeredCommands.containsKey(trigger.toLowerCase())) {
-                System.out.println("Failed to register command with alias '" + trigger + "', already taken!");
+                System.out.println("Failed to register command with alias '" + trigger + "', already taken!");  //mess
                 continue;   // Command name is taken already
             }
 
@@ -122,21 +122,6 @@ public class LandlordCommandExecutor implements CommandExecutor {
         return true;
     }
 
-
-    /**
-     * Called when base command /landlord or aliases (/ll /land)
-     * are executed with no parameters
-     *
-     * @param sender who executed the command
-     * @return boolean
-     */
-    private boolean landlord(CommandSender sender, String[] args, String label) {
-        sender.sendMessage(ChatColor.DARK_GREEN + "--|| Landlord v"+Landlord.getInstance().getDescription().getVersion() +
-                " Created by " + ChatColor.BLUE+"Jcdesimp "+ChatColor.DARK_GREEN +"||--\n"+
-                //ChatColor.GRAY+"(Aliases: /landlord, /land, or /ll)\n"+
-                ChatColor.DARK_GREEN+"Type " +ChatColor.YELLOW+"/"+label+" help "+ChatColor.DARK_GREEN +"for a list of commands");
-        return true;
-    }
 
 
 

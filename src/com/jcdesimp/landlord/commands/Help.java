@@ -23,7 +23,7 @@ public class Help implements LandlordCommand {
 
 
 
-    //mess Pretty much this entire thing, generic help refactor as well from individual command helptext
+    //mess - Pretty much this entire thing, generic help refactor as well from individual command helptext
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
         //check if page number is valid
@@ -40,7 +40,7 @@ public class Help implements LandlordCommand {
 
         //List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getName()).findList();
 
-        String header = ChatColor.DARK_GREEN + "--|| Landlord v"+Landlord.getInstance().getDescription().getVersion() +
+        String header = ChatColor.DARK_GREEN + "--|| Landlord v"+plugin.getDescription().getVersion() +
                 " Created by " + ChatColor.BLUE+"Jcdesimp "+ChatColor.DARK_GREEN +"||--\n"+
                 ChatColor.GRAY+"(Aliases: /landlord, /land, or /ll)\n";
 
