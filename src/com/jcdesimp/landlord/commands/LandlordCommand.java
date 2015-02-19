@@ -12,7 +12,7 @@ public interface LandlordCommand {
      * @param sender who sent the command
      * @param args  array of arguments given with the command
      * @param label the actual command/alias that was entered.
-     * @return boolean on whether or not
+     * @return boolean on whether or not success
      */
     public boolean execute(CommandSender sender, String[] args, String label);
 

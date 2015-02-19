@@ -47,6 +47,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
         this.register(new ShowMap(plugin));     // register the map command
         this.register(new Manage(plugin));      // register the manage command
         this.register(new LandList(plugin));    // register the list command
+        this.register(new ListPlayer(plugin));  // register the listplayer command
 
         //todo CommandRefactor - initially all commands should be .registered()
 
@@ -311,83 +312,6 @@ public class LandlordCommandExecutor implements CommandExecutor {
     }
 
 
-
-    private boolean landlord_listplayer(CommandSender sender, String[] args, String label){
-        String owner;
-
-        //sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
-        if(args.length>1){
-            owner = args[1];
-        } else {
-            sender.sendMessage(ChatColor.RED+"usage: /" + label + " listplayer <player> [page#]");
-            return true;
-        }
-
-        //Player player = (Player) sender;
-        if(!sender.hasPermission("landlord.admin.list")){
-            sender.sendMessage(ChatColor.RED+"You do not have permission.");
-            return true;
-        }
-
-        //check if page number is valid
-        int pageNumber = 1;
-        if (args.length > 2){
-            try{
-                pageNumber = Integer.parseInt(args[2]);}
-            catch (NumberFormatException e){
-                sender.sendMessage(ChatColor.RED+"That is not a valid page number.");
-                return true;
-            }
-        }
-        /*
-         * *************************************
-         * mark for possible change    !!!!!!!!!
-         * *************************************
-         */
-        OfflinePlayer possible = getOfflinePlayer(args[1]);
-        if (!possible.hasPlayedBefore() && !possible.isOnline()) {
-            sender.sendMessage(ChatColor.YELLOW+ owner +" does not own any land!");
-            return true;
-        }
-        List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().ieq("ownerName", getOfflinePlayer(owner).getUniqueId().toString()).findList();
-        if(myLand.size()==0){
-            sender.sendMessage(ChatColor.YELLOW+ owner +" does not own any land!");
-        } else {
-            String header = ChatColor.DARK_GREEN+" | Coords - Chunk Coords - World Name |     \n";
-            ArrayList<String> landList = new ArrayList<String>();
-            //OwnedLand curr = myLand.get(0);
-            for (OwnedLand aMyLand : myLand) {
-                landList.add((ChatColor.GOLD + " ("+ aMyLand.getXBlock() +", "+ aMyLand.getZBlock() +") - (" + aMyLand.getX() + ", " + aMyLand.getZ() + ") - "
-                        + aMyLand.getWorldName()) + "\n")
-                ;
-            }
-            //Amount to be displayed per page
-            final int numPerPage = 7;
-
-            int numPages = ceil((double)landList.size()/(double)numPerPage);
-            if(pageNumber > numPages){
-                sender.sendMessage(ChatColor.RED+"That is not a valid page number.");
-                return true;
-            }
-            String pMsg = ChatColor.DARK_GREEN+"--- " +ChatColor.YELLOW+ owner +"'s Owned Land"+ChatColor.DARK_GREEN+" ---"+ChatColor.YELLOW+" Page "+pageNumber+ChatColor.DARK_GREEN+" ---\n"+header;
-            if (pageNumber == numPages){
-                for(int i = (numPerPage*pageNumber-numPerPage); i<landList.size(); i++){
-                    pMsg+=landList.get(i);
-                }
-                pMsg+=ChatColor.DARK_GREEN+"------------------------------";
-            } else {
-                for(int i = (numPerPage*pageNumber-numPerPage); i<(numPerPage*pageNumber); i++){
-                    pMsg+=landList.get(i);
-                }
-                pMsg+=ChatColor.DARK_GREEN+"--- do"+ChatColor.YELLOW+" /"+label+" listplayer "+(pageNumber+1)+ChatColor.DARK_GREEN+" for next page ---";
-            }
-
-            sender.sendMessage(pMsg);
-        }
-
-
-        return  true;
-    }
 
     private boolean landlord_clearWorld(CommandSender sender, String[] args, String label){
         if(!sender.hasPermission("landlord.admin.clearworld")){
