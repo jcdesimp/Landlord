@@ -134,7 +134,7 @@ public class Unclaim implements LandlordCommand {
     }
 
     @Override
-    public String getHelpText() {
+    public String getHelpText(CommandSender sender) {
 
         //mess
         String usage = "/#{label} #{cmd} [x,z] [world]"; // get the base usage string

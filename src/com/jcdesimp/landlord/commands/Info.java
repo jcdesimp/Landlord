@@ -60,7 +60,7 @@ public class Info implements LandlordCommand {
     }
 
     @Override
-    public String getHelpText() {
+    public String getHelpText(CommandSender sender) {
         //mess
         String usage = "/#{label} #{cmd}"; // get the base usage string
         String desc = "View info about this chunk.";   // get the description

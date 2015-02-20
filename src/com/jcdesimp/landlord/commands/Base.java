@@ -32,9 +32,10 @@ public class Base implements LandlordCommand {
     /**
      * No help text since base command
      * @return  an empty string
+     * @param sender
      */
     @Override
-    public String getHelpText() {
+    public String getHelpText(CommandSender sender) {
         return "";
     }
 

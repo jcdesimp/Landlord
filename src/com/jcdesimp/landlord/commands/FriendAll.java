@@ -66,7 +66,7 @@ public class FriendAll implements LandlordCommand {
     }
 
     @Override
-    public String getHelpText() {
+    public String getHelpText(CommandSender sender) {
 
         //mess
         String usage = "/#{label} #{cmd} <player>"; // get the base usage string

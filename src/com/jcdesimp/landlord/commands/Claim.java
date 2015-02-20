@@ -144,7 +144,7 @@ public class Claim implements LandlordCommand {
     }
 
     @Override
-    public String getHelpText() {
+    public String getHelpText(CommandSender sender) {
 
         //mess
         String usage = "/#{label} #{cmd}"; // get the base usage string

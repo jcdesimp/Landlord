@@ -19,8 +19,9 @@ public interface LandlordCommand {
     /**
      * Get this command help test
      * @return String that describes the command
+     * @param sender of the command.
      */
-    public String getHelpText();
+    public String getHelpText(CommandSender sender);
 
     /**
      * Get the list of strings (non-case sensitive) that can trigger

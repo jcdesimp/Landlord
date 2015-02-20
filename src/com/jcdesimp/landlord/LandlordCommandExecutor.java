@@ -13,14 +13,12 @@ import java.util.HashMap;
 @SuppressWarnings("UnusedParameters")
 public class LandlordCommandExecutor implements CommandExecutor {
 
-    private Landlord plugin; //pointer to main class
     private HashMap<String, LandlordCommand> registeredCommands;
 
     //private Base baseCommand;
     private Help helpCommand;
 
     public LandlordCommandExecutor(Landlord plugin){
-        this.plugin = plugin;
         this.registeredCommands = new HashMap<String, LandlordCommand>();
 
 
@@ -58,7 +56,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
      */
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(cmd.getName().equalsIgnoreCase("landlord")){ // If the player typed /land then do the following...
+        if(cmd.getName().equalsIgnoreCase("landlord")) { // If the player typed /land then do the following...
             // Check if the attempted command is registered
             if (args.length == 0 || !registeredCommands.containsKey(args[0].toLowerCase())) {
                 // if there is no command, or it's not registered, show the help text as the command given is unknown
@@ -101,11 +99,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
             registeredCommands.put(trigger.toLowerCase(), cmd);
         }
 
-        helpCommand.addCommand(cmd);
-
-
-        // add the commands help text to the command help list
-        //commandHelp.add(cmd.getHelpText());
+        helpCommand.addCommand(cmd);    // add the command to the help list
 
         return true;
     }

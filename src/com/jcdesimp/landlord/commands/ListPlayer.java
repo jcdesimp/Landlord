@@ -110,7 +110,7 @@ public class ListPlayer implements LandlordCommand {
     }
 
     @Override
-    public String getHelpText() {
+    public String getHelpText(CommandSender sender) {
         //mess
         String usage = "/#{label} #{cmd} <player>"; // get the base usage string
         String desc = "List land owned by another player.";   // get the description

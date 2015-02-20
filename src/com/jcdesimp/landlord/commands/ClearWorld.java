@@ -66,14 +66,33 @@ public class ClearWorld implements LandlordCommand {
     }
 
     @Override
-    public String getHelpText() {
+    public String getHelpText(CommandSender sender) {
 
-        //mess
-        String usage = "/#{label} #{cmd} <world> [player]"; // get the base usage string
-        String desc = "Delete all land owned by a player in a world. Delete all land of a world (console only).";   // get the description
+
+        //mess ready
+        String usage = "/#{label} #{cmd} <world> [player]";             // get the base usage string
+        String desc = "Delete all land owned by a player in a " +       // get the description
+                "world. Delete all land of a world (console only).";
+        String chunkWarning = "Does not regenerate chunks.";            // get the "chunks won't regen" warning
+
+
+        String helpString = ""; // start building the help string
+
+        // only bother showing them this command if they have permission to do it.
+        if(!sender.hasPermission("landlord.admin.clearworld")){
+            return null;
+        }
+
+        // add the formatted string to it.
+        helpString += Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
+
+        // If chunk regen is on, warn them that bulk deletions will not regen
+        if(plugin.getConfig().getBoolean("options.regenOnUnclaim",false)){  //conf
+            helpString += ChatColor.YELLOW+" "+ChatColor.ITALIC+ chunkWarning;
+        }
 
         // return the constructed and colorized help string
-        return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
+        return helpString;
 
     }
 

@@ -49,22 +49,23 @@ public class Help implements LandlordCommand {
 
         // generate the help list
 
-        //List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getName()).findList();
+        String helpHeader = "--|| Landlord v#{version} Created by #{author} ||--";      //mess ready
+        String aliases = "(Aliases: /landlord, land, /ll)";                             //mess ready
 
-        String helpHeader = "--|| Landlord v#{version} Created by #{author} ||--";
-
-        String aliases = "(Aliases: /landlord, land, /ll)";
-
-        String header = ChatColor.DARK_GREEN + helpHeader
-                .replace("#{version}", plugin.getDescription().getVersion())
-                .replace("#{author}", ChatColor.BLUE + "Jcdesimp" + ChatColor.DARK_GREEN)
-                + '\n' + aliases;
+        // construct the header form the base strings
+        String header = ChatColor.DARK_GREEN + helpHeader                                   // start out with the initial header
+                .replace("#{version}", plugin.getDescription().getVersion())                // fill in the version
+                .replace("#{author}", ChatColor.BLUE + "Jcdesimp" + ChatColor.DARK_GREEN)   // fill in the author name
+                + '\n' + aliases;                                                           // add the aliases line
 
         ArrayList<String> helpList = new ArrayList<String>();
 
-
+        // Get each help string
         for(LandlordCommand lc : registeredCommands) {
-            helpList.add(lc.getHelpText().replace("#{label}",label));
+            String currCmd = lc.getHelpText(sender);
+            if (currCmd != null) {  // make sure the help string isn't null (can happen if conditions aren't right)
+                helpList.add(currCmd.replace("#{label}",label));
+            }
         }
 
         /*helpList.add(ChatColor.DARK_AQUA+"/"+label + " help [page #]" + ChatColor.RESET + " - Show this help message.\n");
@@ -142,7 +143,7 @@ public class Help implements LandlordCommand {
     }
 
     @Override
-    public String getHelpText() {
+    public String getHelpText(CommandSender sender) {
         //mess
         String usage = "/#{label} #{cmd} [page #]"; // get the base usage string
         String desc = "Show this help message.";   // get the description
