@@ -1,24 +1,11 @@
 package com.jcdesimp.landlord;
 
 import com.jcdesimp.landlord.commands.*;
-import com.jcdesimp.landlord.landManagement.LandManagerView;
-import com.jcdesimp.landlord.persistantData.Friend;
-import com.jcdesimp.landlord.persistantData.OwnedLand;
-import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.conversations.StringPrompt;
-import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
-import static org.bukkit.Bukkit.getOfflinePlayer;
-import static org.bukkit.Bukkit.getPlayer;
-import static org.bukkit.Bukkit.getWorld;
-import static org.bukkit.util.NumberConversions.ceil;
 
 /**
  * Command Executor class for LandLord
@@ -72,7 +59,6 @@ public class LandlordCommandExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(cmd.getName().equalsIgnoreCase("landlord")){ // If the player typed /land then do the following...
-
             // Check if the attempted command is registered
             if (args.length == 0 || !registeredCommands.containsKey(args[0].toLowerCase())) {
                 // if there is no command, or it's not registered, show the help text as the command given is unknown
@@ -114,6 +100,9 @@ public class LandlordCommandExecutor implements CommandExecutor {
             // register an entry for this command trigger
             registeredCommands.put(trigger.toLowerCase(), cmd);
         }
+
+        helpCommand.addCommand(cmd);
+
 
         // add the commands help text to the command help list
         //commandHelp.add(cmd.getHelpText());

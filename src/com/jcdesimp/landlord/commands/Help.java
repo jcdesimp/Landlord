@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static org.bukkit.util.NumberConversions.ceil;
 
@@ -16,12 +17,17 @@ import static org.bukkit.util.NumberConversions.ceil;
 public class Help implements LandlordCommand {
 
     private Landlord plugin;
-    private LandlordCommandExecutor commandHandler;
+    private ArrayList<LandlordCommand> registeredCommands;
 
 
     public Help(Landlord plugin, LandlordCommandExecutor commandHandler) {
         this.plugin = plugin;
-        this.commandHandler = commandHandler;
+        this.registeredCommands = new ArrayList<LandlordCommand>();
+    }
+
+
+    public void addCommand(LandlordCommand lc) {
+        registeredCommands.add(lc);
     }
 
 
@@ -31,26 +37,37 @@ public class Help implements LandlordCommand {
     public boolean execute(CommandSender sender, String[] args, String label) {
         //check if page number is valid
         int pageNumber = 1;
-        if (args.length > 1 && args[0].equals("help")) {
+        if (args.length > 1 && Arrays.asList(getTriggers()).contains(args[0]) ) {
             try{
                 pageNumber = Integer.parseInt(args[1]);
             } catch (NumberFormatException e){
                 // Is not a number!
-                sender.sendMessage(ChatColor.RED+"That is not a valid page number.");
+                sender.sendMessage(ChatColor.RED+"That is not a valid page number.");   //mess
                 return true;
             }
         }
 
+        // generate the help list
+
         //List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getName()).findList();
 
-        String header = ChatColor.DARK_GREEN + "--|| Landlord v"+plugin.getDescription().getVersion() +
-                " Created by " + ChatColor.BLUE+"Jcdesimp "+ChatColor.DARK_GREEN +"||--\n"+
-                ChatColor.GRAY+"(Aliases: /landlord, /land, or /ll)\n";
+        String helpHeader = "--|| Landlord v#{version} Created by #{author} ||--";
+
+        String aliases = "(Aliases: /landlord, land, /ll)";
+
+        String header = ChatColor.DARK_GREEN + helpHeader
+                .replace("#{version}", plugin.getDescription().getVersion())
+                .replace("#{author}", ChatColor.BLUE + "Jcdesimp" + ChatColor.DARK_GREEN)
+                + '\n' + aliases;
 
         ArrayList<String> helpList = new ArrayList<String>();
 
 
-        helpList.add(ChatColor.DARK_AQUA+"/"+label + " help [page #]" + ChatColor.RESET + " - Show this help message.\n");
+        for(LandlordCommand lc : registeredCommands) {
+            helpList.add(lc.getHelpText().replace("#{label}",label));
+        }
+
+        /*helpList.add(ChatColor.DARK_AQUA+"/"+label + " help [page #]" + ChatColor.RESET + " - Show this help message.\n");
         String claim = ChatColor.DARK_AQUA+"/"+label + " claim (or "+"/"+label +" buy)" + ChatColor.RESET + " - Claim this chunk.\n";
         if(plugin.hasVault()){
             if(plugin.getvHandler().hasEconomy() && plugin.getConfig().getDouble("economy.buyPrice", 100.0)>0){
@@ -96,7 +113,7 @@ public class Help implements LandlordCommand {
         }
         if(sender.hasPermission("landlord.admin.reload")){
             helpList.add(ChatColor.DARK_AQUA+"/"+label + " reload" + ChatColor.RESET + " - Reloads the Landlord config file.\n");
-        }
+        }*/
         //OwnedLand curr = myLand.get(0);
 
         //Amount to be displayed per page
@@ -110,14 +127,14 @@ public class Help implements LandlordCommand {
         String pMsg = header;
         if (pageNumber == numPages){
             for(int i = (numPerPage*pageNumber-numPerPage); i<helpList.size(); i++){
-                pMsg+=helpList.get(i);
+                pMsg+= '\n' + helpList.get(i);
             }
-            pMsg+=ChatColor.DARK_GREEN+"------------------------------";
+            pMsg+=ChatColor.DARK_GREEN+"\n------------------------------";
         } else {
             for(int i = (numPerPage*pageNumber-numPerPage); i<(numPerPage*pageNumber); i++){
-                pMsg+=helpList.get(i);
+                pMsg+= '\n' + helpList.get(i);
             }
-            pMsg+=ChatColor.DARK_GREEN+"--- do"+ChatColor.YELLOW+" /"+label+" help "+(pageNumber+1)+ChatColor.DARK_GREEN+" for next page ---";
+            pMsg+=ChatColor.DARK_GREEN+"\n--- do"+ChatColor.YELLOW+" /"+label+" help "+(pageNumber+1)+ChatColor.DARK_GREEN+" for next page ---";
         }
 
         sender.sendMessage(pMsg);
@@ -136,6 +153,6 @@ public class Help implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"help"};
+        return new String[]{"help", "?"};
     }
 }
