@@ -111,9 +111,14 @@ public class ListPlayer implements LandlordCommand {
 
     @Override
     public String getHelpText(CommandSender sender) {
-        //mess
-        String usage = "/#{label} #{cmd} <player>"; // get the base usage string
-        String desc = "List land owned by another player.";   // get the description
+
+        if(!sender.hasPermission("landlord.admin.list")){   // Don't bother showing command help if player can't do it
+            return null;
+        }
+
+        //mess ready
+        String usage = "/#{label} #{cmd} <player>";             // get the base usage string
+        String desc = "List land owned by another player.";     // get the description
 
         // return the constructed and colorized help string
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
