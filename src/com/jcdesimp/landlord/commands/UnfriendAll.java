@@ -68,7 +68,8 @@ public class UnfriendAll implements LandlordCommand {
 
     @Override
     public String getHelpText(CommandSender sender) {
-        //mess
+
+        //mess ready
         String usage = "/#{label} #{cmd} <player>"; // get the base usage string
         String desc = "Remove friend from all your land.";   // get the description
 

@@ -61,7 +61,12 @@ public class Info implements LandlordCommand {
 
     @Override
     public String getHelpText(CommandSender sender) {
-        //mess
+
+        if(!sender.hasPermission("landlord.player.info")){   // make sure player has permission to do this command
+            return null;
+        }
+
+        //mess ready
         String usage = "/#{label} #{cmd}"; // get the base usage string
         String desc = "View info about this chunk.";   // get the description
 

@@ -55,7 +55,7 @@ public class ShowMap implements LandlordCommand {
             return null;
         }
 
-        //mess
+        //mess ready
         String usage = "/#{label} #{cmd}"; // get the base usage string
         String desc = "Toggle the land map.";   // get the description
 
