@@ -37,10 +37,10 @@ public class LandlordCommandExecutor implements CommandExecutor {
         this.register(new ShowMap(plugin));     // register the map command
         this.register(new Manage(plugin));      // register the manage command
         this.register(new LandList(plugin));    // register the list command
+        this.register(new Info(plugin));        // register the info command
         this.register(new ListPlayer(plugin));  // register the listplayer command
         this.register(new ClearWorld(plugin));  // register the clearworld command
         this.register(new Reload(plugin));      // register the reload command
-        this.register(new Info(plugin));        // register the info command
 
     }
 

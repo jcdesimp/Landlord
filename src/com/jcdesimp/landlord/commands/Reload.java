@@ -36,7 +36,12 @@ public class Reload implements LandlordCommand {
 
     @Override
     public String getHelpText(CommandSender sender) {
-        //mess
+
+        if(!sender.hasPermission("landlord.admin.list")){
+            return null;
+        }
+
+        //mess ready
         String usage = "/#{label} #{cmd}"; // get the base usage string
         String desc = "Reloads the Landlord config file.";   // get the description
 
