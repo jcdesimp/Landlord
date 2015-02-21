@@ -49,6 +49,12 @@ public class ShowMap implements LandlordCommand {
 
     @Override
     public String getHelpText(CommandSender sender) {
+
+        // only bother showing them this command if they have permission to do it.
+        if(!sender.hasPermission("landlord.player.map") || !plugin.getConfig().getBoolean("options.enableMap",true)) {
+            return null;
+        }
+
         //mess
         String usage = "/#{label} #{cmd}"; // get the base usage string
         String desc = "Toggle the land map.";   // get the description

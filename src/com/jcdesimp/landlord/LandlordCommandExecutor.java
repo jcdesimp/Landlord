@@ -45,8 +45,6 @@ public class LandlordCommandExecutor implements CommandExecutor {
     }
 
 
-
-
     /**
      * Main command handler
      * @param sender who sent the command

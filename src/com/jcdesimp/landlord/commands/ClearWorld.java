@@ -68,6 +68,11 @@ public class ClearWorld implements LandlordCommand {
     @Override
     public String getHelpText(CommandSender sender) {
 
+        // only bother showing them this command if they have permission to do it.
+        if(!sender.hasPermission("landlord.admin.clearworld")){
+            return null;
+        }
+
 
         //mess ready
         String usage = "/#{label} #{cmd} <world> [player]";             // get the base usage string
@@ -78,10 +83,6 @@ public class ClearWorld implements LandlordCommand {
 
         String helpString = ""; // start building the help string
 
-        // only bother showing them this command if they have permission to do it.
-        if(!sender.hasPermission("landlord.admin.clearworld")){
-            return null;
-        }
 
         // add the formatted string to it.
         helpString += Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());

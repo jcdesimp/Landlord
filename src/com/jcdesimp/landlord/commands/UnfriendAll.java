@@ -28,15 +28,15 @@ public class UnfriendAll implements LandlordCommand {
     public boolean execute(CommandSender sender, String[] args, String label) {
         //is sender a player
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
+            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");   //mess
         } else {
             if (args.length < 2) {
-                sender.sendMessage(ChatColor.RED + "usage: /land unfriendall <player>");
+                sender.sendMessage(ChatColor.RED + "usage: /land unfriendall <player>");    //mess
                 return true;
             }
             Player player = (Player) sender;
             if (!player.hasPermission("landlord.player.own")) {
-                player.sendMessage(ChatColor.RED + "You do not have permission.");
+                player.sendMessage(ChatColor.RED + "You do not have permission.");  //mess
                 return true;
             }
 
@@ -44,7 +44,7 @@ public class UnfriendAll implements LandlordCommand {
 
             OfflinePlayer possible = getOfflinePlayer(args[1]);
             if (!possible.hasPlayedBefore() && !possible.isOnline()) {
-                player.sendMessage(ChatColor.RED + "That player is not recognized.");
+                player.sendMessage(ChatColor.RED + "That player is not recognized.");       //mess
                 return true;
             }
 
@@ -56,10 +56,10 @@ public class UnfriendAll implements LandlordCommand {
                 plugin.getDatabase().save(pLand);
 
 
-                player.sendMessage(ChatColor.GREEN+args[1]+" has been removed as a friend from all of your land.");
+                player.sendMessage(ChatColor.GREEN+args[1]+" has been removed as a friend from all of your land."); //mess
                 return true;
             } else {
-                player.sendMessage(ChatColor.YELLOW+"You do not own any land!");
+                player.sendMessage(ChatColor.YELLOW+"You do not own any land!");    //mess
             }
 
         }
@@ -69,7 +69,7 @@ public class UnfriendAll implements LandlordCommand {
     @Override
     public String getHelpText(CommandSender sender) {
         //mess
-        String usage = "/#{label} #{cmd} unfriend <player>"; // get the base usage string
+        String usage = "/#{label} #{cmd} <player>"; // get the base usage string
         String desc = "Remove friend from all your land.";   // get the description
 
         // return the constructed and colorized help string
