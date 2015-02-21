@@ -136,23 +136,33 @@ public class Unclaim implements LandlordCommand {
     @Override
     public String getHelpText(CommandSender sender) {
 
-        //mess
-        String usage = "/#{label} #{cmd} [x,z] [world]"; // get the base usage string
-        String desc = "Unclaim this chunk.";   // get the description
+        //mess ready
+        String usage = "/#{label} #{cmd} [x,z] [world]";            // get the base usage string
+        String desc = "Unclaim this chunk.";                        // get the description
+        String priceWarning = "Get #{pricetag} per unclaim.";       // get the price warning message
+        String regenWarning = "Regenerates Chunk!";                 // get the chun regen warning message
 
-        // return the constructed and colorized help string
-        return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
+        String helpString = "";
 
-        /*if (plugin.hasVault() && plugin.getvHandler().hasEconomy() && plugin.getConfig().getDouble("economy.sellPrice", 50.0) > 0) {    //conf
-            if(plugin.getConfig().getBoolean("options.regenOnUnclaim",false)) {
-                helptext+=ChatColor.RED+""+ChatColor.ITALIC +" Regenerates Chunk!";                         //mess
+        helpString += Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
+
+        if (plugin.hasVault()) {
+            if (plugin.getvHandler().hasEconomy() && plugin.getConfig().getDouble("economy.sellPrice", 50.0) > 0) { //conf
+                helpString += ChatColor.YELLOW+" "+ChatColor.ITALIC+ priceWarning
+                        .replace(
+                            "#{pricetag}",                  // insert the formatted price string
+                            plugin.getvHandler().formatCash(plugin.getConfig().getDouble("economy.sellPrice", 50.0))        //conf
+                        );
             }
-            helptext += ChatColor.YELLOW + "" + ChatColor.ITALIC + " Get " + plugin.getvHandler().formatCash(plugin.getConfig().getDouble("economy.sellPrice", 50.0)) + " per unclaim.\n";
-        } else if(plugin.getConfig().getBoolean("options.regenOnUnclaim",false)) {
-            helptext+=ChatColor.RED+""+ChatColor.ITALIC +" Regenerates Chunk!\n";
         }
 
-        return null;*/
+        // add chunk regen warning if needed
+        if(plugin.getConfig().getBoolean("options.regenOnUnclaim",false)) {
+            helpString+=ChatColor.RED + " " + ChatColor.ITALIC + regenWarning;
+        }
+
+        // return the constructed and colorized help string
+        return helpString;
     }
 
     @Override

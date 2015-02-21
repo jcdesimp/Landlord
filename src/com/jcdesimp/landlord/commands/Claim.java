@@ -147,9 +147,9 @@ public class Claim implements LandlordCommand {
     public String getHelpText(CommandSender sender) {
 
         //mess ready
-        String usage = "/#{label} #{cmd}";                  // get the base usage string
-        String desc = "Claim this chunk.";                  // get the description
-        String priceWarning = "Costs #{pricetag} to claim."; // get the price warnign message
+        String usage = "/#{label} #{cmd}";                      // get the base usage string
+        String desc = "Claim this chunk.";                      // get the description
+        String priceWarning = "Costs #{pricetag} to claim.";    // get the price warning message
 
 
         String helpString = ""; // start building the help string
@@ -160,7 +160,7 @@ public class Claim implements LandlordCommand {
             if(plugin.getvHandler().hasEconomy() && plugin.getConfig().getDouble("economy.buyPrice", 100.0)>0){     //conf
                 helpString += ChatColor.YELLOW+" "+ChatColor.ITALIC+ priceWarning
                         .replace(
-                            "#{pricetag}",                  // insert the formatted proce string
+                            "#{pricetag}",                  // insert the formatted price string
                             plugin.getvHandler().formatCash(plugin.getConfig().getDouble("economy.buyPrice", 100.0))        //conf
                         );
             }
