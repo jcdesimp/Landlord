@@ -146,12 +146,29 @@ public class Claim implements LandlordCommand {
     @Override
     public String getHelpText(CommandSender sender) {
 
-        //mess
-        String usage = "/#{label} #{cmd}"; // get the base usage string
-        String desc = "Claim this chunk.";   // get the description
+        //mess ready
+        String usage = "/#{label} #{cmd}";                  // get the base usage string
+        String desc = "Claim this chunk.";                  // get the description
+        String priceWarning = "Costs #{pricetag} to claim."; // get the price warnign message
+
+
+        String helpString = ""; // start building the help string
+
+        helpString += Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
+
+        if(plugin.hasVault()){
+            if(plugin.getvHandler().hasEconomy() && plugin.getConfig().getDouble("economy.buyPrice", 100.0)>0){     //conf
+                helpString += ChatColor.YELLOW+" "+ChatColor.ITALIC+ priceWarning
+                        .replace(
+                            "#{pricetag}",                  // insert the formatted proce string
+                            plugin.getvHandler().formatCash(plugin.getConfig().getDouble("economy.buyPrice", 100.0))        //conf
+                        );
+            }
+        }
+
 
         // return the constructed and colorized help string
-        return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
+        return helpString;
 
     }
 
