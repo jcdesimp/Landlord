@@ -2,7 +2,6 @@ package com.jcdesimp.landlord;
 
 import com.avaje.ebean.EbeanServer;
 //import com.lennardf1989.bukkitex.MyDatabase;
-import com.jcdesimp.landlord.configuration.ConfigAccessor;
 import com.jcdesimp.landlord.configuration.CustomConfig;
 import com.jcdesimp.landlord.landFlags.*;
 import com.jcdesimp.landlord.landManagement.FlagManager;
@@ -46,6 +45,7 @@ public final class Landlord extends JavaPlugin {
     private LandAlerter pListen;
 
     private CustomConfig mainConfig;
+    private CustomConfig messagesConfig;
 
 
 
@@ -62,7 +62,11 @@ public final class Landlord extends JavaPlugin {
 
         //todo
         //ConfigAccessor ca = new ConfigAccessor(this);
-        mainConfig = new CustomConfig(this, "config.yml","config.yml");
+        mainConfig = new CustomConfig(this, "config.yml", "config.yml");
+
+
+        messagesConfig = new CustomConfig(this, "messages/english.yml", "messages/" + mainConfig.get().getString("options.messagesFile"));
+
         //CustomConfig cc = new CustomConfig(this, "testConf.yml", "testConf.yml");
 
         //ca.registerConfig("testCon", "testConf.yml", "testConf.yml");
@@ -158,6 +162,10 @@ public final class Landlord extends JavaPlugin {
     @Override
     public FileConfiguration getConfig() {
         return mainConfig.get();
+    }
+
+    private FileConfiguration getMessages() {
+        return messagesConfig.get();
     }
 
     public FlagManager getFlagManager() {

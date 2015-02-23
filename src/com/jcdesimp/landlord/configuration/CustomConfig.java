@@ -100,10 +100,10 @@ public class CustomConfig {
 
     public void saveDefault() {
         if (customConfigFile == null) {
-            customConfigFile = new File(plugin.getDataFolder(), resourceLocation);
+            customConfigFile = new File(plugin.getDataFolder(), destination);
         }
         if (!customConfigFile.exists()) {
-            plugin.saveResource(destination, false);
+            plugin.saveResource(resourceLocation, false);
         }
     }
 }
