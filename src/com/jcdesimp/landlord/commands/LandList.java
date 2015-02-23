@@ -108,6 +108,6 @@ public class LandList implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"list"};
+        return new String[]{"list"};    //mess triggers
     }
 }

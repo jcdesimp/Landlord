@@ -174,6 +174,6 @@ public class Claim implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"claim", "buy"};
+        return new String[]{"claim", "buy"};    //mess triggers
     }
 }

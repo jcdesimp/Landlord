@@ -25,6 +25,7 @@ import java.util.Arrays;
 public class PVP extends Landflag {
 
     public PVP() {
+        //mess all these constructor values
         super(
                 "PVP",                                          //Display name (will be displayed to players)
                 "Gives permission to attack|" +
@@ -33,7 +34,7 @@ public class PVP extends Landflag {
                 "Allowed PvP",                                    //Text shown in manager for granted permission
                 "can hurt other players.",                        //Description in manager for granted permission (ex: Friendly players <desc>)
                 "Denied PvP",                                     //Text shown in manager for denied permission
-                "cannot hurt other players."                      //Desciption in manager for denied permission (ex: Regular players <desc>)
+                "cannot hurt other players."                      //Description in manager for denied permission (ex: Regular players <desc>)
         );
     }
 
@@ -57,7 +58,7 @@ public class PVP extends Landflag {
             }
             if(!land.hasPermTo(p, this)){
 
-                p.sendMessage(ChatColor.RED+"You cannot harm other players on this land.");
+                p.sendMessage(ChatColor.RED+"You cannot harm other players on this land.");     //mess
 
                 event.setCancelled(true);
 
@@ -75,7 +76,7 @@ public class PVP extends Landflag {
                 //System.out.println(a.getType());
                 if(!land.hasPermTo(p, this)){
                     if(a.getType().toString().equals("ARROW")) {
-                        p.sendMessage(ChatColor.RED + "You cannot harm other players on this land.");
+                        p.sendMessage(ChatColor.RED + "You cannot harm other players on this land.");       //mess
                     }
                     a.remove();
                     event.setCancelled(true);

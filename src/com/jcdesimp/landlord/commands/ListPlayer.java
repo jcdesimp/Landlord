@@ -127,6 +127,6 @@ public class ListPlayer implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"listplayer"};
+        return new String[]{"listplayer"};      //mess triggers
     }
 }

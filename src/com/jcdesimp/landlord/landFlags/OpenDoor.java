@@ -29,6 +29,7 @@ public class OpenDoor extends Landflag {
      * Constructor needs to be defined and properly call super()
      */
     public OpenDoor() {
+        //mess all these constructor values
         super(
                 "Open Doors",                                       //Display name (will be displayed to players)
                 "Gives permission to open/close doors.",            //Description (Lore of headerItem '|' will seperate lines of lore.)
@@ -89,7 +90,7 @@ public class OpenDoor extends Landflag {
                 return;
             }
 
-            p.sendMessage(ChatColor.RED+"You cannot open doors on this land.");
+            p.sendMessage(ChatColor.RED+"You cannot open doors on this land."); //mess
             event.setCancelled(true);
         }
 

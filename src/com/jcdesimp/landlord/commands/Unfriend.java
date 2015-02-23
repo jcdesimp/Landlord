@@ -88,6 +88,6 @@ public class Unfriend implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"unfriend","remfriend"};
+        return new String[]{"unfriend","remfriend"};        //mess triggers
     }
 }

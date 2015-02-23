@@ -66,6 +66,6 @@ public class ShowMap implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"map"};
+        return new String[]{"map"}; //mess triggers
     }
 }

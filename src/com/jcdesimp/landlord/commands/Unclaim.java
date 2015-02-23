@@ -167,6 +167,6 @@ public class Unclaim implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"unclaim", "sell"};
+        return new String[]{"unclaim", "sell"};     //mess triggers
     }
 }

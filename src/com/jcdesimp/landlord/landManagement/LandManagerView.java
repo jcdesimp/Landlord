@@ -42,11 +42,11 @@ public class LandManagerView implements Listener {
         this.player = player;
         this.mLand = mLand;
         this.perms = mLand.getLandPerms();
-        this.ui = Bukkit.createInventory(null, 36, "Land Manager");
+        this.ui = Bukkit.createInventory(null, 36, "Land Manager");     //mess
         this.updateUIData();
         this.numPages = (int)ceil(((double)permCols.size())/8.0);
         if(numPages==1){
-            this.ui = Bukkit.createInventory(null, 27, "Land Manager");
+            this.ui = Bukkit.createInventory(null, 27, "Land Manager");         //mess
         }
 
         this.setToggles();
@@ -97,19 +97,19 @@ public class LandManagerView implements Listener {
             //System.out.println("VALUE: "+mLand.getLandPerms()[0][l.getPermSlot()]);
             if(perms[0][l.getPermSlot()].equals("1")){
                 desc = colorLore((
-                        ("Regular players "+l.getAllowedText())+"|"+ChatColor.YELLOW+"Click to toggle.").split("\\|"));
+                        ("Regular players "+l.getAllowedText())+"|"+ChatColor.YELLOW+"Click to toggle.").split("\\|"));     //mess
                 allState = makeButton(ChatColor.GREEN+l.getAllowedTitle(), desc, new ItemStack(Material.WOOL,1, (short)5));
             } else {
-                desc = colorLore((("Regular players "+l.getDeniedText()+"|"+ChatColor.YELLOW+"Click to toggle.")).split("\\|"));
+                desc = colorLore((("Regular players "+l.getDeniedText()+"|"+ChatColor.YELLOW+"Click to toggle.")).split("\\|"));    //mess
                 allState = makeButton(ChatColor.RED+l.getDeniedTitle(), desc, new ItemStack(Material.WOOL,1, (short)14));
             }
 
             ItemStack friendState;
             if(perms[1][l.getPermSlot()].equals("1")){
-                desc = colorLore((("Friends of this land "+l.getAllowedText())+"|"+ChatColor.YELLOW+"Click to toggle.").split("\\|"));
+                desc = colorLore((("Friends of this land "+l.getAllowedText())+"|"+ChatColor.YELLOW+"Click to toggle.").split("\\|"));      //mess
                 friendState = makeButton(ChatColor.GREEN+l.getAllowedTitle(), desc, new ItemStack(Material.WOOL,1, (short)5));
             } else {
-                desc = colorLore((("Friends of this land "+l.getDeniedText()+"|"+ChatColor.YELLOW+"Click to toggle.")).split("\\|"));
+                desc = colorLore((("Friends of this land "+l.getDeniedText()+"|"+ChatColor.YELLOW+"Click to toggle.")).split("\\|"));       //mess
                 friendState = makeButton(ChatColor.RED+l.getDeniedTitle(), desc, new ItemStack(Material.WOOL,1, (short)14));
             }
 
@@ -128,6 +128,7 @@ public class LandManagerView implements Listener {
 
     private void buildUI(){
         // Static Items Help and row/column markers
+        //mess this help text
         ui.setItem(0,makeButton(ChatColor.GOLD+"Help",
                 new String[]{
                 ChatColor.RESET+"Click each wool block",
@@ -144,6 +145,7 @@ public class LandManagerView implements Listener {
         ui.setItem(3, makeButton(ChatColor.YELLOW+"Open Containers", new String[]{ChatColor.RESET+"Gives permission to use trap chests,",
                 ChatColor.RESET+"chests, furnaces, anvils, hoppers,", ChatColor.RESET+"droppers, and dispensers."}, Material.CHEST));
         */
+        //mess all this item data being set
         ui.setItem(9,makeButton(ChatColor.YELLOW+"Everyone", new String[]{ChatColor.RESET+"Permissions in this row apply to",
                 ChatColor.RESET+"people that aren't friends",ChatColor.RESET+"of this land."},
                 new ItemStack(Material.SKULL_ITEM, 1, (short)2)));
@@ -196,12 +198,14 @@ public class LandManagerView implements Listener {
         //player.sendMessage(ChatColor.GREEN + "Closing: " + event.getInventory().getTitle() + " of type "+ event.getInventory().getType());
         //player.sendMessage(ChatColor.GREEN + "Viewer:" +
                 //" " + event.getViewers().toString());
+        //todo customizing the name of the land management UI creates possible a risk, player check addresses this
+        // mess
         if(event.getInventory().getTitle().contains("Land Manager") && p.getName().equalsIgnoreCase(player.getName()) && isOpen ){
 
 
             mLand.setPermissions(mLand.permsToString(perms));
             Landlord.getInstance().getDatabase().save(mLand);
-            player.sendMessage(ChatColor.GREEN + "Land permissions saved!");
+            player.sendMessage(ChatColor.GREEN + "Land permissions saved!");        //mess
             if(Landlord.getInstance().getConfig().getBoolean("options.soundEffects",true)){
                 player.playSound(player.getLocation(),Sound.FIZZ,10,10);
             }

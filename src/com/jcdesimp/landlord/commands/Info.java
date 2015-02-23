@@ -76,6 +76,6 @@ public class Info implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"info"};
+        return new String[]{"info"};    //mess triggers
     }
 }

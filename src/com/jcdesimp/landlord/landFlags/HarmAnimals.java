@@ -37,6 +37,7 @@ public class HarmAnimals extends Landflag {
      * Constructor needs to be defined and properly call super()
      */
     public HarmAnimals() {
+        //mess all these constructor values
         super(
                 "Harm Animals",                                    //Display name (will be displayed to players)
                 "Gives permission to hurt or kill|" +
@@ -96,7 +97,7 @@ public class HarmAnimals extends Landflag {
             }
             if(!land.hasPermTo(p, this)){
 
-                p.sendMessage(ChatColor.RED+"You cannot harm animals on this land.");
+                p.sendMessage(ChatColor.RED+"You cannot harm animals on this land.");   //mess
 
                 event.setCancelled(true);
 
@@ -114,7 +115,7 @@ public class HarmAnimals extends Landflag {
                 //System.out.println(a.getType());
                 if(!land.hasPermTo(p, this)){
                     if(a.getType().toString().equals("ARROW")) {
-                        p.sendMessage(ChatColor.RED + "You cannot harm animals on this land.");
+                        p.sendMessage(ChatColor.RED + "You cannot harm animals on this land.");     //mess
                     }
                     a.remove();
                     event.setCancelled(true);

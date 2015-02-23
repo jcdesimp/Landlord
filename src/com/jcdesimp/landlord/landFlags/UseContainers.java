@@ -29,6 +29,7 @@ public class UseContainers extends Landflag {
      * Constructor needs to be defined and properly call super()
      */
     public UseContainers() {
+        //mess all these constructor values
         super(
                 "Use Containers",                                       //Display name (will be displayed to players)
                 "Gives permission to use trap chests|" +
@@ -90,7 +91,7 @@ public class UseContainers extends Landflag {
         }
         Player p = event.getPlayer();
         if(!land.hasPermTo(p, this)){
-            p.sendMessage(ChatColor.RED + "You are not allowed to use containers on this land.");
+            p.sendMessage(ChatColor.RED + "You are not allowed to use containers on this land.");   //mess
             event.setCancelled(true);
         }
     }

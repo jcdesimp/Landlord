@@ -80,6 +80,6 @@ public class UnfriendAll implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"unfriendall","remfriendall"};
+        return new String[]{"unfriendall","remfriendall"};      //mess triggers
     }
 }

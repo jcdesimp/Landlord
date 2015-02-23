@@ -90,8 +90,9 @@ public class LandMap {
                 +ChatColor.STRIKETHROUGH+""+ChatColor.DARK_GREEN+" ==="*/
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         objective.setDisplayName(ChatColor.YELLOW+""+ChatColor.STRIKETHROUGH+
-                "=="+ChatColor.RESET+""+ChatColor.GOLD +" Land Map "
-                +ChatColor.YELLOW+""+ChatColor.STRIKETHROUGH+"==");
+                    "=="+ChatColor.RESET+""+ChatColor.GOLD +" " +
+                "Land Map"                               //mess !WARN! if len > 14 map will not render !Enforce
+                +" " +ChatColor.YELLOW+""+ChatColor.STRIKETHROUGH+"==");
         String[] mapData = buildMap(p);
         for(int i = 0; i<mapData.length; i++){
             if(mapData[i].length()<21){
@@ -477,9 +478,9 @@ public class LandMap {
             mapRows[z] = row;
 
         }
-        mapRows[mapBoard.length] = ChatColor.GREEN + "█-Yours";
-        mapRows[mapBoard.length+1] = ChatColor.YELLOW + "█-Friendly";
-        mapRows[mapBoard.length+2] = ChatColor.RED + "█-Others'";
+        mapRows[mapBoard.length] = ChatColor.GREEN + "█-"+"Yours";         //mess if >28 map won't render
+        mapRows[mapBoard.length+1] = ChatColor.YELLOW + "█-"+"Friendly";   //mess if >28 map won't render
+        mapRows[mapBoard.length+2] = ChatColor.RED + "█-"+"Others'";       //mess if >28 map won't render
         //mapRows[0] = "";
 
         return mapRows;

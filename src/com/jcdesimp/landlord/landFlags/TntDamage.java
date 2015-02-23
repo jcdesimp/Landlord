@@ -35,6 +35,7 @@ public class TntDamage extends Landflag {
      * Constructor needs to be defined and properly call super()
      */
     public TntDamage() {
+        //mess all these constructor values
         super(
                 "TNT Damage",                         //Display name (will be displayed to players)
                 "Gives permission to cause block|" +
@@ -86,7 +87,7 @@ public class TntDamage extends Landflag {
             if(tnt.getSource() != null && tnt.getSource().getType().equals(EntityType.PLAYER)){
                 Player p = (Player)tnt.getSource();
                 if(!land.hasPermTo(p,this)){
-                    p.sendMessage(ChatColor.RED+"You cannot detonate TNT on this land.");
+                    p.sendMessage(ChatColor.RED+"You cannot detonate TNT on this land.");   //mess
                     event.setCancelled(true);
                     return;
                 }
@@ -161,7 +162,7 @@ public class TntDamage extends Landflag {
             }
             Player p = event.getPlayer();
             if (!land.hasPermTo(p, this)) {
-                p.sendMessage(ChatColor.RED + "You are not allowed to ignite tnt on this land.");
+                p.sendMessage(ChatColor.RED + "You are not allowed to ignite tnt on this land.");       //mess
                 event.setCancelled(true);
             }
         }

@@ -13,7 +13,7 @@ public abstract class Landflag implements Listener {
 
     //Display Fields
     private String displayName;
-    private String descrition;
+    private String description;
     private ItemStack headerItem;
     private String allowedTitle;
     private String allowedText;
@@ -21,14 +21,14 @@ public abstract class Landflag implements Listener {
     private String deniedText;
 
     protected Landflag(String displayName,
-                       String descrition,
+                       String description,
                        ItemStack headerItem,
                        String allowedTitle,
                        String allowedText,
                        String deniedTitle,
                        String deniedText) {
         this.displayName = displayName;
-        this.descrition = descrition;
+        this.description = description;
         this.headerItem = headerItem;
         this.allowedTitle = allowedTitle;
         this.allowedText = allowedText;
@@ -61,7 +61,7 @@ public abstract class Landflag implements Listener {
     }
 
     public String getDescription() {
-        return descrition;
+        return description;
     }
 
     public ItemStack getHeaderItem() {

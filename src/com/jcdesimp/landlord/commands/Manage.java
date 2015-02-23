@@ -68,6 +68,6 @@ public class Manage implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"manage"};
+        return new String[]{"manage"};      //mess triggers
     }
 }

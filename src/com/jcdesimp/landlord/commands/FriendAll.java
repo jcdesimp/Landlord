@@ -79,6 +79,6 @@ public class FriendAll implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"friendall","addfriendall"};
+        return new String[]{"friendall","addfriendall"};        //mess triggers
     }
 }

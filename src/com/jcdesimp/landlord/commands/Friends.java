@@ -128,6 +128,6 @@ public class Friends implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"friends"};
+        return new String[]{"friends"};     //mess triggers
     }
 }

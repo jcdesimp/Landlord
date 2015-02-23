@@ -30,6 +30,7 @@ public class UseRedstone extends Landflag {
      * Constructor needs to be defined and properly call super()
      */
     public UseRedstone() {
+        //mess all these constructor values
         super(
                 "Use Redstone",                                   //Display name (will be displayed to players)
                 "Gives permission to use buttons and|" +
@@ -86,7 +87,7 @@ public class UseRedstone extends Landflag {
                 return;
             }
             if(!land.hasPermTo(p, this)){
-                p.sendMessage(ChatColor.RED+"You cannot use redstone on this land.");
+                p.sendMessage(ChatColor.RED+"You cannot use redstone on this land.");   //mess
                 event.setCancelled(true);
                 return;
             }
@@ -99,7 +100,6 @@ public class UseRedstone extends Landflag {
             }
             if(!land.hasPermTo(p, this)){
                 event.setCancelled(true);
-                return;
             }
         }
 

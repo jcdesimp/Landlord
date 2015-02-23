@@ -90,7 +90,7 @@ public class AddFriend implements LandlordCommand {
 
     @Override
     public String getHelpText(CommandSender sender) {
-        //mess
+        //mess ready
         String usage = "/#{label} #{cmd} <player>"; // get the base usage string
         String desc = "Add friend to this land.";   // get the description
 
@@ -100,6 +100,6 @@ public class AddFriend implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"friend", "addfriend"};
+        return new String[]{"friend", "addfriend"}; //mess triggers
     }
 }

@@ -38,6 +38,7 @@ public class Build extends Landflag {
      * Constructor needs to be defined and properly call super()
      */
     public Build() {
+        //mess all these constructor values
         super(
                 "Build",                                       //Display name (will be displayed to players)
                 "Gives permission to place|" +
@@ -94,7 +95,7 @@ public class Build extends Landflag {
          *************************************
          */
         if(!land.hasPermTo(p, this)){
-            p.sendMessage(ChatColor.RED + "You are not allowed to build on this land.");
+            p.sendMessage(ChatColor.RED + "You are not allowed to build on this land.");    //mess
             event.setCancelled(true);
         }
 
@@ -116,7 +117,7 @@ public class Build extends Landflag {
         Player p = event.getPlayer();
 
         if(!land.hasPermTo(p, this)){
-            p.sendMessage(ChatColor.RED + "You are not allowed to break on this land.");
+            p.sendMessage(ChatColor.RED + "You are not allowed to break on this land.");        //mess
             event.setCancelled(true);
         }
     }
@@ -131,7 +132,7 @@ public class Build extends Landflag {
         Player p=event.getPlayer();
 
         if(!land.hasPermTo(p, this)){
-            p.sendMessage(ChatColor.RED+"You cannot place that on this land.");
+            p.sendMessage(ChatColor.RED+"You cannot place that on this land.");     //mess
             event.setCancelled(true);
         }
     }
@@ -145,7 +146,7 @@ public class Build extends Landflag {
         Player p=event.getPlayer();
 
         if(!land.hasPermTo(p, this)){
-            p.sendMessage(ChatColor.RED+"You cannot do that on this land.");
+            p.sendMessage(ChatColor.RED+"You cannot do that on this land.");        //mess
             event.setCancelled(true);
         }
     }
@@ -161,7 +162,7 @@ public class Build extends Landflag {
         if(remover.getType().toString().equals("PLAYER")){
             Player p = (Player)remover;
             if(!land.hasPermTo(p, this)){
-                p.sendMessage(ChatColor.RED+"You cannot break that on this land.");
+                p.sendMessage(ChatColor.RED+"You cannot break that on this land.");     //mess
                 event.setCancelled(true);
             }
             //System.out.println("Attacker Name:" + p.getName());
@@ -183,7 +184,7 @@ public class Build extends Landflag {
         }
 
         if (!land.hasPermTo(event.getPlayer(), this)) {
-            event.getPlayer().sendMessage(ChatColor.RED + "You cannot do that here!");
+            event.getPlayer().sendMessage(ChatColor.RED + "You cannot do that here!");      //mess
             event.setCancelled(true);
         }
 
@@ -209,7 +210,7 @@ public class Build extends Landflag {
             Player attacker = (Player)event.getDamager();
             //System.out.println(attacker.getName());
             if(!land.hasPermTo(attacker ,this)){
-                attacker.sendMessage(ChatColor.RED+"You cannot do that on this land.");
+                attacker.sendMessage(ChatColor.RED+"You cannot do that on this land.");     //mess
                 event.setCancelled(true);
             }
 
@@ -219,7 +220,7 @@ public class Build extends Landflag {
              if(projectile.getShooter() instanceof Player) {
                  Player attacker = (Player)projectile.getShooter();
                  if(!land.hasPermTo(attacker ,this)){
-                     attacker.sendMessage(ChatColor.RED+"You cannot do that on this land.");
+                     attacker.sendMessage(ChatColor.RED+"You cannot do that on this land.");        //mess
                      event.setCancelled(true);
                  }
              }
@@ -249,7 +250,7 @@ public class Build extends Landflag {
                 return;
             }
             if(!land.hasPermTo(p ,this)){
-                p.sendMessage(ChatColor.RED+"You cannot break that on this land.");
+                p.sendMessage(ChatColor.RED+"You cannot break that on this land.");     //mess
                 event.setCancelled(true);
             }
 
@@ -266,11 +267,9 @@ public class Build extends Landflag {
                 return;
             }
             if(!land.hasPermTo(p ,this)){
-                p.sendMessage(ChatColor.RED+"You cannot break that on this land.");
+                p.sendMessage(ChatColor.RED+"You cannot break that on this land.");     //mess
                 event.setCancelled(true);
             }
-        } else {
-            return;
         }
 
 
@@ -289,7 +288,7 @@ public class Build extends Landflag {
             return;
         }
         if(!land.hasPermTo(p ,this)){
-            p.sendMessage(ChatColor.RED+"You cannot break that on this land.");
+            p.sendMessage(ChatColor.RED+"You cannot break that on this land.");     //mess
             event.setCancelled(true);
         }
     }
@@ -310,7 +309,7 @@ public class Build extends Landflag {
             return;
         }
         if(!land.hasPermTo(p ,this)){
-            p.sendMessage(ChatColor.RED+"You cannot do that on this land.");
+            p.sendMessage(ChatColor.RED+"You cannot do that on this land.");        //mess
             event.setCancelled(true);
         }
 
@@ -327,7 +326,7 @@ public class Build extends Landflag {
         if(placer.getType().toString().equals("PLAYER")){
             Player p = (Player)placer;
             if(!land.hasPermTo(p, this)){
-                p.sendMessage(ChatColor.RED+"You cannot place that on this land.");
+                p.sendMessage(ChatColor.RED+"You cannot place that on this land.");     //mess
                 event.setCancelled(true);
             }
 
@@ -354,7 +353,7 @@ public class Build extends Landflag {
             if(land.hasPermTo(p, this)){
                 return;
             }
-            p.sendMessage(ChatColor.RED + "You are not allowed to destroy crops on this land.");
+            p.sendMessage(ChatColor.RED + "You are not allowed to destroy crops on this land.");        //mess
             event.setCancelled(true);
             return;
         }
@@ -369,7 +368,7 @@ public class Build extends Landflag {
             if(land.hasPermTo(p, this)){
                 return;
             }
-            p.sendMessage(ChatColor.RED + "You cannot do that on this land.");
+            p.sendMessage(ChatColor.RED + "You cannot do that on this land.");      //mess
             event.setCancelled(true);
         }
     }
@@ -393,7 +392,7 @@ public class Build extends Landflag {
                 return;
             }
 
-            p.sendMessage(ChatColor.RED+"You cannot do that on this land.");
+            p.sendMessage(ChatColor.RED+"You cannot do that on this land.");        //mess
             event.setCancelled(true);
         }
 

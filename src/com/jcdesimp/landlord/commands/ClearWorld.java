@@ -99,6 +99,6 @@ public class ClearWorld implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"clearworld"};
+        return new String[]{"clearworld"};      //mess triggers
     }
 }

@@ -126,7 +126,7 @@ public class OwnedLand {
          * *************************************
          */
         if (!getOfflinePlayer(UUID.fromString(ownerName)).hasPlayedBefore() && !getOfflinePlayer(UUID.fromString(ownerName)).isOnline()) {
-            return ChatColor.ITALIC+"Unknown";
+            return ChatColor.ITALIC+"Unknown";      //mess
         }
         return getOfflinePlayer(UUID.fromString(ownerName)).getName();
     }

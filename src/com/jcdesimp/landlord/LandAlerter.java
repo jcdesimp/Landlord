@@ -31,18 +31,18 @@ public class LandAlerter implements Listener {
             if(land==null){
                 String prevName = landIn.get(player.getName());
                 if(prevName.equals(player.getName())){
-                    player.sendMessage(ChatColor.YELLOW+"** Now leaving your land.");
+                    player.sendMessage(ChatColor.YELLOW+"** Now leaving your land.");       //mess
                 } else {
-                    player.sendMessage(ChatColor.YELLOW+"** Now leaving "+ prevName +"'s land.");
+                    player.sendMessage(ChatColor.YELLOW+"** Now leaving "+ prevName +"'s land.");       //mess
                 }
 
             } else {
                 String prevName = landIn.get(player.getName());
                 if(!prevName.equals(land.getOwnerUsername())){
                     if(prevName.equals(player.getName())){
-                        player.sendMessage(ChatColor.YELLOW+"** Now leaving your land.");
+                        player.sendMessage(ChatColor.YELLOW+"** Now leaving your land.");       //mess
                     } else {
-                        player.sendMessage(ChatColor.YELLOW+"** Now leaving "+ prevName +"'s land.");
+                        player.sendMessage(ChatColor.YELLOW+"** Now leaving "+ prevName +"'s land.");       //mess
                     }
                 }
             }
@@ -62,20 +62,20 @@ public class LandAlerter implements Listener {
                 landIn.put(player.getName(), land.getOwnerUsername());
 
                 if (land.getOwnerUsername().equals(player.getName())) {
-                    player.sendMessage(ChatColor.GREEN + "** Now entering your land.");
+                    player.sendMessage(ChatColor.GREEN + "** Now entering your land.");         //mess
                 } else {
                     String ownerName = land.getOwnerUsername();
-                    player.sendMessage(ChatColor.YELLOW + "** Now entering " + ownerName + "'s land.");
+                    player.sendMessage(ChatColor.YELLOW + "** Now entering " + ownerName + "'s land.");     //mess
 
                 }
             }
         } else {
             landIn.put(player.getName(), land.getOwnerUsername());
             if (land.getOwnerUsername().equals(player.getName())) {
-                player.sendMessage(ChatColor.GREEN + "** Now entering your land.");
+                player.sendMessage(ChatColor.GREEN + "** Now entering your land.");         //mess
             } else {
                 String ownerName = land.getOwnerUsername();
-                player.sendMessage(ChatColor.YELLOW + "** Now entering " + ownerName + "'s land.");
+                player.sendMessage(ChatColor.YELLOW + "** Now entering " + ownerName + "'s land.");     //mess
 
             }
         }

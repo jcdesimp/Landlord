@@ -51,6 +51,6 @@ public class Reload implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"reload"};
+        return new String[]{"reload"};      //mess triggers
     }
 }
