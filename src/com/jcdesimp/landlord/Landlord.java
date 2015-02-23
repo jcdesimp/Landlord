@@ -66,8 +66,6 @@ public final class Landlord extends JavaPlugin {
         // generate/load the main language file based on value in config.
         messagesConfig = new CustomConfig(this, "messages/english.yml", "messages/" + (mainConfig.get().getString("options.messagesFile").replace("/",".") ));
 
-
-
         // Registering Alert Listener
         pListen = new LandAlerter();
         if(getConfig().getBoolean("options.showLandAlerts",true)) {
@@ -157,6 +155,10 @@ public final class Landlord extends JavaPlugin {
     @Override
     public FileConfiguration getConfig() {
         return mainConfig.get();
+    }
+
+    public FileConfiguration getMessageConfig() {
+        return messagesConfig.get();
     }
 
     private FileConfiguration getMessages() {
