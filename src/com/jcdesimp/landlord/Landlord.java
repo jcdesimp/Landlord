@@ -2,6 +2,8 @@ package com.jcdesimp.landlord;
 
 import com.avaje.ebean.EbeanServer;
 //import com.lennardf1989.bukkitex.MyDatabase;
+import com.jcdesimp.landlord.configuration.ConfigAccessor;
+import com.jcdesimp.landlord.configuration.CustomConfig;
 import com.jcdesimp.landlord.landFlags.*;
 import com.jcdesimp.landlord.landManagement.FlagManager;
 //import com.jcdesimp.landlord.landManagement.LandListener;
@@ -43,6 +45,8 @@ public final class Landlord extends JavaPlugin {
     private ViewManager manageViewManager;
     private LandAlerter pListen;
 
+    private CustomConfig mainConfig;
+
 
 
 
@@ -56,31 +60,13 @@ public final class Landlord extends JavaPlugin {
         getServer().getPluginManager().registerEvents(mapManager, this);
 
 
+        //todo
+        //ConfigAccessor ca = new ConfigAccessor(this);
+        mainConfig = new CustomConfig(this, "config.yml","config.yml");
+        //CustomConfig cc = new CustomConfig(this, "testConf.yml", "testConf.yml");
 
-        //// CONFIG FILE MANAGEMENT ////
+        //ca.registerConfig("testCon", "testConf.yml", "testConf.yml");
 
-
-        Map<String,Object> oldConfig = getConfig().getValues(true);
-        //Generates new config file if not present
-        saveDefaultConfig();
-        //String header = getConfig().options().header();
-        FileConfiguration config = getConfig();
-
-
-        // checks for missing entries and applies new ones
-        for (Map.Entry<String, Object> entry : config.getDefaults().getValues(true).entrySet())
-        {
-            if(oldConfig.containsKey(entry.getKey())){
-                config.set(entry.getKey(),oldConfig.get(entry.getKey()));
-            } else {
-                config.set(entry.getKey(), entry.getValue());
-            }
-
-        }
-
-        saveConfig();
-
-        ////////////////////////////////
 
 
         // Registering Alert Listener
@@ -168,6 +154,11 @@ public final class Landlord extends JavaPlugin {
         pListen.clearPtrack();
     }
 
+
+    @Override
+    public FileConfiguration getConfig() {
+        return mainConfig.get();
+    }
 
     public FlagManager getFlagManager() {
         return flagManager;
