@@ -60,16 +60,11 @@ public final class Landlord extends JavaPlugin {
         getServer().getPluginManager().registerEvents(mapManager, this);
 
 
-        //todo
-        //ConfigAccessor ca = new ConfigAccessor(this);
+
+        // generate/load the main config file
         mainConfig = new CustomConfig(this, "config.yml", "config.yml");
-
-
-        messagesConfig = new CustomConfig(this, "messages/english.yml", "messages/" + mainConfig.get().getString("options.messagesFile"));
-
-        //CustomConfig cc = new CustomConfig(this, "testConf.yml", "testConf.yml");
-
-        //ca.registerConfig("testCon", "testConf.yml", "testConf.yml");
+        // generate/load the main language file based on value in config.
+        messagesConfig = new CustomConfig(this, "messages/english.yml", "messages/" + (mainConfig.get().getString("options.messagesFile").replace("/",".") ));
 
 
 

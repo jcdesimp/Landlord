@@ -89,7 +89,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
             // Check if the command is taken
             if(registeredCommands.containsKey(trigger.toLowerCase())) {
-                System.out.println("Failed to register command with alias '" + trigger + "', already taken!");  //mess
+                System.out.println("Failed to register command with alias '" + trigger + "', already taken!");
                 continue;   // Command name is taken already
             }
 
