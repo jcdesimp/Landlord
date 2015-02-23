@@ -2,6 +2,7 @@ package com.jcdesimp.landlord;
 
 import com.avaje.ebean.EbeanServer;
 //import com.lennardf1989.bukkitex.MyDatabase;
+import com.jcdesimp.landlord.configuration.CustomConfig;
 import com.jcdesimp.landlord.landFlags.*;
 import com.jcdesimp.landlord.landManagement.FlagManager;
 //import com.jcdesimp.landlord.landManagement.LandListener;
@@ -43,6 +44,9 @@ public final class Landlord extends JavaPlugin {
     private ViewManager manageViewManager;
     private LandAlerter pListen;
 
+    private CustomConfig mainConfig;
+    private CustomConfig messagesConfig;
+
 
 
 
@@ -56,31 +60,17 @@ public final class Landlord extends JavaPlugin {
         getServer().getPluginManager().registerEvents(mapManager, this);
 
 
-
-        //// CONFIG FILE MANAGEMENT ////
-
-
-        Map<String,Object> oldConfig = getConfig().getValues(true);
-        //Generates new config file if not present
-        saveDefaultConfig();
-        //String header = getConfig().options().header();
-        FileConfiguration config = getConfig();
+        //todo
+        //ConfigAccessor ca = new ConfigAccessor(this);
+        mainConfig = new CustomConfig(this, "config.yml", "config.yml");
 
 
-        // checks for missing entries and applies new ones
-        for (Map.Entry<String, Object> entry : config.getDefaults().getValues(true).entrySet())
-        {
-            if(oldConfig.containsKey(entry.getKey())){
-                config.set(entry.getKey(),oldConfig.get(entry.getKey()));
-            } else {
-                config.set(entry.getKey(), entry.getValue());
-            }
+        messagesConfig = new CustomConfig(this, "messages/english.yml", "messages/" + mainConfig.get().getString("options.messagesFile"));
 
-        }
+        //CustomConfig cc = new CustomConfig(this, "testConf.yml", "testConf.yml");
 
-        saveConfig();
+        //ca.registerConfig("testCon", "testConf.yml", "testConf.yml");
 
-        ////////////////////////////////
 
 
         // Registering Alert Listener
@@ -168,6 +158,15 @@ public final class Landlord extends JavaPlugin {
         pListen.clearPtrack();
     }
 
+
+    @Override
+    public FileConfiguration getConfig() {
+        return mainConfig.get();
+    }
+
+    private FileConfiguration getMessages() {
+        return messagesConfig.get();
+    }
 
     public FlagManager getFlagManager() {
         return flagManager;

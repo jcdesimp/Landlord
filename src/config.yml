@@ -13,6 +13,8 @@
 #    regenOnUnclaim: false
 #    #Show entey/exit messages when players enter/leave owned land.
 #    showLandAlerts: true
+#    #File inside the "messages" folder to use as souce for all messages displayed to players.
+#    messagesFile: "english.yml"
 # Limits on amount of owned land
 # limits:
 #    #Max land a regular player can own (-1 for no limit).
@@ -59,6 +61,7 @@ options:
   enableMap: true
   regenOnUnclaim: false
   showLandAlerts: true
+  messagesFile: "english.yml"
 limits:
   landLimit: 10
   extra: 10
