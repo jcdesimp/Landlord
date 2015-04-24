@@ -27,26 +27,32 @@ public class FriendAll implements LandlordCommand {
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
         // Message Data mess ready
-        String notPlayer = "";
+        String notPlayerString = "This command can only be run by a player.";
+        String usageString = "usage: /#{label} friendall <player>";
+        String noPermsString = "You do not have permission.";
+        String unknownPlayer = "That player is not recognized.";
+        String friendAddedString = "#{player} has been added as a friend to all of your land.";
+        String noLandString = "You do not own any land!";
+
 
         //is sender a player
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");   //mess
+            sender.sendMessage(ChatColor.DARK_RED + notPlayerString);
         } else {
             if (args.length < 2) {
-                sender.sendMessage(ChatColor.RED + "usage: /land friendall <player>");  //mess
+                sender.sendMessage(ChatColor.RED + usageString.replace("#{label}", label));
                 return true;
             }
             Player player = (Player) sender;
             if (!player.hasPermission("landlord.player.own")) {
-                player.sendMessage(ChatColor.RED + "You do not have permission.");  //mess
+                player.sendMessage(ChatColor.RED + noPermsString);
                 return true;
             }
 
             List<OwnedLand> pLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId()).findList();
             OfflinePlayer possible = getOfflinePlayer(args[1]);
             if (!possible.hasPlayedBefore() && !possible.isOnline()) {
-                player.sendMessage(ChatColor.RED + "That player is not recognized.");       //mess
+                player.sendMessage(ChatColor.RED + unknownPlayer);
                 return true;
             }
 
@@ -58,10 +64,10 @@ public class FriendAll implements LandlordCommand {
                 plugin.getDatabase().save(pLand);
 
 
-                player.sendMessage(ChatColor.GREEN+args[1]+" has been added as a friend to all of your land.");     //mess
+                player.sendMessage(ChatColor.GREEN + friendAddedString.replace("#{player}", args[1]));
                 return true;
             } else {
-                player.sendMessage(ChatColor.YELLOW+"You do not own any land!");        //mess
+                player.sendMessage(ChatColor.YELLOW+noLandString);        //mess
             }
 
         }
