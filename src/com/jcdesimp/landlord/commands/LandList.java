@@ -26,65 +26,89 @@ public class LandList implements LandlordCommand {
 
     /**
      * Display a list of all owned land to a player
+     *
      * @param sender who executed the command
-     * @param args given with command
+     * @param args   given with command
      * @return boolean
      */
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
+
+        //mess ready
+        String notPlayer = "This command can only be run by a player.";
+        String noPerms = "You do not have permission.";
+        String badPageNum = "That is not a valid page number.";
+        String noLand = "You do not own any land!";
+
+        String outputHeader = "Coords - Chunk Coords - World Name";
+        String ownedLandString =  "Your Owned Land";
+        String pageNum = "Page #{pageNum}";
+        String nextPageString = "do #{label} #{cmd} #{pageNumber} for next page";
+
+
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");   //mess
+            sender.sendMessage(ChatColor.DARK_RED + notPlayer);
         } else {
             Player player = (Player) sender;
-            if(!player.hasPermission("landlord.player.own")){
-                player.sendMessage(ChatColor.RED+"You do not have permission.");        //mess
+            if (!player.hasPermission("landlord.player.own")) {
+                player.sendMessage(ChatColor.RED + noPerms);
                 return true;
             }
 
             //check if page number is valid
             int pageNumber = 1;
-            if (args.length > 1){
-                try{
-                    pageNumber = Integer.parseInt(args[1]);}
-                catch (NumberFormatException e){
-                    player.sendMessage(ChatColor.RED+"That is not a valid page number.");       //mess
+            if (args.length > 1) {
+                try {
+                    pageNumber = Integer.parseInt(args[1]);
+                } catch (NumberFormatException e) {
+                    player.sendMessage(ChatColor.RED + badPageNum);
                     return true;
                 }
             }
 
-            List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId().toString()).findList();
-            if(myLand.size()==0){
-                player.sendMessage(ChatColor.YELLOW+"You do not own any land!");        //mess
+            List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName", player.getUniqueId().toString()).findList();
+            if (myLand.size() == 0) {
+                player.sendMessage(ChatColor.YELLOW + noLand);
             } else {
-                String header = ChatColor.DARK_GREEN+" | Coords - Chunk Coords - World Name |     \n";      //mess
+                String header = ChatColor.DARK_GREEN + " | " + outputHeader + " |\n";
                 ArrayList<String> landList = new ArrayList<String>();
                 //OwnedLand curr = myLand.get(0);
                 for (OwnedLand aMyLand : myLand) {
-                    landList.add((ChatColor.GOLD + " ("+ aMyLand.getXBlock() +", "+ aMyLand.getZBlock() +") - (" + aMyLand.getX() + ", " + aMyLand.getZ() + ") - "      //mess
+                    landList.add((ChatColor.GOLD + " (" + aMyLand.getXBlock() + ", " + aMyLand.getZBlock() + ") - (" + aMyLand.getX() + ", " + aMyLand.getZ() + ") - "
                             + aMyLand.getWorldName()) + "\n")
                     ;
                 }
                 //Amount to be displayed per page
                 final int numPerPage = 7;
 
-                int numPages = ceil((double)landList.size()/(double)numPerPage);
-                if(pageNumber > numPages){
-                    player.sendMessage(ChatColor.RED+"That is not a valid page number.");
+                int numPages = ceil((double) landList.size() / (double) numPerPage);
+                if (pageNumber > numPages) {
+                    player.sendMessage(ChatColor.RED + badPageNum);
                     return true;
                 }
 
-                //mess
-                String pMsg = ChatColor.DARK_GREEN+"--- " +ChatColor.YELLOW+"Your Owned Land"+ChatColor.DARK_GREEN+" ---"+ChatColor.YELLOW+" Page "+pageNumber+ChatColor.DARK_GREEN+" ---\n"+header;
-                if (pageNumber == numPages){
-                    for(int i = (numPerPage*pageNumber-numPerPage); i<landList.size(); i++){
-                        pMsg+=landList.get(i);
+                //String pMsg = ChatColor.DARK_GREEN + "--- " + ChatColor.YELLOW + ownedLandString + ChatColor.DARK_GREEN + " ---" + ChatColor.YELLOW + " Page " + pageNumber + ChatColor.DARK_GREEN + " ---\n" + header;
+                String pMsg = (ChatColor.DARK_GREEN + "--- " + ChatColor.YELLOW + ownedLandString + ChatColor.DARK_GREEN + " ---" + ChatColor.YELLOW + " ")
+                        .replace("#{pageNum}", pageNum)
+                        + ChatColor.DARK_GREEN + " ---\n" + header;
+
+
+                if (pageNumber == numPages) {
+                    for (int i = (numPerPage * pageNumber - numPerPage); i < landList.size(); i++) {
+                        pMsg += landList.get(i);
                     }
-                    pMsg+=ChatColor.DARK_GREEN+"------------------------------";    //mess
+                    pMsg += ChatColor.DARK_GREEN + "------------------------------";
                 } else {
-                    for(int i = (numPerPage*pageNumber-numPerPage); i<(numPerPage*pageNumber); i++){
-                        pMsg+=landList.get(i);
+                    for (int i = (numPerPage * pageNumber - numPerPage); i < (numPerPage * pageNumber); i++) {
+                        pMsg += landList.get(i);
                     }
-                    pMsg+=ChatColor.DARK_GREEN+"--- do"+ChatColor.YELLOW+" /"+label+" list "+(pageNumber+1)+ChatColor.DARK_GREEN+" for next page ---";      //mess
+                    //pMsg += ChatColor.DARK_GREEN + "--- do" + ChatColor.YELLOW + " /" + label + " list " + (pageNumber + 1) + ChatColor.DARK_GREEN + " for next page ---";
+
+                    pMsg += ChatColor.DARK_GREEN + "--- " + ChatColor.YELLOW + nextPageString
+                            .replace("#{label}", "/"+label)
+                            .replace("#{cmd}", args[0])
+                            .replace("#{pageNumber}", "" + pageNumber + 1)
+                            + " ---";
                 }
 
                 player.sendMessage(pMsg);
@@ -97,7 +121,7 @@ public class LandList implements LandlordCommand {
 
     @Override
     public String getHelpText(CommandSender sender) {
-        //mess
+        //mess ready
         String usage = "/#{label} #{cmd}"; // get the base usage string
         String desc = "List all your own land.";   // get the description
 
