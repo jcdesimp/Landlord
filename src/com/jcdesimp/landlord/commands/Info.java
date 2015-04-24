@@ -27,7 +27,7 @@ public class Info implements LandlordCommand {
         String notPlayer = "This command can only be run by a player.";
         String noPerms = "You do not have permission.";
         String noOwner = "None";
-        String landInfoString = "You are in chunk #{chunkCoords} in world #{worldName} \n";
+        String landInfoString = "You are in chunk #{chunkCoords} in world #{worldName} ";
         String landOwnerString = "Owned by: #{ownerName}";
 
         if (!(sender instanceof Player)) {
@@ -62,7 +62,7 @@ public class Info implements LandlordCommand {
                     .replace("#{chunkCoords}",(ChatColor.GOLD + "(" + currChunk.getX() + ", " + currChunk.getZ() + ")" + ChatColor.DARK_GREEN))
                     .replace("#{worldName}", ChatColor.GOLD + "\"" + currChunk.getWorld().getName()  + "\"") +
 
-                    ChatColor.DARK_GREEN + "----- " + landOwnerString.replace("#{ownerName}", owner);
+                    ChatColor.DARK_GREEN + "-----\n" + landOwnerString.replace("#{ownerName}", owner);
             player.sendMessage(msg);
 
         }
