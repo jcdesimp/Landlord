@@ -38,13 +38,27 @@ public class Claim implements LandlordCommand {
      */
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
+
+        // Message data mess ready
+        String notPlayer = "This command can only be run by a player.";                             // When run by non-player
+        String noPerms = "You do not have permission.";                                             // No permissions
+
+        String cannotClaim = "You cannot claim in this world.";                                     // Claiming disabled in this world
+        String alreadyOwn = "You already own this land!";                                           // When you already own this land
+        String otherOwn = "Someone else owns this land.";                                           // Someone else owns this land
+        String noClaimZone = "You cannot claim here.";                                              // You can't claim here! (Worldguard)
+        String ownLimit = "You can only own #{limit} chunks of land.";                              // Chunk limit hit
+        String claimPrice = "It costs #{cost} to purchase land.";                                   // Not enough funds
+        String charged = "You have been charged #{cost} to purchase land.";                         // Charged for claim
+        String success = "Successfully claimed chunk #{chunkCoords} in world \'#{worldName}\'.";    // Chunk claim successful
+
         //is sender a player
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");   //mess
+            sender.sendMessage(ChatColor.DARK_RED + notPlayer);
         } else {
             Player player = (Player) sender;
             if(!player.hasPermission("landlord.player.own")){
-                player.sendMessage(ChatColor.RED+"You do not have permission.");    //mess
+                player.sendMessage(ChatColor.RED+ noPerms);
                 return true;
             }
 
@@ -56,7 +70,7 @@ public class Claim implements LandlordCommand {
             List<String> disabledWorlds = plugin.getConfig().getStringList("disabled-worlds");
             for (String s : disabledWorlds) {
                 if (s.equalsIgnoreCase(currChunk.getWorld().getName())) {
-                    player.sendMessage(ChatColor.RED+"You cannot claim in this world."); //mess
+                    player.sendMessage(ChatColor.RED+ cannotClaim);
                     return true;
                 }
             }
@@ -65,7 +79,7 @@ public class Claim implements LandlordCommand {
             if(plugin.hasWorldGuard()){
                 // if it is make sure that the attempted land claim isn't with a protected worldguard region.
                 if(!plugin.getWgHandler().canClaim(player,currChunk)){
-                    player.sendMessage(ChatColor.RED+"You cannot claim here."); //mess
+                    player.sendMessage(ChatColor.RED + noClaimZone);
                     return true;
                 }
             }
@@ -79,10 +93,10 @@ public class Claim implements LandlordCommand {
             if(dbLand != null){
                 //Check if they already own this land
                 if (dbLand.ownerUUID().equals(player.getUniqueId())){
-                    player.sendMessage(ChatColor.YELLOW + "You already own this land!");    //mess
+                    player.sendMessage(ChatColor.YELLOW + alreadyOwn);
                     return true;
                 }
-                player.sendMessage(ChatColor.YELLOW + "Someone else owns this land.");  //mess
+                player.sendMessage(ChatColor.YELLOW + otherOwn);
                 return true;
 
             }
@@ -103,7 +117,7 @@ public class Claim implements LandlordCommand {
 
             if(limit >= 0 && !player.hasPermission("landlord.limit.override")){
                 if(plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId().toString()).findRowCount() >= limit){
-                    player.sendMessage(ChatColor.RED+"You can only own " + limit + " chunks of land."); //mess
+                    player.sendMessage(ChatColor.RED+ownLimit.replace("#{limit}", ""+limit));
                     return true;
                 }
             }
@@ -117,10 +131,10 @@ public class Claim implements LandlordCommand {
                         if (numFree > 0 && plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId().toString()).findRowCount() < numFree) {
                             //player.sendMessage(ChatColor.YELLOW+"You have been charged " + plugin.getvHandler().formatCash(amt) + " to purchase land.");
                         } else if(!plugin.getvHandler().chargeCash(player, amt)){
-                            player.sendMessage(ChatColor.RED+"It costs " + plugin.getvHandler().formatCash(amt) + " to purchase land.");    //mess
+                            player.sendMessage(ChatColor.RED+ claimPrice.replace("#{cost}", plugin.getvHandler().formatCash(amt)));
                             return true;
                         } else {
-                            player.sendMessage(ChatColor.YELLOW+"You have been charged " + plugin.getvHandler().formatCash(amt) + " to purchase land.");    //mess
+                            player.sendMessage(ChatColor.YELLOW+ charged.replace("#{cost}", plugin.getvHandler().formatCash(amt)));
                         }
                     }
 
@@ -129,8 +143,9 @@ public class Claim implements LandlordCommand {
             Landlord.getInstance().getDatabase().save(land);
             land.highlightLand(player, Effect.HAPPY_VILLAGER);
             sender.sendMessage(
-                    ChatColor.GREEN + "Successfully claimed chunk (" + currChunk.getX() + ", " +
-                            currChunk.getZ() + ") in world \'" + currChunk.getWorld().getName() + "\'." );  //mess
+                    ChatColor.GREEN + success
+                            .replace("#{chunkCoords}", "(" + currChunk.getX() + ", " + currChunk.getZ() + ")")
+                            .replace("#{worldName}", currChunk.getWorld().getName()));
 
             if(plugin.getConfig().getBoolean("options.soundEffects",true)){
                 player.playSound(player.getLocation(), Sound.FIREWORK_TWINKLE2,10,10);
@@ -146,7 +161,7 @@ public class Claim implements LandlordCommand {
     @Override
     public String getHelpText(CommandSender sender) {
 
-        //mess ready
+        //Message data mess ready
         String usage = "/#{label} #{cmd}";                      // get the base usage string
         String desc = "Claim this chunk.";                      // get the description
         String priceWarning = "Costs #{pricetag} to claim.";    // get the price warning message
