@@ -25,22 +25,28 @@ public class ShowMap implements LandlordCommand {
      */
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
+        //mess ready
+        String mapDisabled = "Land map is disabled.";
+        String notPlayer = "This command can only be run by a player.";
+        String noPerms = "You do not have permission.";
+        String noMap = "Map unavailable.";
+
         if(!plugin.getConfig().getBoolean("options.enableMap", true)){      //conf
-            sender.sendMessage(ChatColor.YELLOW+"Land Map is disabled.");   //mess
+            sender.sendMessage(ChatColor.YELLOW+mapDisabled);
             return true;
         }
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");   //mess
+            sender.sendMessage(ChatColor.DARK_RED + notPlayer);
         } else {
             Player player = (Player) sender;
             if(!player.hasPermission("landlord.player.map")){
-                player.sendMessage(ChatColor.RED+"You do not have permission.");    //mess
+                player.sendMessage(ChatColor.RED+noPerms);
                 return true;
             }
             try {
                 plugin.getMapManager().toggleMap(player);
             } catch (Exception e) {
-                sender.sendMessage(ChatColor.RED+"Map unavailable.");   //mess
+                sender.sendMessage(ChatColor.RED+noMap); 
             }
 
         }
