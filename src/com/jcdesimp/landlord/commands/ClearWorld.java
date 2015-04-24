@@ -25,8 +25,20 @@ public class ClearWorld implements LandlordCommand {
 
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
+
+        // Message Data mess ready
+        String usage = "/#{label} #{cmd} clearworld <world> [<player>]";
+
+        String noPerms = "You do not have permission.";
+        String unknownPlayer = "That player is not recognized.";
+        String notConsole = "You can only delete entire worlds from the console.";
+        String noLand = "No land to remove.";
+        String confirmation = "Land(s) deleted!";
+
+
+
         if(!sender.hasPermission("landlord.admin.clearworld")){
-            sender.sendMessage(ChatColor.RED+"You do not have permission.");        //mess
+            sender.sendMessage(ChatColor.RED+noPerms);
             return true;
         }
         if(args.length > 1){
@@ -39,28 +51,28 @@ public class ClearWorld implements LandlordCommand {
                  */
                 OfflinePlayer possible = getOfflinePlayer(args[2]);
                 if (!possible.hasPlayedBefore() && !possible.isOnline()) {
-                    sender.sendMessage(ChatColor.RED+"That player is not recognized.");     //mess
+                    sender.sendMessage(ChatColor.RED + unknownPlayer);
                     return true;
                 }
                 land = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",possible.getUniqueId().toString()).eq("worldName",args[1]).findList();
             } else {
                 if(sender instanceof Player){
-                    sender.sendMessage(ChatColor.RED+"You can only delete entire worlds from the console.");    //mess
+                    sender.sendMessage(ChatColor.RED+notConsole);
                     return true;
                 }
                 land = plugin.getDatabase().find(OwnedLand.class).where().eq("worldName",args[1]).findList();
             }
             if(land.isEmpty()){
-                sender.sendMessage(ChatColor.RED + "No land to remove.");       //mess
+                sender.sendMessage(ChatColor.RED + noLand);
                 return true;
             }
 
             plugin.getDatabase().delete(land);
             plugin.getMapManager().updateAll();
-            sender.sendMessage(ChatColor.GREEN+"Land(s) deleted!");     //mess
+            sender.sendMessage(ChatColor.GREEN+ confirmation);
 
         } else {
-            sender.sendMessage(ChatColor.RED + "format: " + label + " clearworld <world> [<player>]");  //mess DUPE OF HELP, should probably make call to getHelpText
+            sender.sendMessage(ChatColor.RED + usage.replace("#{label}", label).replace("#{cmd}", args[0]) );
         }
         return true;
     }
@@ -74,7 +86,7 @@ public class ClearWorld implements LandlordCommand {
         }
 
 
-        //mess ready
+        // Message Data mess ready
         String usage = "/#{label} #{cmd} <world> [player]";             // get the base usage string
         String desc = "Delete all land owned by a player in a " +       // get the description
                 "world. Delete all land of a world (console only).";
