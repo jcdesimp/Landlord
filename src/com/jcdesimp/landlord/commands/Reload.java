@@ -25,12 +25,17 @@ public class Reload implements LandlordCommand {
      */
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
+
+        //mess ready
+        String configReloaded = "Landlord config reloaded.";
+        String noPerms = "You do not have permission.";
+
         if(sender.hasPermission("landlord.admin.reload")){
             plugin.reloadConfig();
-            sender.sendMessage(ChatColor.GREEN+"Landlord config reloaded.");        //mess
+            sender.sendMessage(ChatColor.GREEN+configReloaded);
             return true;
         }
-        sender.sendMessage(ChatColor.RED+"You do not have permission.");    //mess
+        sender.sendMessage(ChatColor.RED+noPerms);    
         return true;
     }
 
