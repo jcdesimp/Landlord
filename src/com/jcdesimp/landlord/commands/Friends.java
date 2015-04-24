@@ -28,23 +28,37 @@ public class Friends implements LandlordCommand {
 
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
+
+        //mess ready
+        String notPlayer = "This command can only be run by a player.";
+        String noPerms = "You do not have permission.";
+        String notOwner = "You do not own this land.";
+        String badPageNum = "That is not a valid page number.";
+        String friendListHeader = "Friends of this Land";
+        String noFriends = "This land has no friends.";
+        String onlineString = "Online";
+        String offlineString = "Offline";
+        String invalidPage = "That is not a valid page number.";
+        String nextPageString = "do #{label} #{cmd} #{pageNumber} for next page";
+
+
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");   //mess
+            sender.sendMessage(ChatColor.DARK_RED + notPlayer);
         } else {
             Player player = (Player) sender;
             if(!player.hasPermission("landlord.player.own")){
-                player.sendMessage(ChatColor.RED+"You do not have permission.");        //mess
+                player.sendMessage(ChatColor.RED+ noPerms);
                 return true;
             }
             Chunk currChunk = player.getLocation().getChunk();
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
             if( land == null || ( !land.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.friends") ) ){
-                player.sendMessage(ChatColor.RED + "You do not own this land.");    //mess
+                player.sendMessage(ChatColor.RED + notOwner);
                 return true;
             }
-            if(!land.getOwnerName().equals(player.getUniqueId())){
-                //player.sendMessage(ChatColor.YELLOW+"Viewing friends of someone else's land.");
-            }
+//            if(!land.getOwnerName().equals(player.getUniqueId())){
+//                //player.sendMessage(ChatColor.YELLOW+"Viewing friends of someone else's land.");
+//            }
             if(plugin.getConfig().getBoolean("options.particleEffects",true)) {     //conf
                 land.highlightLand(player, Effect.HEART, 3);
             }
@@ -54,31 +68,30 @@ public class Friends implements LandlordCommand {
                 try {
                     pageNumber = Integer.parseInt(args[1]);
                 } catch (NumberFormatException e){
-                    player.sendMessage(ChatColor.RED+"That is not a valid page number.");       //mess
+                    player.sendMessage(ChatColor.RED+ badPageNum);
                     return true;
                 }
             }
 
             //List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getName()).findList();
 
-            String header = ChatColor.DARK_GREEN + "----- Friends of this Land -----\n";        //mess
-
+            String header = ChatColor.DARK_GREEN + "----- " + friendListHeader + " -----\n";
             ArrayList<String> friendList = new ArrayList<String>();
             if(land.getFriends().isEmpty()){
-                player.sendMessage(ChatColor.YELLOW+"This land has no friends.");   //mess
+                player.sendMessage(ChatColor.YELLOW+noFriends);
                 return true;
             }
             for(Friend f: land.getFriends()){
-                String fr = ChatColor.DARK_GREEN+" - "+ChatColor.GOLD+f.getName()+ChatColor.DARK_GREEN+" - ";   //mess
+                String fr = ChatColor.DARK_GREEN+" - "+ChatColor.GOLD+f.getName()+ChatColor.DARK_GREEN+" - ";
                 /*
                  * *************************************
                  * mark for possible change    !!!!!!!!!
                  * *************************************
                  */
                 if(Bukkit.getOfflinePlayer(f.getUUID()).isOnline()){
-                    fr+= ChatColor.GREEN+""+ChatColor.ITALIC+" Online"; //mess
+                    fr+= ChatColor.GREEN+""+ChatColor.ITALIC+ onlineString;
                 } else {
-                    fr+= ChatColor.RED+""+ChatColor.ITALIC+" Offline";  //mess
+                    fr+= ChatColor.RED+""+ChatColor.ITALIC+ offlineString;
                 }
 
                 fr+="\n";
@@ -90,7 +103,7 @@ public class Friends implements LandlordCommand {
 
             int numPages = ceil((double)friendList.size()/(double)numPerPage);
             if(pageNumber > numPages){
-                sender.sendMessage(ChatColor.RED+"That is not a valid page number.");   //mess
+                sender.sendMessage(ChatColor.RED+invalidPage);
                 return true;
             }
             String pMsg = header;
@@ -98,14 +111,17 @@ public class Friends implements LandlordCommand {
                 for(int i = (numPerPage*pageNumber-numPerPage); i<friendList.size(); i++){
                     pMsg+=friendList.get(i);
                 }
-                pMsg+=ChatColor.DARK_GREEN+"------------------------------";    //mess
+                pMsg+=ChatColor.DARK_GREEN+"------------------------------";
             } else {
                 for(int i = (numPerPage*pageNumber-numPerPage); i<(numPerPage*pageNumber); i++){
                     pMsg+=friendList.get(i);
                 }
 
-                //mess
-                pMsg+=ChatColor.DARK_GREEN+"--- do"+ChatColor.YELLOW+" /"+label+" friends "+(pageNumber+1)+ChatColor.DARK_GREEN+" for next page ---";
+                pMsg += "\n" + ChatColor.DARK_GREEN + "--- " + nextPageString
+                        .replace("#{label}",ChatColor.YELLOW + "/" + label)
+                        .replace("#{cmd}", args[0])
+                        .replace("#{pageNumber}", "" + (pageNumber + 1) + ChatColor.DARK_GREEN)
+                        + " ---";
             }
             player.sendMessage(pMsg);
 
@@ -117,7 +133,7 @@ public class Friends implements LandlordCommand {
     @Override
     public String getHelpText(CommandSender sender) {
 
-        //mess
+        //mess ready
         String usage = "/#{label} #{cmd}"; // get the base usage string
         String desc = "List friends of this land.";   // get the description
 
