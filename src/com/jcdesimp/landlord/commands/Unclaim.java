@@ -29,19 +29,33 @@ public class Unclaim implements LandlordCommand {
     /**
      * Called when landlord unclaim command is executed
      * This command must be run by a player
+     *
      * @param sender who executed the command
-     * @param args given with costp[mmand
+     * @param args   given with costp[mmand
      * @return boolean
      */
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
+
+        //mess ready
+        String notPlayer = "This command can only be run by a player.";
+        String noPerms = "You do not have permission.";
+        String noClaim = "You cannot claim in this world.";
+        String noWorld = "World #{worldName} does not exist.";
+        String usageString = "usage: /#{label} #{command} [x, y] [world].";
+        String notYourLand = "You do not own this land.";
+        String landSold = "Land sold for #{amount}.";
+        String unclaimOther = "Unclaimed #{player}'s land";
+        String unclaimed = "Successfully unclaimed chunk #{chunkCoords} in world #{worldName}.";
+
+
         //is sender a player
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");   //mess
+            sender.sendMessage(ChatColor.DARK_RED + notPlayer);
         } else {
             Player player = (Player) sender;
-            if(!player.hasPermission("landlord.player.own") && !player.hasPermission("landlord.admin.unclaim")){
-                player.sendMessage(ChatColor.RED+"You do not have permission.");                    //mess
+            if (!player.hasPermission("landlord.player.own") && !player.hasPermission("landlord.admin.unclaim")) {
+                player.sendMessage(ChatColor.RED + noPerms);
                 return true;
             }
             //sender.sendMessage(ChatColor.GOLD + "Current Location: " + player.getLocation().toString());
@@ -54,78 +68,89 @@ public class Unclaim implements LandlordCommand {
             List<String> disabledWorlds = plugin.getConfig().getStringList("disabled-worlds");  //conf
             for (String s : disabledWorlds) {
                 if (s.equalsIgnoreCase(currChunk.getWorld().getName())) {
-                    player.sendMessage(ChatColor.RED+"You cannot claim in this world.");            //mess
+                    player.sendMessage(ChatColor.RED + noClaim);
                     return true;
                 }
             }
 
 
-            if(args.length>1){
-                try{
+            if (args.length > 1) {
+                try {
                     String[] coords = args[1].split(",");
                     //System.out.println("COORDS: "+coords);
                     x = Integer.parseInt(coords[0]);
                     z = Integer.parseInt(coords[1]);
-                    currChunk = currChunk.getWorld().getChunkAt(x,z);
-                    if(args.length>2){
+                    currChunk = currChunk.getWorld().getChunkAt(x, z);
+                    if (args.length > 2) {
 
-                        if(plugin.getServer().getWorld(worldname) == null){
-                            player.sendMessage(ChatColor.RED + "World \'"+worldname + "\' does not exist.");    //mess
+                        if (plugin.getServer().getWorld(worldname) == null) {
+                            player.sendMessage(ChatColor.RED + noWorld.replace("#{worldName}", "'" + worldname + "'"));
                             return true;
                         }
                         currChunk = getWorld(worldname).getChunkAt(x, z);
 
                     }
-                } catch (NumberFormatException e){
+                } catch (NumberFormatException e) {
                     //e.printStackTrace();
-                    player.sendMessage(ChatColor.RED+"usage: /"+label +" "+ args[0]+ " [x,z] [world]"); //mess
+                    player.sendMessage(ChatColor.RED + usageString
+                                    .replace("#{label}", label)
+                                    .replace("#{command}", args[0])
+
+                    );
                     return true;
 
-                } catch (ArrayIndexOutOfBoundsException e){
-                    player.sendMessage(ChatColor.RED+"usage: /"+label +" "+ args[0]+" [x,z] [world]");  //mess
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    player.sendMessage(ChatColor.RED + usageString
+                                    .replace("#{label}", label)
+                                    .replace("#{command}", args[0])
+
+                    );
                     return true;
                 }
             }
             OwnedLand dbLand = OwnedLand.getLandFromDatabase(x, z, worldname);
 
 
-            if (dbLand == null || (!dbLand.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.unclaim"))){
-                player.sendMessage(ChatColor.RED + "You do not own this land.");    //mess
+            if (dbLand == null || (!dbLand.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.unclaim"))) {
+                player.sendMessage(ChatColor.RED + notYourLand);
                 return true;
             }
-            if(plugin.hasVault()){
-                if(plugin.getvHandler().hasEconomy()){
+            if (plugin.hasVault()) {
+                if (plugin.getvHandler().hasEconomy()) {
                     Double amt = plugin.getConfig().getDouble("economy.sellPrice", 100.0);  //conf
-                    if(amt > 0){
+                    if (amt > 0) {
                         int numFree = plugin.getConfig().getInt("economy.freeLand", 0);
-                        if (numFree > 0 && plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId().toString()).findRowCount() <= numFree) {
+                        if (numFree > 0 && plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName", player.getUniqueId().toString()).findRowCount() <= numFree) {
                             //player.sendMessage(ChatColor.YELLOW+"You have been charged " + plugin.getvHandler().formatCash(amt) + " to purchase land.");
-                        } else if(plugin.getvHandler().giveCash(player, amt)){
-                            player.sendMessage(ChatColor.GREEN+"Land sold for " + plugin.getvHandler().formatCash(amt) + ".");  //mess
+                        } else if (plugin.getvHandler().giveCash(player, amt)) {
+                            player.sendMessage(ChatColor.GREEN + landSold.replace("#{amount}", plugin.getvHandler().formatCash(amt)));
                             //return true;
                         }
                     }
 
                 }
             }
-            if(!player.getUniqueId().equals(dbLand.ownerUUID())){
-                player.sendMessage(ChatColor.YELLOW+"Unclaimed " + getOfflinePlayer(dbLand.ownerUUID()).getName() + "'s land.");    //mess
+            if (!player.getUniqueId().equals(dbLand.ownerUUID())) {
+                player.sendMessage(ChatColor.YELLOW + unclaimOther.replace("#{player}", getOfflinePlayer(dbLand.ownerUUID()).getName()));
             }
             plugin.getDatabase().delete(dbLand);
             dbLand.highlightLand(player, Effect.WITCH_MAGIC);
-
+            
             sender.sendMessage(
-                    ChatColor.YELLOW + "Successfully unclaimed chunk (" + currChunk.getX() + ", " +         //mess
-                            currChunk.getZ() + ") in world \'" + currChunk.getWorld().getName() + "\'."
+                    ChatColor.YELLOW + unclaimed
+                            .replace("#{chunkCoords}",
+                                    "(" + currChunk.getX() + ", " + currChunk.getZ() + ")"
+                            )
+                            .replace("#{worldName}", currChunk.getWorld().getName())
             );
 
             //Regen land if enabled
-            if(plugin.getConfig().getBoolean("options.regenOnUnclaim",false)){
-                currChunk.getWorld().regenerateChunk(currChunk.getX(),currChunk.getZ());
+            if (plugin.getConfig().getBoolean("options.regenOnUnclaim", false)) {
+                currChunk.getWorld().regenerateChunk(currChunk.getX(), currChunk.getZ());
             }
 
-            if(plugin.getConfig().getBoolean("options.soundEffects",true)){
-                player.playSound(player.getLocation(), Sound.ENDERMAN_HIT,10,.5f);
+            if (plugin.getConfig().getBoolean("options.soundEffects", true)) {
+                player.playSound(player.getLocation(), Sound.ENDERMAN_HIT, 10, .5f);
             }
             plugin.getMapManager().updateAll();
 
@@ -148,17 +173,17 @@ public class Unclaim implements LandlordCommand {
 
         if (plugin.hasVault()) {
             if (plugin.getvHandler().hasEconomy() && plugin.getConfig().getDouble("economy.sellPrice", 50.0) > 0) { //conf
-                helpString += ChatColor.YELLOW+" "+ChatColor.ITALIC+ priceWarning
+                helpString += ChatColor.YELLOW + " " + ChatColor.ITALIC + priceWarning
                         .replace(
-                            "#{pricetag}",                  // insert the formatted price string
-                            plugin.getvHandler().formatCash(plugin.getConfig().getDouble("economy.sellPrice", 50.0))        //conf
+                                "#{pricetag}",                  // insert the formatted price string
+                                plugin.getvHandler().formatCash(plugin.getConfig().getDouble("economy.sellPrice", 50.0))        //conf
                         );
             }
         }
 
         // add chunk regen warning if needed
-        if(plugin.getConfig().getBoolean("options.regenOnUnclaim",false)) {
-            helpString+=ChatColor.RED + " " + ChatColor.ITALIC + regenWarning;
+        if (plugin.getConfig().getBoolean("options.regenOnUnclaim", false)) {
+            helpString += ChatColor.RED + " " + ChatColor.ITALIC + regenWarning;
         }
 
         // return the constructed and colorized help string
