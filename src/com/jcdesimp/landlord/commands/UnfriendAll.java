@@ -26,17 +26,25 @@ public class UnfriendAll implements LandlordCommand {
 
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
+
+        //mess ready
+        String notPlayer = "This command can only be run by a player.";
+        String usageString = "usage: /#{label} #{command} <player>";
+        String noPerms = "You do not have permission.";
+        String unknownPlayer = "That player is not recognized.";
+        String playerRemoved = "#{playername} has been removed as a friend from all of your land.";
+        String noLand = "You do not own any land!";
+
         //is sender a player
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");   //mess
+            sender.sendMessage(ChatColor.DARK_RED + notPlayer);
         } else {
             if (args.length < 2) {
-                sender.sendMessage(ChatColor.RED + "usage: /land unfriendall <player>");    //mess
-                return true;
+                sender.sendMessage(ChatColor.RED + usageString.replace("#label}", label).replace("#{command}", args[0]));
             }
             Player player = (Player) sender;
             if (!player.hasPermission("landlord.player.own")) {
-                player.sendMessage(ChatColor.RED + "You do not have permission.");  //mess
+                player.sendMessage(ChatColor.RED + noPerms);
                 return true;
             }
 
@@ -44,7 +52,7 @@ public class UnfriendAll implements LandlordCommand {
 
             OfflinePlayer possible = getOfflinePlayer(args[1]);
             if (!possible.hasPlayedBefore() && !possible.isOnline()) {
-                player.sendMessage(ChatColor.RED + "That player is not recognized.");       //mess
+                player.sendMessage(ChatColor.RED + unknownPlayer);
                 return true;
             }
 
@@ -52,14 +60,13 @@ public class UnfriendAll implements LandlordCommand {
                 for(OwnedLand l : pLand){
                     l.removeFriend(Friend.friendFromOfflinePlayer(getOfflinePlayer(args[1])));
                 }
-
+                
                 plugin.getDatabase().save(pLand);
 
-
-                player.sendMessage(ChatColor.GREEN+args[1]+" has been removed as a friend from all of your land."); //mess
+                player.sendMessage(ChatColor.GREEN+playerRemoved.replace("#{playername}", args[1]));
                 return true;
             } else {
-                player.sendMessage(ChatColor.YELLOW+"You do not own any land!");    //mess
+                player.sendMessage(ChatColor.YELLOW + noLand);
             }
 
         }
