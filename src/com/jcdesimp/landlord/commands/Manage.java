@@ -27,26 +27,36 @@ public class Manage implements LandlordCommand {
      */
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
+
+
+        //mess ready
+        String notPlayer = "This command can only be run by a player.";
+        String noPerms = "You do not have permission.";
+        String noLand = "There is nothing ot manage!";
+        String notOwner = "You do not own this land.";
+        String otherLand = "Managing someone else's land.";
+
+
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");   //mess
+            sender.sendMessage(ChatColor.DARK_RED + notPlayer);
         } else {
             Player player = (Player) sender;
             if(!player.hasPermission("landlord.player.own")){
-                player.sendMessage(ChatColor.RED+"You do not have permission.");                    //mess
+                player.sendMessage(ChatColor.RED+noPerms);
                 return true;
             }
             if(plugin.getFlagManager().getRegisteredFlags().size() <= 0){
-                player.sendMessage(ChatColor.RED+"There is nothing to manage!");                    //mess
+                player.sendMessage(ChatColor.RED+noLand);
                 return true;
             }
             Chunk currChunk = player.getLocation().getChunk();
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
             if( land == null || ( !land.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.manage") ) ){
-                player.sendMessage(ChatColor.RED + "You do not own this land.");        //mess
+                player.sendMessage(ChatColor.RED + notOwner);
                 return true;
             }
             if(!land.ownerUUID().equals(player.getUniqueId())){
-                player.sendMessage(ChatColor.YELLOW+"Managing someone else's land.");      //mess
+                player.sendMessage(ChatColor.YELLOW+otherLand);   
             }
             plugin.getManageViewManager().activateView(player, land);
 
