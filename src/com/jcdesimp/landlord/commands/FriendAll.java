@@ -26,6 +26,9 @@ public class FriendAll implements LandlordCommand {
 
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
+        // Message Data mess ready
+        String notPlayer = "";
+
         //is sender a player
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");   //mess
