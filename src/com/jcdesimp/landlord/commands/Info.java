@@ -22,17 +22,25 @@ public class Info implements LandlordCommand {
 
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
+
+        //mess ready
+        String notPlayer = "This command can only be run by a player.";
+        String noPerms = "You do not have permission.";
+        String noOwner = "None";
+        String landInfoString = "You are in chunk #{chunkCoords} in world #{worldName} \n";
+        String landOwnerString = "Owned by: #{ownerName}";
+
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");   //mess
+            sender.sendMessage(ChatColor.DARK_RED + notPlayer);
         } else {
             Player player = (Player) sender;
             if(!player.hasPermission("landlord.player.info")){
-                player.sendMessage(ChatColor.RED+"You do not have permission.");        //mess
+                player.sendMessage(ChatColor.RED+noPerms);
                 return true;
             }
             Chunk currChunk = player.getLocation().getChunk();
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
-            String owner = ChatColor.GRAY + "" + ChatColor.ITALIC + "None";     //mess
+            String owner = ChatColor.GRAY + "" + ChatColor.ITALIC + noOwner;
             if( land != null ){
 
                 /*
@@ -49,10 +57,12 @@ public class Info implements LandlordCommand {
                 land.highlightLand(player, Effect.LAVADRIP);
             }
 
-            //mess
-            String msg = ChatColor.DARK_GREEN + "--- You are in chunk " + ChatColor.GOLD + "(" + currChunk.getX() + ", " + currChunk.getZ() + ") " +
-                    ChatColor.DARK_GREEN + " in world \"" + ChatColor.GOLD + currChunk.getWorld().getName()  + ChatColor.DARK_GREEN + "\"\n"+ "----- Owned by: " +
-                    owner;
+            // Build the land info string
+            String msg = ChatColor.DARK_GREEN + "--- " + landInfoString
+                    .replace("#{chunkCoords}",(ChatColor.GOLD + "(" + currChunk.getX() + ", " + currChunk.getZ() + ")" + ChatColor.DARK_GREEN))
+                    .replace("#{worldName}", ChatColor.GOLD + "\"" + currChunk.getWorld().getName()  + "\"") +
+
+                    ChatColor.DARK_GREEN + "----- " + landOwnerString.replace("#{ownerName}", owner);
             player.sendMessage(msg);
 
         }
