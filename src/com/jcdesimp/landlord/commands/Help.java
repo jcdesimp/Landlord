@@ -32,9 +32,17 @@ public class Help implements LandlordCommand {
 
 
 
-    //mess - Pretty much this entire thing, generic help refactor as well from individual command help text
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
+
+        //mess ready
+        String badPageNum = "That is not a valid page number.";
+        String helpHeader = "Landlord #{version} Created by #{author}";
+        String aliases = "Aliases: #{aliases}";
+        String nextPageString = "do #{label} #{cmd} #{pageNumber} for next page";
+
+        String aliasList = "/landlord, /land, /ll";
+
         //check if page number is valid
         int pageNumber = 1;
         if (args.length > 1 && Arrays.asList(getTriggers()).contains(args[0]) ) {
@@ -42,21 +50,20 @@ public class Help implements LandlordCommand {
                 pageNumber = Integer.parseInt(args[1]);
             } catch (NumberFormatException e){
                 // Is not a number!
-                sender.sendMessage(ChatColor.RED+"That is not a valid page number.");   //mess
+                sender.sendMessage(ChatColor.RED+badPageNum);
                 return true;
             }
         }
 
-        // generate the help list
-
-        String helpHeader = "--|| Landlord v#{version} Created by #{author} ||--";      //mess ready
-        String aliases = "(Aliases: /landlord, land, /ll)";                             //mess ready
 
         // construct the header form the base strings
-        String header = ChatColor.DARK_GREEN + helpHeader                                   // start out with the initial header
-                .replace("#{version}", plugin.getDescription().getVersion())                // fill in the version
-                .replace("#{author}", ChatColor.BLUE + "Jcdesimp" + ChatColor.DARK_GREEN)   // fill in the author name
-                + '\n' + aliases;                                                           // add the aliases line
+        String header = ChatColor.DARK_GREEN
+                + "-|| " +
+                helpHeader                                                                  // start out with the initial header
+        .replace("#{version}", "v" + plugin.getDescription().getVersion())                  // fill in the version
+                .replace("#{author}", ChatColor.BLUE + plugin.getDescription().getAuthors().get(0) + ChatColor.DARK_GREEN)   // fill in the author name
+                + " ||--" +
+        "\n   " + ChatColor.GRAY + aliases.replace("#{aliases}", aliasList);                                  // add the aliases line
 
         ArrayList<String> helpList = new ArrayList<String>();
 
@@ -74,7 +81,7 @@ public class Help implements LandlordCommand {
 
         int numPages = ceil((double)helpList.size()/(double)numPerPage);
         if(pageNumber > numPages){
-            sender.sendMessage(ChatColor.RED+"That is not a valid page number.");       //mess
+            sender.sendMessage(ChatColor.RED+badPageNum);
             return true;
         }
         String pMsg = header;
@@ -87,7 +94,12 @@ public class Help implements LandlordCommand {
             for(int i = (numPerPage*pageNumber-numPerPage); i<(numPerPage*pageNumber); i++){
                 pMsg+= '\n' + helpList.get(i);
             }
-            pMsg+=ChatColor.DARK_GREEN+"\n--- do"+ChatColor.YELLOW+" /"+label+" help "+(pageNumber+1)+ChatColor.DARK_GREEN+" for next page ---";        //mess
+
+            pMsg += "\n" + ChatColor.DARK_GREEN + "--- " + nextPageString
+                    .replace("#{label}",ChatColor.YELLOW + "/" + label)
+                    .replace("#{cmd}", args[0])
+                    .replace("#{pageNumber}", "" + (pageNumber + 1) + ChatColor.DARK_GREEN)
+                    + " ---";
         }
 
         sender.sendMessage(pMsg);
@@ -96,7 +108,8 @@ public class Help implements LandlordCommand {
 
     @Override
     public String getHelpText(CommandSender sender) {
-        //mess
+
+        //mess ready
         String usage = "/#{label} #{cmd} [page #]"; // get the base usage string
         String desc = "Show this help message.";   // get the description
 
