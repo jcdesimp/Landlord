@@ -65,6 +65,10 @@ public class Friend {
     }
 
     public String getName() {
+
+        //mess ready
+        String unknownFriend = "Unknown";
+
         /*
          * *************************************
          * mark for possible change    !!!!!!!!!
@@ -72,7 +76,7 @@ public class Friend {
          */
         OfflinePlayer op = getOfflinePlayer(UUID.fromString(playerName));
         if (!op.hasPlayedBefore() && !op.isOnline()) {
-            return ChatColor.ITALIC+"Unknown";  //mess
+            return ChatColor.ITALIC+unknownFriend;
         }
         return op.getName();
     }
