@@ -120,13 +120,17 @@ public class OwnedLand {
     }
 
     public String getOwnerUsername() {
+
+        //mess ready
+        String unknownUser = "Unknown";
+
         /*
          * *************************************
          * mark for possible change    !!!!!!!!!
          * *************************************
          */
         if (!getOfflinePlayer(UUID.fromString(ownerName)).hasPlayedBefore() && !getOfflinePlayer(UUID.fromString(ownerName)).isOnline()) {
-            return ChatColor.ITALIC+"Unknown";      //mess
+            return ChatColor.ITALIC+unknownUser;
         }
         return getOfflinePlayer(UUID.fromString(ownerName)).getName();
     }
