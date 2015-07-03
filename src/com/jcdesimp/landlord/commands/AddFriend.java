@@ -5,7 +5,10 @@ import com.jcdesimp.landlord.persistantData.Friend;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 import static org.bukkit.Bukkit.getOfflinePlayer;
 
@@ -34,16 +37,16 @@ public class AddFriend implements LandlordCommand {
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
         //is sender a player
+        FileConfiguration messages = plugin.getMessageConfig();
 
-        // Message Data mess ready
-        String usage = "/#{label} #{cmd} <player>";
-        String notPlayer = "This command can only be run by a player.";
-        String noPerms = "You do not have permission.";
+        String usage = messages.getString("commands.addFriend.usage");
+        String notPlayer = messages.getString("info.warnings.playerCommand");
+        String noPerms = messages.getString("info.warnings.noPerms");
 
-        String notOwner = "You do not own this land.";
-        String unknownPlayer = "That player is not recognized.";
-        String alreadyFriend = "Player #{player} is already a friend of this land.";
-        String nowFriend = "Player #{player} is now a friend of this land.";
+        String notOwner = messages.getString("info.warnings.notOwner");
+        String unknownPlayer = messages.getString("info.warnings.unknownPlayer");
+        String alreadyFriend = messages.getString("commands.addFriend.alerts.alreadyFriend");
+        String nowFriend = messages.getString("commands.addFriend.alerts.success");
 
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.DARK_RED + notPlayer);
@@ -101,9 +104,10 @@ public class AddFriend implements LandlordCommand {
 
     @Override
     public String getHelpText(CommandSender sender) {
-        // Message Data mess ready
-        String usage = "/#{label} #{cmd} <player>"; // get the base usage string
-        String desc = "Add friend to this land.";   // get the description
+        FileConfiguration messages = plugin.getMessageConfig();
+
+        String usage = messages.getString("commands.addFriend.usage"); // get the base usage string
+        String desc = messages.getString("commands.addFriend.description");   // get the description
 
         // return the constructed and colorized help string
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
@@ -111,6 +115,7 @@ public class AddFriend implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"friend", "addfriend"}; //mess triggers
+        List<String> triggers = plugin.getMessageConfig().getStringList("commands.addFriend.triggers");
+        return triggers.toArray(new String[triggers.size()]);
     }
 }

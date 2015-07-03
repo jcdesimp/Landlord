@@ -6,3 +6,32 @@ info:
     leaveOtherLand: "Now leaving #{owner}'s land."
     enterOwnLand: "Now entering your land."
     enterOtherLand: "Now entering #{owner}'s land."
+  warnings:
+    playerCommand: "This command can only be run by a player."
+    noPerms: "You do not have permission."
+    unknownPlayer: "That player is not recognized."
+    notOwner: "You do not own this land."
+commands:
+  addFriend:
+    usage: "/#{label} #{cmd} <player>"
+    description: "Add friend to this land."
+    alerts:
+      success: "Player #{player} is now a friend of this land."
+      alreadyFriend: "Player #{player} is already a friend of this land."
+    triggers:
+      - "friend"
+      - "addfriend"
+  claim:
+  clearWorld:
+  friendAll:
+  friends:
+  help:
+  info:
+  landList:
+  listPlayer:
+  manage:
+  reload:
+  showMap:
+  unclaim:
+  unfriend:
+  unfriendAll:
