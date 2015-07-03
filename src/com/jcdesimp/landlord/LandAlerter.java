@@ -1,8 +1,10 @@
 package com.jcdesimp.landlord;
 
+import com.jcdesimp.landlord.configuration.CustomConfig;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,6 +14,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * File created by jcdesimp on 4/30/14.
@@ -21,16 +24,26 @@ public class LandAlerter implements Listener {
 
     HashMap<String,String> landIn = new HashMap<String, String>();
 
-    //mess ready
 
-    String leaveOwn = "Now leaving your land.";
-    String leaveOther = "Now leaving #{owner}'s land.";
-    String enterOwn = "Now entering your land.";
-    String enterOther = "Now entering #{owner}'s land.";
+    private Landlord plugin;
 
+
+    public LandAlerter(Landlord plugin) {
+        this.plugin = plugin;
+    }
 
     public void landAlertPlayer(Player player, Location loc) {
+
+       FileConfiguration messages = plugin.getMessageConfig();
+
+        String leaveOwn = messages.getString("info.alerts.leaveOwnLand");
+        String leaveOther = messages.getString("info.alerts.leaveOtherLand");
+        String enterOwn = messages.getString("info.alerts.enterOwnLand");
+        String enterOther = messages.getString("info.alerts.enterOtherLand");
+
         OwnedLand land = OwnedLand.getApplicableLand(loc);
+
+
 
 
         //Leaving Land

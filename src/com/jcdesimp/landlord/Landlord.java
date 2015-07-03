@@ -67,7 +67,7 @@ public final class Landlord extends JavaPlugin {
         messagesConfig = new CustomConfig(this, "messages/english.yml", "messages/" + (mainConfig.get().getString("options.messagesFile").replace("/",".") ));
 
         // Registering Alert Listener
-        pListen = new LandAlerter();
+        pListen = new LandAlerter(plugin);
         if(getConfig().getBoolean("options.showLandAlerts",true)) {
             getServer().getPluginManager().registerEvents(pListen, this);
         }
