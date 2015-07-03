@@ -95,9 +95,10 @@ public class Help implements LandlordCommand {
                 pMsg+= '\n' + helpList.get(i);
             }
 
+            System.out.println(Arrays.toString(args));
             pMsg += "\n" + ChatColor.DARK_GREEN + "--- " + nextPageString
                     .replace("#{label}",ChatColor.YELLOW + "/" + label)
-                    .replace("#{cmd}", args[0])
+                    .replace("#{cmd}", getTriggers()[0])
                     .replace("#{pageNumber}", "" + (pageNumber + 1) + ChatColor.DARK_GREEN)
                     + " ---";
         }
