@@ -7,6 +7,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Effect;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -39,18 +40,19 @@ public class Claim implements LandlordCommand {
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
 
-        // Message data mess ready
-        String notPlayer = "This command can only be run by a player.";                             // When run by non-player
-        String noPerms = "You do not have permission.";                                             // No permissions
+        FileConfiguration messages = plugin.getMessageConfig();
 
-        String cannotClaim = "You cannot claim in this world.";                                     // Claiming disabled in this world
-        String alreadyOwn = "You already own this land!";                                           // When you already own this land
-        String otherOwn = "Someone else owns this land.";                                           // Someone else owns this land
-        String noClaimZone = "You cannot claim here.";                                              // You can't claim here! (Worldguard)
-        String ownLimit = "You can only own #{limit} chunks of land.";                              // Chunk limit hit
-        String claimPrice = "It costs #{cost} to purchase land.";                                   // Not enough funds
-        String charged = "You have been charged #{cost} to purchase land.";                         // Charged for claim
-        String success = "Successfully claimed chunk #{chunkCoords} in world \'#{worldName}\'.";    // Chunk claim successful
+        String notPlayer = messages.getString("info.warnings.playerCommand");                             // When run by non-player
+        String noPerms = messages.getString("info.warnings.noPerms");                                             // No permissions
+
+        String cannotClaim = messages.getString("commands.claim.alerts.cannotClaim");                                     // Claiming disabled in this world
+        String alreadyOwn = messages.getString("commands.claim.alerts.alreadyOwn");                                           // When you already own this land
+        String otherOwn = messages.getString("commands.claim.alerts.otherOwn");                                           // Someone else owns this land
+        String noClaimZone = messages.getString("commands.claim.alerts.noClaimZone");                                              // You can't claim here! (Worldguard)
+        String ownLimit = messages.getString("commands.claim.alerts.ownLimit");                              // Chunk limit hit
+        String claimPrice = messages.getString("commands.claim.alerts.claimPrice");                                   // Not enough funds
+        String charged = messages.getString("commands.claim.alerts.charged");                         // Charged for claim
+        String success = messages.getString("commands.claim.alerts.success");    // Chunk claim successful
 
         //is sender a player
         if (!(sender instanceof Player)) {
@@ -160,11 +162,11 @@ public class Claim implements LandlordCommand {
 
     @Override
     public String getHelpText(CommandSender sender) {
+        FileConfiguration messages = plugin.getMessageConfig();
 
-        //Message data mess ready
-        String usage = "/#{label} #{cmd}";                      // get the base usage string
-        String desc = "Claim this chunk.";                      // get the description
-        String priceWarning = "Costs #{pricetag} to claim.";    // get the price warning message
+        String usage = messages.getString("commands.claim.usage");                      // get the base usage string
+        String desc = messages.getString("commands.claim.description");                      // get the description
+        String priceWarning = messages.getString("commands.claim.alerts.cost");    // get the price warning message
 
 
         String helpString = ""; // start building the help string
@@ -189,6 +191,7 @@ public class Claim implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"claim", "buy"};    //mess triggers
+        List<String> triggers = plugin.getMessageConfig().getStringList("commands.claim.triggers");
+        return triggers.toArray(new String[triggers.size()]);
     }
 }

@@ -22,6 +22,21 @@ commands:
       - "friend"
       - "addfriend"
   claim:
+    usage: "/#{label} #{cmd}"
+    description: "Claim this chunk."
+    alerts:
+      success: "Successfully claimed chunk #{chunkCoords} in world '#{worldName}'"
+      cost: "Costs #{pricetag} to claim."
+      cannotClaim: "You cannot claim in this world."
+      alreadyOwn: "You already own this land."
+      otherOwn: "Someone else owns this land."
+      noClaimZone: "You cannot claim here."
+      ownLimit: "You can only own #{limit} chunks of land."
+      claimPrice: "It costs #{cost} to purchase land."
+      charged: "You have been charged #{cost} to purchase land."
+    triggers:
+      - "claim"
+      - "buy"
   clearWorld:
   friendAll:
   friends:
