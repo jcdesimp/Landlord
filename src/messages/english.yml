@@ -6,11 +6,13 @@ info:
     leaveOtherLand: "Now leaving #{owner}'s land."
     enterOwnLand: "Now entering your land."
     enterOtherLand: "Now entering #{owner}'s land."
+    nextPage: "do #{label} #{cmd} #{pageNumber} for next page"
   warnings:
     playerCommand: "This command can only be run by a player."
     noPerms: "You do not have permission."
     unknownPlayer: "That player is not recognized."
     notOwner: "You do not own this land."
+    badPage: "That is not a valid page number."
 commands:
   addFriend:
     usage: "/#{label} #{cmd} <player>"
@@ -57,6 +59,15 @@ commands:
       - "friendall"
       - "addfriendall"
   friends:
+    usage: "/#{label} #{cmd}"
+    description: "List friends of this land."
+    alerts:
+      listHeader: "Friends of this Land"
+      noFriends: "This land has no friends"
+      online: "Online"
+      offline: "Offline"
+    triggers:
+      - "friends"
   help:
   info:
   landList:

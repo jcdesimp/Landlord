@@ -8,9 +8,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Effect;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.bukkit.util.NumberConversions.ceil;
 
@@ -28,18 +30,18 @@ public class Friends implements LandlordCommand {
 
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
+        FileConfiguration messages = plugin.getMessageConfig();
 
-        //mess ready
-        String notPlayer = "This command can only be run by a player.";
-        String noPerms = "You do not have permission.";
-        String notOwner = "You do not own this land.";
-        String badPageNum = "That is not a valid page number.";
-        String friendListHeader = "Friends of this Land";
-        String noFriends = "This land has no friends.";
-        String onlineString = "Online";
-        String offlineString = "Offline";
-        String invalidPage = "That is not a valid page number.";
-        String nextPageString = "do #{label} #{cmd} #{pageNumber} for next page";
+        String notPlayer = messages.getString("info.warnings.playerCommand");
+        String noPerms = messages.getString("info.warnings.noPerms");
+        String notOwner = messages.getString("info.warnings.notOwner");
+        String badPageNum = messages.getString("info.warnings.badPage");
+        String friendListHeader = messages.getString("commands.friends.alerts.listHeader");
+        String noFriends = messages.getString("commands.friends.alerts.noFriends");
+        String onlineString = messages.getString("commands.friends.alerts.online");
+        String offlineString = messages.getString("commands.friends.alerts.offline");
+        String invalidPage = messages.getString("info.warnings.badPage");
+        String nextPageString = messages.getString("info.alerts.nextPage");
 
 
         if (!(sender instanceof Player)) {
@@ -132,10 +134,10 @@ public class Friends implements LandlordCommand {
 
     @Override
     public String getHelpText(CommandSender sender) {
+        FileConfiguration messages = plugin.getMessageConfig();
 
-        //mess ready
-        String usage = "/#{label} #{cmd}"; // get the base usage string
-        String desc = "List friends of this land.";   // get the description
+        String usage = messages.getString("commands.friends.usage"); // get the base usage string
+        String desc = messages.getString("commands.friends.description");   // get the description
 
         // return the constructed and colorized help string
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
@@ -144,6 +146,7 @@ public class Friends implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"friends"};     //mess triggers
+        List<String> triggers = plugin.getMessageConfig().getStringList("commands.friends.triggers");
+        return triggers.toArray(new String[triggers.size()]);
     }
 }
