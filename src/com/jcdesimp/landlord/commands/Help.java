@@ -4,9 +4,11 @@ import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.LandlordCommandExecutor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.bukkit.util.NumberConversions.ceil;
 
@@ -34,12 +36,12 @@ public class Help implements LandlordCommand {
 
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
-
+        FileConfiguration messages = plugin.getMessageConfig();
         //mess ready
-        String badPageNum = "That is not a valid page number.";
-        String helpHeader = "Landlord #{version} Created by #{author}";
-        String aliases = "Aliases: #{aliases}";
-        String nextPageString = "do #{label} #{cmd} #{pageNumber} for next page";
+        String badPageNum = messages.getString("info.warnings.badPage");
+        String helpHeader = messages.getString("commands.help.alerts.header");
+        String aliases = messages.getString("commands.help.alerts.aliases");
+        String nextPageString = messages.getString("info.alerts.nextPage");
 
         String aliasList = "/landlord, /land, /ll";
 
@@ -109,9 +111,10 @@ public class Help implements LandlordCommand {
     @Override
     public String getHelpText(CommandSender sender) {
 
-        //mess ready
-        String usage = "/#{label} #{cmd} [page #]"; // get the base usage string
-        String desc = "Show this help message.";   // get the description
+        FileConfiguration messages = plugin.getMessageConfig();
+
+        String usage = messages.getString("commands.help.usage"); // get the base usage string
+        String desc = messages.getString("commands.help.description");   // get the description
 
         // return the constructed and colorized help string
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
@@ -119,6 +122,7 @@ public class Help implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"help", "?"};   //mess triggers
+        List<String> triggers = plugin.getMessageConfig().getStringList("commands.help.triggers");
+        return triggers.toArray(new String[triggers.size()]);
     }
 }

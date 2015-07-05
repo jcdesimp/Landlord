@@ -69,6 +69,14 @@ commands:
     triggers:
       - "friends"
   help:
+    usage: "/#{label} #{cmd} [page #]"
+    description: "Show this help message."
+    alerts:
+      header: "Landlord #{version} Created by #{author}"
+      aliases: "Aliases: #{aliases}"
+    triggers:
+      - "help"
+      - "?"
   info:
   landList:
   listPlayer:
