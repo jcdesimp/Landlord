@@ -37,7 +37,7 @@ public class Help implements LandlordCommand {
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
         FileConfiguration messages = plugin.getMessageConfig();
-        //mess ready
+
         String badPageNum = messages.getString("info.warnings.badPage");
         String helpHeader = messages.getString("commands.help.alerts.header");
         String aliases = messages.getString("commands.help.alerts.aliases");
