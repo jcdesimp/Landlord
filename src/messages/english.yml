@@ -38,6 +38,15 @@ commands:
       - "claim"
       - "buy"
   clearWorld:
+    usage: "/#{label} #{cmd} <world> [player]"
+    description: "Delete all land owned by a player in a world. Delete all land of a world (console only)."
+    alerts:
+      notConsole: "You can only delete entire worlds from the console."
+      chunkWarning: "Does not regenerate chunks."
+      noLand: "No land to remove."
+      success: "Land(s) deleted!"
+    triggers:
+      - "clearworld"
   friendAll:
   friends:
   help:

@@ -5,6 +5,7 @@ import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -26,14 +27,15 @@ public class ClearWorld implements LandlordCommand {
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
 
-        // Message Data mess ready
-        String usage = "/#{label} #{cmd} clearworld <world> [<player>]";
+        FileConfiguration messages = plugin.getMessageConfig();
 
-        String noPerms = "You do not have permission.";
-        String unknownPlayer = "That player is not recognized.";
-        String notConsole = "You can only delete entire worlds from the console.";
-        String noLand = "No land to remove.";
-        String confirmation = "Land(s) deleted!";
+        String usage = messages.getString("commands.clearWorld.usage");
+
+        String noPerms = messages.getString("info.warnings.noPerms");
+        String unknownPlayer = messages.getString("info.warnings.unknownPlayer");
+        String notConsole = messages.getString("commands.clearWorld.alerts.notConsole");
+        String noLand = messages.getString("commands.clearWorld.alerts.noLand");
+        String confirmation = messages.getString("commands.clearWorld.alerts.success");
 
 
 
@@ -85,12 +87,11 @@ public class ClearWorld implements LandlordCommand {
             return null;
         }
 
+        FileConfiguration messages = plugin.getMessageConfig();
 
-        // Message Data mess ready
-        String usage = "/#{label} #{cmd} <world> [player]";             // get the base usage string
-        String desc = "Delete all land owned by a player in a " +       // get the description
-                "world. Delete all land of a world (console only).";
-        String chunkWarning = "Does not regenerate chunks.";            // get the "chunks won't regen" warning
+        String usage = messages.getString("commands.clearWorld.usage");             // get the base usage string
+        String desc = messages.getString("commands.clearWorld.description");
+        String chunkWarning = messages.getString("commands.clearWorld.alerts.chunkWarning");            // get the "chunks won't regen" warning
 
 
         String helpString = ""; // start building the help string
@@ -111,6 +112,7 @@ public class ClearWorld implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"clearworld"};      //mess triggers
+        List<String> triggers = plugin.getMessageConfig().getStringList("commands.clearWorld.triggers");
+        return triggers.toArray(new String[triggers.size()]);
     }
 }
