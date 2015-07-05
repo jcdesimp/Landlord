@@ -48,6 +48,14 @@ commands:
     triggers:
       - "clearworld"
   friendAll:
+    usage: "/#{label} #{cmd} <player>"
+    description: "Add friend to all your land."
+    alerts:
+      success: "#{player} has been added as a friend to all of your land."
+      noLand: "You do not own any land!"
+    triggers:
+      - "friendall"
+      - "addfriendall"
   friends:
   help:
   info:

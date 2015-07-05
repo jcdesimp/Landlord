@@ -6,6 +6,7 @@ import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -26,13 +27,13 @@ public class FriendAll implements LandlordCommand {
 
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
-        // Message Data mess ready
-        String notPlayerString = "This command can only be run by a player.";
-        String usageString = "usage: /#{label} friendall <player>";
-        String noPermsString = "You do not have permission.";
-        String unknownPlayer = "That player is not recognized.";
-        String friendAddedString = "#{player} has been added as a friend to all of your land.";
-        String noLandString = "You do not own any land!";
+        FileConfiguration messages = plugin.getMessageConfig();
+        String notPlayerString = messages.getString("info.warnings.playerCommand");
+        String usageString = messages.getString("commands.friendAll.usage");
+        String noPermsString = messages.getString("info.warnings.noPerms");
+        String unknownPlayer = messages.getString("info.warnings.unknownPlayer");
+        String friendAddedString = messages.getString("commands.friendAll.alerts.success");
+        String noLandString = messages.getString("commands.friendAll.alerts.noLand");
 
 
         //is sender a player
@@ -67,7 +68,7 @@ public class FriendAll implements LandlordCommand {
                 player.sendMessage(ChatColor.GREEN + friendAddedString.replace("#{player}", args[1]));
                 return true;
             } else {
-                player.sendMessage(ChatColor.YELLOW+noLandString);        //mess
+                player.sendMessage(ChatColor.YELLOW+noLandString);
             }
 
         }
@@ -76,10 +77,10 @@ public class FriendAll implements LandlordCommand {
 
     @Override
     public String getHelpText(CommandSender sender) {
+        FileConfiguration messages = plugin.getMessageConfig();
 
-        //mess
-        String usage = "/#{label} #{cmd} <player>"; // get the base usage string
-        String desc = "Add friend to all your land.";   // get the description
+        String usage = messages.getString("commands.friendAll.usage"); // get the base usage string
+        String desc = messages.getString("commands.friendAll.description");   // get the description
 
         // return the constructed and colorized help string
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
@@ -88,6 +89,7 @@ public class FriendAll implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"friendall","addfriendall"};        //mess triggers
+        List<String> triggers = plugin.getMessageConfig().getStringList("commands.friendAll.triggers");
+        return triggers.toArray(new String[triggers.size()]);
     }
 }
