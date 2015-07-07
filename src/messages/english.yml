@@ -7,6 +7,7 @@ info:
     enterOwnLand: "Now entering your land."
     enterOtherLand: "Now entering #{owner}'s land."
     nextPage: "do #{label} #{cmd} #{pageNumber} for next page"
+    noOwner: "None"
   warnings:
     playerCommand: "This command can only be run by a player."
     noPerms: "You do not have permission."
@@ -78,6 +79,13 @@ commands:
       - "help"
       - "?"
   info:
+    usage: "/#{label} #{cmd}"
+    description: "View info about this chunk."
+    alerts:
+      landInfo: "You are in chunk #{chunkCoords} in world #{worldName} "
+      landOwner: "Owned by: #{ownerName}"
+    triggers:
+      - "info"
   landList:
   listPlayer:
   manage:
