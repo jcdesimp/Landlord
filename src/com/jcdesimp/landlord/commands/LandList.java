@@ -4,6 +4,7 @@ import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -34,16 +35,18 @@ public class LandList implements LandlordCommand {
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
 
-        //mess ready
-        String notPlayer = "This command can only be run by a player.";
-        String noPerms = "You do not have permission.";
-        String badPageNum = "That is not a valid page number.";
-        String noLand = "You do not own any land!";
 
-        String outputHeader = "Coords - Chunk Coords - World Name";
-        String ownedLandString =  "Your Owned Land";
-        String pageNum = "Page #{pageNum}";
-        String nextPageString = "do #{label} #{cmd} #{pageNumber} for next page";
+        FileConfiguration messages = plugin.getMessageConfig();
+
+        String notPlayer = messages.getString("info.warnings.playerCommand");
+        String noPerms = messages.getString("info.warnings.noPerms");
+        String badPageNum = messages.getString("info.warnings.badPage");
+        String noLand = messages.getString("commands.landList.alerts.noLand");
+
+        String outputHeader = messages.getString("commands.landList.alerts.listHeader");
+        String ownedLandString = messages.getString("commands.landList.alerts.outputHeader");
+        String pageNum = messages.getString("commands.landList.alerts.pageLabel");
+        String nextPageString = messages.getString("info.alerts.nextPage");
 
 
         if (!(sender instanceof Player)) {
@@ -88,8 +91,8 @@ public class LandList implements LandlordCommand {
                 }
 
                 //String pMsg = ChatColor.DARK_GREEN + "--- " + ChatColor.YELLOW + ownedLandString + ChatColor.DARK_GREEN + " ---" + ChatColor.YELLOW + " Page " + pageNumber + ChatColor.DARK_GREEN + " ---\n" + header;
-                String pMsg = (ChatColor.DARK_GREEN + "--- " + ChatColor.YELLOW + ownedLandString + ChatColor.DARK_GREEN + " ---" + ChatColor.YELLOW + " ")
-                        .replace("#{pageNum}", pageNum)
+                String pMsg = (ChatColor.DARK_GREEN + "--- " + ChatColor.YELLOW + ownedLandString + ChatColor.DARK_GREEN + " --- " + ChatColor.YELLOW + pageNum)
+                        .replace("#{pageNum}", pageNumber+"")
                         + ChatColor.DARK_GREEN + " ---\n" + header;
 
 
@@ -107,8 +110,8 @@ public class LandList implements LandlordCommand {
                     pMsg += ChatColor.DARK_GREEN + "--- " + ChatColor.YELLOW + nextPageString
                             .replace("#{label}", "/"+label)
                             .replace("#{cmd}", args[0])
-                            .replace("#{pageNumber}", "" + pageNumber + 1)
-                            + " ---";
+                            .replace("#{pageNumber}", "" + (pageNumber + 1))
+                            + ChatColor.DARK_GREEN + " ---";
                 }
 
                 player.sendMessage(pMsg);
@@ -121,10 +124,9 @@ public class LandList implements LandlordCommand {
 
     @Override
     public String getHelpText(CommandSender sender) {
-        //mess ready
-        String usage = "/#{label} #{cmd}"; // get the base usage string
-        String desc = "List all your own land.";   // get the description
-
+        FileConfiguration messages = plugin.getMessageConfig();
+        String usage = messages.getString("commands.landList.usage"); // get the base usage string
+        String desc = messages.getString("commands.landList.description");   // get the description
         // return the constructed and colorized help string
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
 
@@ -132,6 +134,7 @@ public class LandList implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"list"};    //mess triggers
+        List<String> triggers = plugin.getMessageConfig().getStringList("commands.landList.triggers");
+        return triggers.toArray(new String[triggers.size()]);
     }
 }

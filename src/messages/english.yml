@@ -87,6 +87,16 @@ commands:
     triggers:
       - "info"
   landList:
+    usage: "/#{label} #{cmd}"
+    description: "List all your own land."
+    alerts:
+      noLand: "You do not own any land!"
+      listHeader: "Coords - Chunk Coords - World Name"
+      outputHeader: "Your Owned land"
+      pageLabel: "Page #{pageNum}"
+    triggers:
+      - "list"
+
   listPlayer:
   manage:
   reload:
