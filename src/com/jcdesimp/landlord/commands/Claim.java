@@ -127,7 +127,9 @@ public class Claim implements LandlordCommand {
                 }
             }
             Landlord.getInstance().getDatabase().save(land);
-            land.highlightLand(player, Effect.HAPPY_VILLAGER);
+            if(plugin.getConfig().getBoolean("options.particleEffects")){
+                land.highlightLand(player, Effect.HAPPY_VILLAGER);
+            }
             sender.sendMessage(
                     ChatColor.GREEN + "Successfully claimed chunk (" + currChunk.getX() + ", " +
                             currChunk.getZ() + ") in world \'" + currChunk.getWorld().getName() + "\'." );  //mess

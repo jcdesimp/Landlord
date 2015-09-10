@@ -112,7 +112,9 @@ public class Unclaim implements LandlordCommand {
                 player.sendMessage(ChatColor.YELLOW+"Unclaimed " + getOfflinePlayer(dbLand.ownerUUID()).getName() + "'s land.");    //mess
             }
             plugin.getDatabase().delete(dbLand);
-            dbLand.highlightLand(player, Effect.WITCH_MAGIC);
+            if(plugin.getConfig().getBoolean("options.particleEffects")){
+                dbLand.highlightLand(player, Effect.WITCH_MAGIC);
+            }
 
             sender.sendMessage(
                     ChatColor.YELLOW + "Successfully unclaimed chunk (" + currChunk.getX() + ", " +         //mess
