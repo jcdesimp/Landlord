@@ -79,7 +79,7 @@ public class AddFriend implements LandlordCommand {
 
             plugin.getDatabase().save(land);
             if(plugin.getConfig().getBoolean("options.soundEffects",true)){     //conf
-                player.playSound(player.getLocation(), Sound.ORB_PICKUP,10,.2f);
+                player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP,10,.2f);
             }
             sender.sendMessage(ChatColor.GREEN + "Player " + args[1] +" is now a friend of this land.");    //mess
             plugin.getMapManager().updateAll();

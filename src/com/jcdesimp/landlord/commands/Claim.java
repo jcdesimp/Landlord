@@ -133,7 +133,7 @@ public class Claim implements LandlordCommand {
                             currChunk.getZ() + ") in world \'" + currChunk.getWorld().getName() + "\'." );  //mess
 
             if(plugin.getConfig().getBoolean("options.soundEffects",true)){
-                player.playSound(player.getLocation(), Sound.FIREWORK_TWINKLE2,10,10);
+                player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_TWINKLE,10,10);
             }
 
 
