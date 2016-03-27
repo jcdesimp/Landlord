@@ -1,16 +1,15 @@
 package com.jcdesimp.landlord;
 
 import com.avaje.ebean.EbeanServer;
-//import com.lennardf1989.bukkitex.MyDatabase;
 import com.jcdesimp.landlord.configuration.CustomConfig;
 import com.jcdesimp.landlord.landFlags.*;
 import com.jcdesimp.landlord.landManagement.FlagManager;
-//import com.jcdesimp.landlord.landManagement.LandListener;
 import com.jcdesimp.landlord.landManagement.ViewManager;
 import com.jcdesimp.landlord.landMap.MapManager;
 import com.jcdesimp.landlord.persistantData.*;
 import com.jcdesimp.landlord.pluginHooks.VaultHandler;
 import com.jcdesimp.landlord.pluginHooks.WorldguardHandler;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.milkbowl.vault.Vault;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.Configuration;
@@ -21,12 +20,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-
-import static org.bukkit.Bukkit.getLogger;
 import static org.bukkit.Bukkit.getOfflinePlayer;
+
+//import com.lennardf1989.bukkitex.MyDatabase;
+//import com.jcdesimp.landlord.landManagement.LandListener;
 
 /**
  *
@@ -47,8 +45,10 @@ public final class Landlord extends JavaPlugin {
     private CustomConfig mainConfig;
     private CustomConfig messagesConfig;
 
-
-
+    public static Landlord getInstance() {
+        return (Landlord) Bukkit.getPluginManager().getPlugin("Landlord");
+        //return Bukkit.getPluginManager().getPlugin("MyPlugin");
+    }
 
     @Override
     public void onEnable() {
@@ -60,12 +60,20 @@ public final class Landlord extends JavaPlugin {
         getServer().getPluginManager().registerEvents(mapManager, this);
 
 
-
         // generate/load the main config file
         mainConfig = new CustomConfig(this, "config.yml", "config.yml");
-        // generate/load the main language file based on value in config.
-        messagesConfig = new CustomConfig(this, "messages/english.yml", "messages/" + (mainConfig.get().getString("options.messagesFile").replace("/",".") ));
-
+        // generate/load the main language file based on language value in config.
+        String lang = mainConfig.get().getString("options.language");
+        switch (lang) {
+            case "english":
+                messagesConfig = new CustomConfig(this, "messages/" + lang + ".yml", "messages." + lang + ".yml");
+                getLogger().info("Language set to " + lang);
+                break;
+            default:
+                messagesConfig = new CustomConfig(this, "messages/english.yml", "messages.english.yml");
+                getLogger().warning("Language is not properly configured and defaulted to english.");
+                break;
+        }
         // Registering Alert Listener
         pListen = new LandAlerter(plugin);
         if(getConfig().getBoolean("options.showLandAlerts",true)) {
@@ -151,7 +159,6 @@ public final class Landlord extends JavaPlugin {
         pListen.clearPtrack();
     }
 
-
     @Override
     public FileConfiguration getConfig() {
         return mainConfig.get();
@@ -177,11 +184,6 @@ public final class Landlord extends JavaPlugin {
         return manageViewManager;
     }
 
-    public static Landlord getInstance() {
-        return (Landlord)Bukkit.getPluginManager().getPlugin("Landlord");
-        //return Bukkit.getPluginManager().getPlugin("MyPlugin");
-    }
-
 
 
     /*
@@ -189,7 +191,6 @@ public final class Landlord extends JavaPlugin {
      *      Dependency Stuff
      * ***************************
      */
-
 
     /*
      * **************
@@ -248,11 +249,8 @@ public final class Landlord extends JavaPlugin {
 
 
         // WorldGuard may not be loaded
-        if (plugin == null || !(plugin instanceof Vault) || !this.getConfig().getBoolean("economy.enable", true)) {
-            return false;
-        }
+        return !(plugin == null || !(plugin instanceof Vault) || !this.getConfig().getBoolean("economy.enable", true));
 
-        return true;
     }
 
     public VaultHandler getvHandler(){
@@ -280,7 +278,7 @@ public final class Landlord extends JavaPlugin {
                 list.add(LandFlagPerm.class);
 
                 return list;
-            };
+            }
         };
 
         database.initializeDatabase(
