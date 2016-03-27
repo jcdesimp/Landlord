@@ -68,7 +68,7 @@ public class Unfriend implements LandlordCommand {
             }
             plugin.getDatabase().save(land);
             if(plugin.getConfig().getBoolean("options.soundEffects",true)){ //conf
-                player.playSound(player.getLocation(), Sound.ZOMBIE_INFECT,10,.5f);
+                player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_INFECT,10,.5f);
             }
             player.sendMessage(ChatColor.GREEN + "Player " + args[1] + " is no longer a friend of this land."); //mess
 

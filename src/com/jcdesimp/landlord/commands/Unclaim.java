@@ -125,7 +125,7 @@ public class Unclaim implements LandlordCommand {
             }
 
             if(plugin.getConfig().getBoolean("options.soundEffects",true)){
-                player.playSound(player.getLocation(), Sound.ENDERMAN_HIT,10,.5f);
+                player.playSound(player.getLocation(), Sound.ENTITY_ENDERMEN_HURT,10,.5f);
             }
             plugin.getMapManager().updateAll();
 
