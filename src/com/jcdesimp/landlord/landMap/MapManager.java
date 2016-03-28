@@ -18,9 +18,11 @@ import java.util.HashMap;
 public class MapManager implements Listener {
     private HashMap<String, LandMap> mapList;
 
-    public MapManager() {
-        this.mapList = new HashMap<String, LandMap>();
+    private Landlord plugin;
 
+    public MapManager(Landlord plugin) {
+        this.mapList = new HashMap<String, LandMap>();
+        this.plugin = plugin;
     }
 
 
@@ -33,7 +35,7 @@ public class MapManager implements Listener {
         if( mapList.containsKey(p.getName()) ){
             remMap(p.getName());
         } else {
-            addMap(new LandMap(p));
+            addMap(new LandMap(p, this.plugin));
         }
         //System.out.println(mapList.toString());
 

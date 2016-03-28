@@ -35,7 +35,7 @@ public final class Landlord extends JavaPlugin {
 
     private MyDatabase database;
     private Landlord plugin;
-    private MapManager mapManager = new MapManager();
+    private MapManager mapManager;
     private WorldguardHandler wgHandler;
     private VaultHandler vHandler;
     private FlagManager flagManager;
@@ -53,6 +53,7 @@ public final class Landlord extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
+        mapManager = new MapManager(this);
         //listner = new LandListener();
         //getServer().getPluginManager().registerEvents(new LandListener(this), this);
         flagManager = new FlagManager(this);

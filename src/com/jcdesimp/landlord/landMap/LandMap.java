@@ -4,6 +4,7 @@ package com.jcdesimp.landlord.landMap;
 import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.*;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
@@ -24,8 +25,10 @@ public class LandMap {
     Chunk currChunk;
     List<OwnedLand> nearbyLand;
     String currDir;
+    private Landlord plugin;
 
-    public LandMap(Player p) {
+    public LandMap(Player p, Landlord plugin) {
+        this.plugin = plugin;
         this.mapViewer=p;
         this.currChunk = p.getLocation().getChunk();
         //System.out.println("CURR: "+currChunk);
@@ -375,13 +378,13 @@ public class LandMap {
             }
 
             //OfflinePlayer ofp = Bukkit.getOfflinePlayer(mapData[i].substring(5,17));
+            //todo String index out of range (17) ??? What broke?
             OfflinePlayer ofp = new myOfflinePlayer(mapData[i].substring(5, 17));
             //String ofp = mapData[i].substring(5,17);
 
             Score score = objective.getScore(ofp.getName());
 
             score.setScore(mapData.length - i);
-
 
             Team t = board.registerNewTeam(i + "");
             t.setPrefix(mapData[i].substring(0, 5));
@@ -414,9 +417,7 @@ public class LandMap {
     private String[] buildMap(Player p) {
         //String st ="▒▒▒▓▒▒▒\n▒▒▓▓▓▒▒\n▒▓▓▓▓▓▒\n▓▓▓█▓▓▓\n▓▓▒▒▒▓▓\n▓▒▒▒▒▒▓\n▒▒▒▒▒▒▒";
 
-        int radius = 3;
-
-
+        final int radius = 3;
 
         String[][] mapBoard = getMapDir(getPlayerDirection(p));
 
@@ -468,11 +469,34 @@ public class LandMap {
 
         //TODO
 
-        mapRows[mapBoard.length] = ChatColor.GREEN + "█-";         //mess if >28 map won't render
-        mapRows[mapBoard.length + 1] = ChatColor.YELLOW + "█-";   //mess if >28 map won't render
-        mapRows[mapBoard.length + 2] = ChatColor.RED + "█-";       //mess if >28 map won't render
+        mapRows[mapRows.length - 3] = ChatColor.GREEN + "█-";         //mess if >28 map won't render
+        mapRows[mapRows.length - 2] = ChatColor.YELLOW + "█-";   //mess if >28 map won't render
+        mapRows[mapRows.length - 1] = ChatColor.RED + "█-";       //mess if >28 map won't render
         //mapRows[0] = "";
 
+        FileConfiguration messages = plugin.getMessageConfig();
+
+        final String yours = messages.getString("map.labels.yours");
+        final String friends = messages.getString("map.labels.friends");
+        final String others = messages.getString("map.labels.others");
+
+        if (yours.length() <= 26) {
+            mapRows[mapRows.length - 3].concat(yours);
+        } else {
+            mapRows[mapRows.length - 3].concat("Yours");
+        }
+
+        if (friends.length() <= 26) {
+            mapRows[mapRows.length - 2].concat(friends);
+        } else {
+            mapRows[mapRows.length - 2].concat("Friends'");
+        }
+
+        if (others.length() <= 26) {
+            mapRows[mapRows.length - 1].concat(friends);
+        } else {
+            mapRows[mapRows.length - 1].concat("Others'");
+        }
 
         return mapRows;
     }

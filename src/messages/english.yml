@@ -25,7 +25,7 @@ commands:
     triggers:
       - "friend"
       - "addfriend"
-      - "tradesexformemes"
+      - "trust"
   claim:
     usage: "/#{label} #{cmd}"
     description: "Claim this chunk."
@@ -40,8 +40,8 @@ commands:
       charged: "You have been charged #{cost} to purchase land."
     triggers:
       - "claim"
-      - "tradesexformemes"
       - "buy"
+      - "protect"
   clearWorld:
     usage: "/#{label} #{cmd} <world> [player]"
     description: "Delete all land owned by a player in a world. Delete all land of a world (console only)."
@@ -52,7 +52,6 @@ commands:
       success: "Land(s) deleted!"
     triggers:
       - "clearworld"
-      - "tradesexformemes"
   friendAll:
     usage: "/#{label} #{cmd} <player>"
     description: "Add friend to all your land."
@@ -62,7 +61,6 @@ commands:
     triggers:
       - "friendall"
       - "addfriendall"
-      - "tradesexformemes"
   friends:
     usage: "/#{label} #{cmd}"
     description: "List friends of this land."
@@ -73,7 +71,6 @@ commands:
       offline: "Offline"
     triggers:
       - "friends"
-      - "tradesexformemes"
   help:
     usage: "/#{label} #{cmd} [page #]"
     description: "Show this help message."
@@ -101,6 +98,7 @@ commands:
       pageLabel: "Page #{pageNum}"
     triggers:
       - "list"
+      - "ls"
   listPlayer:
     usage: "/#{label} listplayer <player> [page#]"
     description: "List land owned by another player."
@@ -120,6 +118,9 @@ commands:
         otherLand: "Managing someone else's land."
       triggers:
         - "manage"
+        - "edit"
+        - "config"
+        - "configure"
   reload:
       usage: "/#{label} #{cmd}"
       description: "Reloads the Landlord config file."
@@ -135,6 +136,7 @@ commands:
         noMap: "Map unavailable."
       triggers:
         - "map"
+        - "grid"
   unclaim:
       usage: "usage: /#{label} #{command} [x, y] [world]."
       description: "Unclaim this chunk."
@@ -157,6 +159,10 @@ commands:
       triggers:
         - "unfriend"
         - "remfriend"
+        - "removefriend"
+        - "delfriend"
+        - "deletefriend"
+        - "untrust"
   unfriendAll:
       usage: "/#{label} #{command} <player>"
       description: "Remove friend from all your land."
@@ -166,8 +172,16 @@ commands:
       triggers:
         - "unfriendall"
         - "remfriendall"
+        - "remallfriends"
+        - "removeallfriends"
+        - "removefriendall"
+        - "untrustall"
+        - "delfriendall"
+        - "delallfriends"
+        - "deleteallfriends"
+        - "deletefriendall"
 map:
   labels:
     yours: "Yours"
-    friends: "Friendly"
+    friends: "Friends'"
     others: "Others'"

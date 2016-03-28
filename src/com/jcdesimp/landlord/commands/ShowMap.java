@@ -51,7 +51,8 @@ public class ShowMap implements LandlordCommand {
             try {
                 plugin.getMapManager().toggleMap(player);
             } catch (Exception e) {
-                sender.sendMessage(ChatColor.RED+noMap); 
+                sender.sendMessage(ChatColor.RED + noMap);
+                e.printStackTrace();
             }
 
         }
