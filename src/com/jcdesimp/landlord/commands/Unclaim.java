@@ -5,8 +5,8 @@ import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Effect;
-import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -31,22 +31,23 @@ public class Unclaim implements LandlordCommand {
      * This command must be run by a player
      *
      * @param sender who executed the command
-     * @param args   given with costp[mmand
+     * @param args   given with command
      * @return boolean
      */
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
 
-        //mess ready
-        String notPlayer = "This command can only be run by a player.";
-        String noPerms = "You do not have permission.";
-        String noClaim = "You cannot claim in this world.";
-        String noWorld = "World #{worldName} does not exist.";
-        String usageString = "usage: /#{label} #{command} [x, y] [world].";
-        String notYourLand = "You do not own this land.";
-        String landSold = "Land sold for #{amount}.";
-        String unclaimOther = "Unclaimed #{player}'s land";
-        String unclaimed = "Successfully unclaimed chunk #{chunkCoords} in world #{worldName}.";
+        FileConfiguration messages = plugin.getMessageConfig();
+
+        final String notPlayer = messages.getString("info.warnings.playerCommand");
+        final String noPerms = messages.getString("info.warnings.noPerms");
+        final String noClaim = messages.getString("info.warnings.noClaim");
+        final String noWorld = messages.getString("commands.unclaim.alerts.noWorld");
+        final String usage = messages.getString("commands.unclaim.usage");
+        final String notOwner = messages.getString("info.warnings.notOwner");
+        final String landSold = messages.getString("commands.unclaim.alerts.landSold");
+        final String unclaimOther = messages.getString("commands.unclaim.alerts.unclaimOther");
+        final String unclaimed = messages.getString("commands.unclaim.alerts.unclaim");
 
 
         //is sender a player
@@ -92,7 +93,7 @@ public class Unclaim implements LandlordCommand {
                     }
                 } catch (NumberFormatException e) {
                     //e.printStackTrace();
-                    player.sendMessage(ChatColor.RED + usageString
+                    player.sendMessage(ChatColor.RED + usage
                                     .replace("#{label}", label)
                                     .replace("#{command}", args[0])
 
@@ -100,7 +101,7 @@ public class Unclaim implements LandlordCommand {
                     return true;
 
                 } catch (ArrayIndexOutOfBoundsException e) {
-                    player.sendMessage(ChatColor.RED + usageString
+                    player.sendMessage(ChatColor.RED + usage
                                     .replace("#{label}", label)
                                     .replace("#{command}", args[0])
 
@@ -112,7 +113,7 @@ public class Unclaim implements LandlordCommand {
 
 
             if (dbLand == null || (!dbLand.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.unclaim"))) {
-                player.sendMessage(ChatColor.RED + notYourLand);
+                player.sendMessage(ChatColor.RED + notOwner);
                 return true;
             }
             if (plugin.hasVault()) {
@@ -150,7 +151,7 @@ public class Unclaim implements LandlordCommand {
             }
 
             if (plugin.getConfig().getBoolean("options.soundEffects", true)) {
-                player.playSound(player.getLocation(), Sound.ENDERMAN_HIT, 10, .5f);
+//TODO                player.playSound(player.getLocation(), Sound.ENDERMAN_HIT, 10, .5f);
             }
             plugin.getMapManager().updateAll();
 
@@ -161,11 +162,12 @@ public class Unclaim implements LandlordCommand {
     @Override
     public String getHelpText(CommandSender sender) {
 
-        //mess ready
-        String usage = "/#{label} #{cmd} [x,z] [world]";            // get the base usage string
-        String desc = "Unclaim this chunk.";                        // get the description
-        String priceWarning = "Get #{pricetag} per unclaim.";       // get the price warning message
-        String regenWarning = "Regenerates Chunk!";                 // get the chun regen warning message
+        FileConfiguration messages = plugin.getMessageConfig();
+
+        final String usage = messages.getString("commands.unclaim.usage");            // get the base usage string
+        final String desc = messages.getString("commands.unclaim.description");                        // get the description
+        final String priceWarning = messages.getString("commands.unclaim.alerts.priceWarning");       // get the price warning message
+        final String regenWarning = messages.getString("commands.unclaim.alerts.regenWarning");                 // get the chunk regen warning message
 
         String helpString = "";
 
@@ -192,6 +194,7 @@ public class Unclaim implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"unclaim", "sell"};     //mess triggers
+        final List<String> triggers = plugin.getMessageConfig().getStringList("commands.unclaim.triggers");
+        return triggers.toArray(new String[triggers.size()]);
     }
 }

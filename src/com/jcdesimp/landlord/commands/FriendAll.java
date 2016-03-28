@@ -28,12 +28,12 @@ public class FriendAll implements LandlordCommand {
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
         FileConfiguration messages = plugin.getMessageConfig();
-        String notPlayerString = messages.getString("info.warnings.playerCommand");
-        String usageString = messages.getString("commands.friendAll.usage");
-        String noPermsString = messages.getString("info.warnings.noPerms");
-        String unknownPlayer = messages.getString("info.warnings.unknownPlayer");
-        String friendAddedString = messages.getString("commands.friendAll.alerts.success");
-        String noLandString = messages.getString("commands.friendAll.alerts.noLand");
+        final String notPlayerString = messages.getString("info.warnings.playerCommand");
+        final String usageString = messages.getString("commands.friendAll.usage");
+        final String noPermsString = messages.getString("info.warnings.noPerms");
+        final String unknownPlayer = messages.getString("info.warnings.unknownPlayer");
+        final String friendAddedString = messages.getString("commands.friendAll.alerts.success");
+        final String noLandString = messages.getString("commands.friendAll.alerts.noLand");
 
 
         //is sender a player
@@ -79,8 +79,8 @@ public class FriendAll implements LandlordCommand {
     public String getHelpText(CommandSender sender) {
         FileConfiguration messages = plugin.getMessageConfig();
 
-        String usage = messages.getString("commands.friendAll.usage"); // get the base usage string
-        String desc = messages.getString("commands.friendAll.description");   // get the description
+        final String usage = messages.getString("commands.friendAll.usage"); // get the base usage string
+        final String desc = messages.getString("commands.friendAll.description");   // get the description
 
         // return the constructed and colorized help string
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
@@ -89,7 +89,7 @@ public class FriendAll implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        List<String> triggers = plugin.getMessageConfig().getStringList("commands.friendAll.triggers");
+        final List<String> triggers = plugin.getMessageConfig().getStringList("commands.friendAll.triggers");
         return triggers.toArray(new String[triggers.size()]);
     }
 }

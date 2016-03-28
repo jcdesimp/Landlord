@@ -5,7 +5,6 @@ import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Effect;
-import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -42,17 +41,17 @@ public class Claim implements LandlordCommand {
 
         FileConfiguration messages = plugin.getMessageConfig();
 
-        String notPlayer = messages.getString("info.warnings.playerCommand");                             // When run by non-player
-        String noPerms = messages.getString("info.warnings.noPerms");                                             // No permissions
+        final String notPlayer = messages.getString("info.warnings.playerCommand");     // When run by non-player
+        final String noPerms = messages.getString("info.warnings.noPerms");     // No permissions
 
-        String cannotClaim = messages.getString("commands.claim.alerts.cannotClaim");                                     // Claiming disabled in this world
-        String alreadyOwn = messages.getString("commands.claim.alerts.alreadyOwn");                                           // When you already own this land
-        String otherOwn = messages.getString("commands.claim.alerts.otherOwn");                                           // Someone else owns this land
-        String noClaimZone = messages.getString("commands.claim.alerts.noClaimZone");                                              // You can't claim here! (Worldguard)
-        String ownLimit = messages.getString("commands.claim.alerts.ownLimit");                              // Chunk limit hit
-        String claimPrice = messages.getString("commands.claim.alerts.claimPrice");                                   // Not enough funds
-        String charged = messages.getString("commands.claim.alerts.charged");                         // Charged for claim
-        String success = messages.getString("commands.claim.alerts.success");    // Chunk claim successful
+        final String cannotClaim = messages.getString("info.warnings.noClaim");     // Claiming disabled in this world
+        final String alreadyOwn = messages.getString("commands.claim.alerts.alreadyOwn");       // When you already own this land
+        final String otherOwn = messages.getString("commands.claim.alerts.otherOwn");       // Someone else owns this land
+        final String noClaimZone = messages.getString("commands.claim.alerts.noClaimZone");     // You can't claim here! (Worldguard)
+        final String ownLimit = messages.getString("commands.claim.alerts.ownLimit");       // Chunk limit hit
+        final String claimPrice = messages.getString("commands.claim.alerts.claimPrice");       // Not enough funds
+        final String charged = messages.getString("commands.claim.alerts.charged");     // Charged for claim
+        final String success = messages.getString("commands.claim.alerts.success");     // Chunk claim successful
 
         //is sender a player
         if (!(sender instanceof Player)) {
@@ -150,7 +149,7 @@ public class Claim implements LandlordCommand {
                             .replace("#{worldName}", currChunk.getWorld().getName()));
 
             if(plugin.getConfig().getBoolean("options.soundEffects",true)){
-                player.playSound(player.getLocation(), Sound.FIREWORK_TWINKLE2,10,10);
+//TODO                player.playSound(player.getLocation(), Sound.FIREWORK_TWINKLE2,10,10);
             }
 
 

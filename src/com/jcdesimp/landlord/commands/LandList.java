@@ -14,12 +14,11 @@ import static org.bukkit.util.NumberConversions.ceil;
 
 /**
  * Created by jcdesimp on 2/18/15.
- * Command to get a list of the players land
+ * Command to get a list of the sender player's land
  */
 public class LandList implements LandlordCommand {
 
     private Landlord plugin;
-
 
     public LandList(Landlord plugin) {
         this.plugin = plugin;
@@ -38,15 +37,15 @@ public class LandList implements LandlordCommand {
 
         FileConfiguration messages = plugin.getMessageConfig();
 
-        String notPlayer = messages.getString("info.warnings.playerCommand");
-        String noPerms = messages.getString("info.warnings.noPerms");
-        String badPageNum = messages.getString("info.warnings.badPage");
-        String noLand = messages.getString("commands.landList.alerts.noLand");
+        final String notPlayer = messages.getString("info.warnings.playerCommand");
+        final String noPerms = messages.getString("info.warnings.noPerms");
+        final String badPageNum = messages.getString("info.warnings.badPage");
+        final String noLand = messages.getString("commands.landList.alerts.noLand");
 
-        String outputHeader = messages.getString("commands.landList.alerts.listHeader");
-        String ownedLandString = messages.getString("commands.landList.alerts.outputHeader");
-        String pageNum = messages.getString("commands.landList.alerts.pageLabel");
-        String nextPageString = messages.getString("info.alerts.nextPage");
+        final String outputHeader = messages.getString("commands.landList.alerts.listHeader");
+        final String ownedLandString = messages.getString("commands.landList.alerts.outputHeader");
+        final String pageNum = messages.getString("commands.landList.alerts.pageLabel");
+        final String nextPageString = messages.getString("info.alerts.nextPage");
 
 
         if (!(sender instanceof Player)) {
@@ -125,8 +124,8 @@ public class LandList implements LandlordCommand {
     @Override
     public String getHelpText(CommandSender sender) {
         FileConfiguration messages = plugin.getMessageConfig();
-        String usage = messages.getString("commands.landList.usage"); // get the base usage string
-        String desc = messages.getString("commands.landList.description");   // get the description
+        final String usage = messages.getString("commands.landList.usage"); // get the base usage string
+        final String desc = messages.getString("commands.landList.description");   // get the description
         // return the constructed and colorized help string
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
 
@@ -134,7 +133,7 @@ public class LandList implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        List<String> triggers = plugin.getMessageConfig().getStringList("commands.landList.triggers");
+        final List<String> triggers = plugin.getMessageConfig().getStringList("commands.landList.triggers");
         return triggers.toArray(new String[triggers.size()]);
     }
 }

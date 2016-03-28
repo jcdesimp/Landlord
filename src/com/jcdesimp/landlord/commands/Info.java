@@ -28,11 +28,11 @@ public class Info implements LandlordCommand {
 
         FileConfiguration messages = plugin.getMessageConfig();
 
-        String notPlayer = messages.getString("info.warnings.playerCommand");
-        String noPerms = messages.getString("info,warnings.noPerms");
-        String noOwner = messages.getString("info.alerts.noOwner");
-        String landInfoString = messages.getString("commands.info.alerts.landInfo");
-        String landOwnerString = messages.getString("commands.info.alerts.landOwner");
+        final String notPlayer = messages.getString("info.warnings.playerCommand");
+        final String noPerms = messages.getString("info,warnings.noPerms");
+        final String noOwner = messages.getString("info.alerts.noOwner");
+        final String landInfoString = messages.getString("commands.info.alerts.landInfo");
+        final String landOwnerString = messages.getString("commands.info.alerts.landOwner");
 
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.DARK_RED + notPlayer);
@@ -82,8 +82,8 @@ public class Info implements LandlordCommand {
 
         FileConfiguration messages = plugin.getMessageConfig();
 
-        String usage = messages.getString("commands.info.usage"); // get the base usage string
-        String desc = messages.getString("commands.info.description");   // get the description
+        final String usage = messages.getString("commands.info.usage"); // get the base usage string
+        final String desc = messages.getString("commands.info.description");   // get the description
 
         // return the constructed and colorized help string
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
@@ -91,7 +91,7 @@ public class Info implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        List<String> triggers = plugin.getMessageConfig().getStringList("commands.info.triggers");
+        final List<String> triggers = plugin.getMessageConfig().getStringList("commands.info.triggers");
         return triggers.toArray(new String[triggers.size()]);
     }
 }

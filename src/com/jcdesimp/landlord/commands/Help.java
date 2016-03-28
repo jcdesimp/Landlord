@@ -38,12 +38,12 @@ public class Help implements LandlordCommand {
     public boolean execute(CommandSender sender, String[] args, String label) {
         FileConfiguration messages = plugin.getMessageConfig();
 
-        String badPageNum = messages.getString("info.warnings.badPage");
-        String helpHeader = messages.getString("commands.help.alerts.header");
-        String aliases = messages.getString("commands.help.alerts.aliases");
-        String nextPageString = messages.getString("info.alerts.nextPage");
+        final String badPageNum = messages.getString("info.warnings.badPage");
+        final String helpHeader = messages.getString("commands.help.alerts.header");
+        final String aliases = messages.getString("commands.help.alerts.aliases");
+        final String nextPageString = messages.getString("info.alerts.nextPage");
 
-        String aliasList = "/landlord, /land, /ll";
+        final String aliasList = "/landlord, /land, /ll";
 
         //check if page number is valid
         int pageNumber = 1;
@@ -113,8 +113,8 @@ public class Help implements LandlordCommand {
 
         FileConfiguration messages = plugin.getMessageConfig();
 
-        String usage = messages.getString("commands.help.usage"); // get the base usage string
-        String desc = messages.getString("commands.help.description");   // get the description
+        final String usage = messages.getString("commands.help.usage"); // get the base usage string
+        final String desc = messages.getString("commands.help.description");   // get the description
 
         // return the constructed and colorized help string
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
@@ -122,7 +122,7 @@ public class Help implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        List<String> triggers = plugin.getMessageConfig().getStringList("commands.help.triggers");
+        final List<String> triggers = plugin.getMessageConfig().getStringList("commands.help.triggers");
         return triggers.toArray(new String[triggers.size()]);
     }
 }

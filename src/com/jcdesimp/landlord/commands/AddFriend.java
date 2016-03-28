@@ -3,7 +3,10 @@ package com.jcdesimp.landlord.commands;
 import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.persistantData.Friend;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
+import org.bukkit.Effect;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -39,14 +42,14 @@ public class AddFriend implements LandlordCommand {
         //is sender a player
         FileConfiguration messages = plugin.getMessageConfig();
 
-        String usage = messages.getString("commands.addFriend.usage");
-        String notPlayer = messages.getString("info.warnings.playerCommand");
-        String noPerms = messages.getString("info.warnings.noPerms");
+        final String usage = messages.getString("commands.addFriend.usage");
+        final String notPlayer = messages.getString("info.warnings.playerCommand");
+        final String noPerms = messages.getString("info.warnings.noPerms");
 
-        String notOwner = messages.getString("info.warnings.notOwner");
-        String unknownPlayer = messages.getString("info.warnings.unknownPlayer");
-        String alreadyFriend = messages.getString("commands.addFriend.alerts.alreadyFriend");
-        String nowFriend = messages.getString("commands.addFriend.alerts.success");
+        final String notOwner = messages.getString("info.warnings.notOwner");
+        final String unknownPlayer = messages.getString("info.warnings.unknownPlayer");
+        final String alreadyFriend = messages.getString("commands.addFriend.alerts.alreadyFriend");
+        final String nowFriend = messages.getString("commands.addFriend.alerts.success");
 
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.DARK_RED + notPlayer);
@@ -93,7 +96,7 @@ public class AddFriend implements LandlordCommand {
 
             plugin.getDatabase().save(land);
             if(plugin.getConfig().getBoolean("options.soundEffects",true)){     //conf
-                player.playSound(player.getLocation(), Sound.ORB_PICKUP,10,.2f);
+//TODO                player.playSound(player.getLocation(), Sound.ORB_PICKUP,10,.2f);
             }
             sender.sendMessage(ChatColor.GREEN + nowFriend.replace("#{player}", args[1]));
             plugin.getMapManager().updateAll();
@@ -106,8 +109,8 @@ public class AddFriend implements LandlordCommand {
     public String getHelpText(CommandSender sender) {
         FileConfiguration messages = plugin.getMessageConfig();
 
-        String usage = messages.getString("commands.addFriend.usage"); // get the base usage string
-        String desc = messages.getString("commands.addFriend.description");   // get the description
+        final String usage = messages.getString("commands.addFriend.usage"); // get the base usage string
+        final String desc = messages.getString("commands.addFriend.description");   // get the description
 
         // return the constructed and colorized help string
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
@@ -115,7 +118,7 @@ public class AddFriend implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        List<String> triggers = plugin.getMessageConfig().getStringList("commands.addFriend.triggers");
+        final List<String> triggers = plugin.getMessageConfig().getStringList("commands.addFriend.triggers");
         return triggers.toArray(new String[triggers.size()]);
     }
 }

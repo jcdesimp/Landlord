@@ -5,6 +5,7 @@ import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ import static org.bukkit.util.NumberConversions.ceil;
 
 /**
  * Created by jcdesimp on 2/18/15.
- * List the land of a specified player
+ * List the land of a specified player (typically for administrator use)
  */
 public class ListPlayer implements LandlordCommand {
 
@@ -34,15 +35,17 @@ public class ListPlayer implements LandlordCommand {
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
 
+        FileConfiguration messages = plugin.getMessageConfig();
+
         //mess ready
-        String usage = "usage: /#{label} listplayer <player> [page#]";
-        String noPerms = "You do not have permission.";
-        String badPage = "That is not a valid page number.";
-        String ownsNone = "#{owner} does not own any land!";
-        String listHeader = "Coords - Chunk Coords - World Name";
-        String ownersLand = "#{owner}'s Owned Land";
-        String pageNum = " Page #{pageNumber}";
-        String nextPageString = "do #{label} #{cmd} #{pageNumber} for next page";
+        final String usage = messages.getString("commands.listPlayer.usage");
+        final String noPerms = messages.getString("info.warnings.noPerms");
+        final String badPage = messages.getString("info.warnings.badPage");
+        final String ownsNone = messages.getString("commands.listPlayer.alerts.ownsNone");
+        final String listHeader = messages.getString("commands.listPlayer.alerts.listHeader");
+        final String ownersLand = messages.getString("commands.listPlayer.alerts.ownersLand");
+        final String pageNum = messages.getString("commands.listPlayer.alerts.pageNum");
+        final String nextPageString = messages.getString("commands.listPlayer.alerts.nextPage");
 
 
         String owner;
@@ -86,7 +89,7 @@ public class ListPlayer implements LandlordCommand {
             sender.sendMessage(ChatColor.YELLOW + ownsNone.replace("#{owner}", owner));
         } else {
             String header = ChatColor.DARK_GREEN+" | "+ listHeader + " |     \n";
-            ArrayList<String> landList = new ArrayList<String>();
+            ArrayList<String> landList = new ArrayList<>();
             //OwnedLand curr = myLand.get(0);
             for (OwnedLand aMyLand : myLand) {
                 landList.add((ChatColor.GOLD + " ("+ aMyLand.getXBlock() +", "+ aMyLand.getZBlock() +") - (" + aMyLand.getX() + ", " + aMyLand.getZ() + ") - "
@@ -134,9 +137,10 @@ public class ListPlayer implements LandlordCommand {
             return null;
         }
 
-        //mess ready
-        String usage = "/#{label} #{cmd} <player>";             // get the base usage string
-        String desc = "List land owned by another player.";     // get the description
+        FileConfiguration messages = plugin.getMessageConfig();
+
+        final String usage = messages.getString("commands.listPlayer.usage");       // get the base usage string
+        final String desc = messages.getString("commands.listPlayer.description");      // get the description
 
         // return the constructed and colorized help string
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
@@ -145,6 +149,7 @@ public class ListPlayer implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"listplayer"};      //mess triggers
+        final List<String> triggers = plugin.getMessageConfig().getStringList("commands.listPlayer.triggers");
+        return triggers.toArray(new String[triggers.size()]);
     }
 }

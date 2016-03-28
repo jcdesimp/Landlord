@@ -6,9 +6,11 @@ import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Effect;
-import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 import static org.bukkit.Bukkit.getOfflinePlayer;
 
@@ -34,19 +36,21 @@ public class Unfriend implements LandlordCommand {
      */
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
-        //mess player
-        String notPlayer = "This command can only be run by a player.";
-        String usageString ="usage: /#{label} #{command} <player>";
-        String noPerms = "You do not have permission.";
-        String notOwner = "You do not own this land.";
-        String notFriend = "Player #{playerName} is not a friend of this land.";
-        String unfriended = "Player #{playerName} is no longer a friend of this land.";
+
+        FileConfiguration messages = plugin.getMessageConfig();
+
+        final String notPlayer = messages.getString("info.warnings.playerCommand");
+        final String usage = messages.getString("commands.unfriend.usage");
+        final String noPerms = messages.getString("info.warnings.noPerms");
+        final String notOwner = messages.getString("info.warnings.notOwner");
+        final String notFriend = messages.getString("commands.unfriend.alerts.notFriend");
+        final String unfriended = messages.getString("commands.unfriend.alerts.unfriended");
 
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.DARK_RED + notPlayer);
         } else {
             if (args.length < 2){
-                sender.sendMessage(ChatColor.RED + usageString.replace("#{label}", label).replace("#{command}", args[0]));
+                sender.sendMessage(ChatColor.RED + usage.replace("#{label}", label).replace("#{command}", args[0]));
                 return true;
             }
             Player player = (Player) sender;
@@ -76,7 +80,7 @@ public class Unfriend implements LandlordCommand {
             }
             plugin.getDatabase().save(land);
             if(plugin.getConfig().getBoolean("options.soundEffects",true)){ //conf
-                player.playSound(player.getLocation(), Sound.ZOMBIE_INFECT,10,.5f);
+//TODO                player.playSound(player.getLocation(), Sound.ZOMBIE_INFECT,10,.5f);
             }
             player.sendMessage(ChatColor.GREEN + unfriended.replace("#{playerName}",args[1]));
 
@@ -87,9 +91,10 @@ public class Unfriend implements LandlordCommand {
     @Override
     public String getHelpText(CommandSender sender) {
 
-        //mess ready
-        String usage = "/#{label} #{cmd} <player>"; // get the base usage string
-        String desc = "Remove friend from this land.";   // get the description
+        FileConfiguration messages = plugin.getMessageConfig();
+
+        final String usage = messages.getString("commands.unfriend.usage"); // get the base usage string
+        final String desc = messages.getString("commands.unfriend.description");   // get the description
 
         // return the constructed and colorized help string
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
@@ -97,6 +102,7 @@ public class Unfriend implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"unfriend","remfriend"};
+        final List<String> triggers = plugin.getMessageConfig().getStringList("commands.unfriend.triggers");
+        return triggers.toArray(new String[triggers.size()]);
     }
 }

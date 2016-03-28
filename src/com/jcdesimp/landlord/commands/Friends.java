@@ -32,16 +32,16 @@ public class Friends implements LandlordCommand {
     public boolean execute(CommandSender sender, String[] args, String label) {
         FileConfiguration messages = plugin.getMessageConfig();
 
-        String notPlayer = messages.getString("info.warnings.playerCommand");
-        String noPerms = messages.getString("info.warnings.noPerms");
-        String notOwner = messages.getString("info.warnings.notOwner");
-        String badPageNum = messages.getString("info.warnings.badPage");
-        String friendListHeader = messages.getString("commands.friends.alerts.listHeader");
-        String noFriends = messages.getString("commands.friends.alerts.noFriends");
-        String onlineString = messages.getString("commands.friends.alerts.online");
-        String offlineString = messages.getString("commands.friends.alerts.offline");
-        String invalidPage = messages.getString("info.warnings.badPage");
-        String nextPageString = messages.getString("info.alerts.nextPage");
+        final String notPlayer = messages.getString("info.warnings.playerCommand");
+        final String noPerms = messages.getString("info.warnings.noPerms");
+        final String notOwner = messages.getString("info.warnings.notOwner");
+        final String badPageNum = messages.getString("info.warnings.badPage");
+        final String friendListHeader = messages.getString("commands.friends.alerts.listHeader");
+        final String noFriends = messages.getString("commands.friends.alerts.noFriends");
+        final String onlineString = messages.getString("commands.friends.alerts.online");
+        final String offlineString = messages.getString("commands.friends.alerts.offline");
+        final String invalidPage = messages.getString("info.warnings.badPage");
+        final String nextPageString = messages.getString("info.alerts.nextPage");
 
 
         if (!(sender instanceof Player)) {
@@ -136,8 +136,8 @@ public class Friends implements LandlordCommand {
     public String getHelpText(CommandSender sender) {
         FileConfiguration messages = plugin.getMessageConfig();
 
-        String usage = messages.getString("commands.friends.usage"); // get the base usage string
-        String desc = messages.getString("commands.friends.description");   // get the description
+        final String usage = messages.getString("commands.friends.usage"); // get the base usage string
+        final String desc = messages.getString("commands.friends.description");   // get the description
 
         // return the constructed and colorized help string
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
@@ -146,7 +146,7 @@ public class Friends implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        List<String> triggers = plugin.getMessageConfig().getStringList("commands.friends.triggers");
+        final List<String> triggers = plugin.getMessageConfig().getStringList("commands.friends.triggers");
         return triggers.toArray(new String[triggers.size()]);
     }
 }

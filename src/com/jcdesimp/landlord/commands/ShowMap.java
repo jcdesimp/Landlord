@@ -3,7 +3,10 @@ package com.jcdesimp.landlord.commands;
 import com.jcdesimp.landlord.Landlord;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 /**
  * Created by jcdesimp on 2/18/15.
@@ -25,11 +28,13 @@ public class ShowMap implements LandlordCommand {
      */
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
-        //mess ready
-        String mapDisabled = "Land map is disabled.";
-        String notPlayer = "This command can only be run by a player.";
-        String noPerms = "You do not have permission.";
-        String noMap = "Map unavailable.";
+
+        FileConfiguration messages = plugin.getMessageConfig();
+
+        final String mapDisabled = messages.getString("commands.showMap.alerts.mapDisabled");
+        final String notPlayer = messages.getString("info.warnings.playerCommand");
+        final String noPerms = messages.getString("info.warnings.noPerms");
+        final String noMap = messages.getString("commands.showMap.alerts.noMap");
 
         if(!plugin.getConfig().getBoolean("options.enableMap", true)){      //conf
             sender.sendMessage(ChatColor.YELLOW+mapDisabled);
@@ -61,9 +66,10 @@ public class ShowMap implements LandlordCommand {
             return null;
         }
 
-        //mess ready
-        String usage = "/#{label} #{cmd}"; // get the base usage string
-        String desc = "Toggle the land map.";   // get the description
+        FileConfiguration messages = plugin.getMessageConfig();
+
+        final String usage = messages.getString("commands.showMap.usage"); // get the base usage string
+        final String desc = messages.getString("commands.showMap.description");   // get the description
 
         // return the constructed and colorized help string
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
@@ -72,6 +78,7 @@ public class ShowMap implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"map"}; //mess triggers
+        final List<String> triggers = plugin.getMessageConfig().getStringList("commands.showMap.triggers");
+        return triggers.toArray(new String[triggers.size()]);
     }
 }

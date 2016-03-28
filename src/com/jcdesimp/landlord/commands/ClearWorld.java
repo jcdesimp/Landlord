@@ -29,13 +29,13 @@ public class ClearWorld implements LandlordCommand {
 
         FileConfiguration messages = plugin.getMessageConfig();
 
-        String usage = messages.getString("commands.clearWorld.usage");
+        final String usage = messages.getString("commands.clearWorld.usage");
 
-        String noPerms = messages.getString("info.warnings.noPerms");
-        String unknownPlayer = messages.getString("info.warnings.unknownPlayer");
-        String notConsole = messages.getString("commands.clearWorld.alerts.notConsole");
-        String noLand = messages.getString("commands.clearWorld.alerts.noLand");
-        String confirmation = messages.getString("commands.clearWorld.alerts.success");
+        final String noPerms = messages.getString("info.warnings.noPerms");
+        final String unknownPlayer = messages.getString("info.warnings.unknownPlayer");
+        final String notConsole = messages.getString("commands.clearWorld.alerts.notConsole");
+        final String noLand = messages.getString("commands.clearWorld.alerts.noLand");
+        final String confirmation = messages.getString("commands.clearWorld.alerts.success");
 
 
 
@@ -89,9 +89,9 @@ public class ClearWorld implements LandlordCommand {
 
         FileConfiguration messages = plugin.getMessageConfig();
 
-        String usage = messages.getString("commands.clearWorld.usage");             // get the base usage string
-        String desc = messages.getString("commands.clearWorld.description");
-        String chunkWarning = messages.getString("commands.clearWorld.alerts.chunkWarning");            // get the "chunks won't regen" warning
+        final String usage = messages.getString("commands.clearWorld.usage");             // get the base usage string
+        final String desc = messages.getString("commands.clearWorld.description");
+        final String chunkWarning = messages.getString("commands.clearWorld.alerts.chunkWarning");            // get the "chunks won't regen" warning
 
 
         String helpString = ""; // start building the help string
@@ -112,7 +112,7 @@ public class ClearWorld implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        List<String> triggers = plugin.getMessageConfig().getStringList("commands.clearWorld.triggers");
+        final List<String> triggers = plugin.getMessageConfig().getStringList("commands.clearWorld.triggers");
         return triggers.toArray(new String[triggers.size()]);
     }
 }

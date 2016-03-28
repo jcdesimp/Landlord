@@ -3,6 +3,9 @@ package com.jcdesimp.landlord.commands;
 import com.jcdesimp.landlord.Landlord;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+
+import java.util.List;
 
 /**
  * Created by jcdesimp on 2/19/15.
@@ -26,9 +29,10 @@ public class Reload implements LandlordCommand {
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
 
-        //mess ready
-        String configReloaded = "Landlord config reloaded.";
-        String noPerms = "You do not have permission.";
+        FileConfiguration messages = plugin.getMessageConfig();
+
+        final String configReloaded = messages.getString("commands.reload.alerts.configReloaded");
+        final String noPerms = messages.getString("info.warnings.noPerms");
 
         if(sender.hasPermission("landlord.admin.reload")){
             plugin.reloadConfig();
@@ -46,9 +50,10 @@ public class Reload implements LandlordCommand {
             return null;
         }
 
-        //mess ready
-        String usage = "/#{label} #{cmd}"; // get the base usage string
-        String desc = "Reloads the Landlord config file.";   // get the description
+        FileConfiguration messages = plugin.getMessageConfig();
+
+        final String usage = messages.getString("commands.reload.usage"); // get the base usage string
+        final String desc = messages.getString("commands.reload.description");   // get the description
 
         // return the constructed and colorized help string
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
@@ -56,6 +61,7 @@ public class Reload implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"reload"};      //mess triggers
+        final List<String> triggers = plugin.getMessageConfig().getStringList("commands.reload.triggers");
+        return triggers.toArray(new String[triggers.size()]);
     }
 }

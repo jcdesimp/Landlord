@@ -5,7 +5,10 @@ import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 /**
  * Created by jcdesimp on 2/18/15.
@@ -28,13 +31,13 @@ public class Manage implements LandlordCommand {
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
 
+        FileConfiguration messages = plugin.getMessageConfig();
 
-        //mess ready
-        String notPlayer = "This command can only be run by a player.";
-        String noPerms = "You do not have permission.";
-        String noLand = "There is nothing ot manage!";
-        String notOwner = "You do not own this land.";
-        String otherLand = "Managing someone else's land.";
+        final String notPlayer = messages.getString("info.warnings.playerCommand");
+        final String noPerms = messages.getString("info.warnings.noPerms");
+        final String noLand = messages.getString("commands.manage.alerts.noLand");
+        final String notOwner = messages.getString("info.warnings.notOwner");
+        final String otherLand = messages.getString("commands.manage.alerts.otherLand");
 
 
         if (!(sender instanceof Player)) {
@@ -67,9 +70,11 @@ public class Manage implements LandlordCommand {
 
     @Override
     public String getHelpText(CommandSender sender) {
-        //mess
-        String usage = "/#{label} #{cmd}"; // get the base usage string
-        String desc = "Manage permissions for this land.";   // get the description
+
+        FileConfiguration messages = plugin.getMessageConfig();
+
+        final String usage = messages.getString("commands.manage.usage");       // get the base usage string
+        final String desc = messages.getString("commands.manage.description");   // get the description
 
         // return the constructed and colorized help string
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
@@ -78,6 +83,7 @@ public class Manage implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"manage"};      //mess triggers
+        final List<String> triggers = plugin.getMessageConfig().getStringList("commands.manage.triggers");
+        return triggers.toArray(new String[triggers.size()]);
     }
 }
