@@ -63,17 +63,7 @@ public final class Landlord extends JavaPlugin {
         // generate/load the main config file
         mainConfig = new CustomConfig(this, "config.yml", "config.yml");
         // generate/load the main language file based on language value in config.
-        String lang = mainConfig.get().getString("options.language");
-        switch (lang) {
-            case "english":
-                messagesConfig = new CustomConfig(this, "messages/" + lang + ".yml", "messages." + lang + ".yml");
-                getLogger().info("Language set to " + lang);
-                break;
-            default:
-                messagesConfig = new CustomConfig(this, "messages/english.yml", "messages.english.yml");
-                getLogger().warning("Language is not properly configured and defaulted to english.");
-                break;
-        }
+        messagesConfig = new CustomConfig(this, "messages/english.yml", "messages/" + (mainConfig.get().getString("options.messagesFile").replace("/", ".")));
         // Registering Alert Listener
         pListen = new LandAlerter(plugin);
         if(getConfig().getBoolean("options.showLandAlerts",true)) {

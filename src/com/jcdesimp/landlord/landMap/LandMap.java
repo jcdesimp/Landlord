@@ -52,13 +52,11 @@ public class LandMap {
         }, 0L, 7L);*/
 
         this.schedulerId = new BukkitRunnable() {
-            @Override
             public void run() {
                 if(!currDir.equals(getPlayerDirection(mapViewer)) || !currChunk.equals(mapViewer.getLocation().getChunk())){
                     displayMap(mapViewer);
                     currDir = getPlayerDirection(mapViewer);
                 }
-
             }
         }.runTaskTimer(Landlord.getInstance(), 0L, 7L).getTaskId();
 
@@ -66,149 +64,6 @@ public class LandMap {
 
 
     }
-
-    public Player getMapViewer() {
-        return mapViewer;
-    }
-
-    public void removeMap(){
-        mapViewer.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-        Bukkit.getServer().getScheduler().cancelTask(schedulerId);
-
-    }
-
-    private Scoreboard displayMap(Player p){
-        ScoreboardManager manager = Bukkit.getScoreboardManager();
-        Scoreboard board = manager.getNewScoreboard();
-        //Scoreboard board = manager.getMainScoreboard();
-        Team team = board.registerNewTeam("teamname");
-        team.addPlayer(p);
-
-        Objective objective = board.registerNewObjective("Land Map", "dummy");
-        /*ChatColor.STRIKETHROUGH+""+ChatColor.DARK_GREEN+
-        "=== "+ChatColor.RESET+""+ChatColor.DARK_GREEN +"Land Map"
-                +ChatColor.STRIKETHROUGH+""+ChatColor.DARK_GREEN+" ==="*/
-        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        objective.setDisplayName(ChatColor.YELLOW+""+ChatColor.STRIKETHROUGH+
-                    "=="+ChatColor.RESET+""+ChatColor.GOLD +" " +
-                "Land Map"                               //mess !WARN! if len > 14 map will not render !Enforce
-                +" " +ChatColor.YELLOW+""+ChatColor.STRIKETHROUGH+"==");
-        String[] mapData = buildMap(p);
-        for(int i = 0; i<mapData.length; i++){
-            if(mapData[i].length()<21){
-                for(int f = 0; f<(21-mapData[i].length()); f++){
-                    mapData[i] += ChatColor.RESET;
-                }
-            }
-
-
-            //THIS BETTER NOT STAY!!!!!!
-            class myOfflinePlayer implements OfflinePlayer {
-                String name;
-
-                public myOfflinePlayer(String name){
-                    this.name=name;
-                }
-
-                @Override
-                public Player getPlayer() {
-                    return null;
-                }
-                @Override
-                public boolean hasPlayedBefore() {
-                    return false;
-                }
-
-                @Override
-                public String getName() {
-                    return name;
-                }
-
-                @Override
-                public void setOp(boolean b){
-                    return;
-                }
-                @Override
-                public UUID getUniqueId() {
-                    return null;
-                }
-                @Override
-                public long getFirstPlayed(){
-                    return 0;
-                }
-
-                @Override
-                public boolean isBanned() {
-                    return false;
-                }
-
-                @Override
-                public Map<String,Object> serialize() {
-                    return null;
-                }
-
-                @Override
-                public boolean isWhitelisted() {
-                    return true;
-                }
-
-                @Override
-                public Location getBedSpawnLocation(){
-                    return null;
-                }
-
-                @Override
-                public void setWhitelisted(boolean b) {
-                    return;
-                }
-
-                @Override
-                public boolean isOnline(){
-                    return false;
-                }
-                @Override
-                public long getLastPlayed(){
-                    return 0;
-                }
-
-                @Override
-                @Deprecated
-                public void setBanned(boolean b) {
-                    return;
-                }
-                @Override
-                public boolean isOp(){
-                    return false;
-                }
-
-            }
-
-            //OfflinePlayer ofp = Bukkit.getOfflinePlayer(mapData[i].substring(5,17));
-            OfflinePlayer ofp = new myOfflinePlayer(mapData[i].substring(5,17));
-            //String ofp = mapData[i].substring(5,17);
-
-            Score score = objective.getScore(ofp.getName());
-
-            score.setScore(mapData.length - i);
-
-
-            Team t = board.registerNewTeam(i+"");
-            t.setPrefix(mapData[i].substring(0,5));
-            t.setSuffix(mapData[i].substring(17));
-            t.addPlayer(ofp);
-            t.setDisplayName(mapData[i]);
-
-
-            //Score score = objective.getScore(Bukkit.getOfflinePlayer(i + ""));
-            //score.setScore((mapData.length)-i);
-        }
-        //Score score = objective.getScore(Bukkit.getOfflinePlayer()); //Get a fake offline player
-        //board.
-        p.setScoreboard(board);
-
-        return board;
-    }
-
 
     public static String getPlayerDirection(Player playerSelf){
         String dir;
@@ -413,6 +268,138 @@ public class LandMap {
         return mapDir;
     }
 
+    public Player getMapViewer() {
+        return mapViewer;
+    }
+
+    public void removeMap() {
+        mapViewer.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+        Bukkit.getServer().getScheduler().cancelTask(schedulerId);
+
+    }
+
+    private Scoreboard displayMap(Player p) {
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        Scoreboard board = manager.getNewScoreboard();
+        //Scoreboard board = manager.getMainScoreboard();
+        Team team = board.registerNewTeam("teamname");
+        team.addPlayer(p);
+
+        Objective objective = board.registerNewObjective("Land Map", "dummy");
+        /*ChatColor.STRIKETHROUGH+""+ChatColor.DARK_GREEN+
+        "=== "+ChatColor.RESET+""+ChatColor.DARK_GREEN +"Land Map"
+                +ChatColor.STRIKETHROUGH+""+ChatColor.DARK_GREEN+" ==="*/
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        objective.setDisplayName(ChatColor.YELLOW + "" + ChatColor.STRIKETHROUGH +
+                "==" + ChatColor.RESET + "" + ChatColor.GOLD + " " +
+                "Land Map"                               //mess !WARN! if len > 14 map will not render !Enforce
+                + " " + ChatColor.YELLOW + "" + ChatColor.STRIKETHROUGH + "==");
+        String[] mapData = buildMap(p);
+        for (int i = 0; i < mapData.length; i++) {
+            if (mapData[i].length() < 21) {
+                for (int f = 0; f < (21 - mapData[i].length()); f++) {
+                    mapData[i] += ChatColor.RESET;
+                }
+            }
+
+
+            //todo THIS BETTER NOT STAY!!!!!!
+            class myOfflinePlayer implements OfflinePlayer {
+                String name;
+
+                public myOfflinePlayer(String name) {
+                    this.name = name;
+                }
+
+                public Player getPlayer() {
+                    return null;
+                }
+
+                public boolean hasPlayedBefore() {
+                    return false;
+                }
+
+                public String getName() {
+                    return name;
+                }
+
+                public UUID getUniqueId() {
+                    return null;
+                }
+
+                public long getFirstPlayed() {
+                    return 0;
+                }
+
+                public boolean isBanned() {
+                    return false;
+                }
+
+                @Deprecated
+                public void setBanned(boolean b) {
+                    return;
+                }
+
+                public Map<String, Object> serialize() {
+                    return null;
+                }
+
+                public boolean isWhitelisted() {
+                    return true;
+                }
+
+                public void setWhitelisted(boolean b) {
+                    return;
+                }
+
+                public Location getBedSpawnLocation() {
+                    return null;
+                }
+
+                public boolean isOnline() {
+                    return false;
+                }
+
+                public long getLastPlayed() {
+                    return 0;
+                }
+
+                public boolean isOp() {
+                    return false;
+                }
+
+                public void setOp(boolean b) {
+                    return;
+                }
+
+            }
+
+            //OfflinePlayer ofp = Bukkit.getOfflinePlayer(mapData[i].substring(5,17));
+            OfflinePlayer ofp = new myOfflinePlayer(mapData[i].substring(5, 17));
+            //String ofp = mapData[i].substring(5,17);
+
+            Score score = objective.getScore(ofp.getName());
+
+            score.setScore(mapData.length - i);
+
+
+            Team t = board.registerNewTeam(i + "");
+            t.setPrefix(mapData[i].substring(0, 5));
+            t.setSuffix(mapData[i].substring(17));
+            t.addPlayer(ofp);
+            t.setDisplayName(mapData[i]);
+
+
+            //Score score = objective.getScore(Bukkit.getOfflinePlayer(i + ""));
+            //score.setScore((mapData.length)-i);
+        }
+        //Score score = objective.getScore(Bukkit.getOfflinePlayer()); //Get a fake offline player
+        //board.
+        p.setScoreboard(board);
+
+        return board;
+    }
+
     public void updateMap(){
         nearbyLand = Landlord.getInstance().getDatabase().find(OwnedLand.class)
                 .where()
@@ -478,10 +465,14 @@ public class LandMap {
             mapRows[z] = row;
 
         }
-        mapRows[mapBoard.length] = ChatColor.GREEN + "█-"+"Yours";         //mess if >28 map won't render
-        mapRows[mapBoard.length+1] = ChatColor.YELLOW + "█-"+"Friendly";   //mess if >28 map won't render
-        mapRows[mapBoard.length+2] = ChatColor.RED + "█-"+"Others'";       //mess if >28 map won't render
+
+        //TODO
+
+        mapRows[mapBoard.length] = ChatColor.GREEN + "█-";         //mess if >28 map won't render
+        mapRows[mapBoard.length + 1] = ChatColor.YELLOW + "█-";   //mess if >28 map won't render
+        mapRows[mapBoard.length + 2] = ChatColor.RED + "█-";       //mess if >28 map won't render
         //mapRows[0] = "";
+
 
         return mapRows;
     }

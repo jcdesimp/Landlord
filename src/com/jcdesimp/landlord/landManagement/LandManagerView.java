@@ -2,13 +2,17 @@ package com.jcdesimp.landlord.landManagement;
 
 import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Effect;
+import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -207,7 +211,7 @@ public class LandManagerView implements Listener {
             Landlord.getInstance().getDatabase().save(mLand);
             player.sendMessage(ChatColor.GREEN + "Land permissions saved!");        //mess
             if(Landlord.getInstance().getConfig().getBoolean("options.soundEffects",true)){
-                player.playSound(player.getLocation(),Sound.FIZZ,10,10);
+//todo                player.playSound(player.getLocation(),Sound.FIZZ,10,10);
             }
             mLand.highlightLand(player, Effect.LAVADRIP);
             //InventoryCloseEvent.getHandlerList().unregister(this);
@@ -250,10 +254,10 @@ public class LandManagerView implements Listener {
             if((col<=(endIndex-startIndex) && col>0)) {
 
                 if(row == 1) {
-                    player.playSound(player.getLocation(), Sound.CLICK, 1L, 1L);
+//todo                    player.playSound(player.getLocation(), Sound.CLICK, 1L, 1L);
                     perms[0][permSlots.get((col-1)+((pageNum)*8))] = bSwap(perms[0][permSlots.get((col-1)+((pageNum)*8))]);
                 } else if (row == 2){
-                    player.playSound(player.getLocation(), Sound.CLICK, 1L, 1L);
+//todo                    player.playSound(player.getLocation(), Sound.CLICK, 1L, 1L);
                     //System.out.println((col-1)+((pageNum)*8));
                     perms[1][permSlots.get((col-1)+((pageNum)*8))] = bSwap(perms[1][permSlots.get((col-1)+((pageNum)*8))]);
                     //System.out.println(perms[1][permSlots.get((col-1)+((pageNum)*8))]);
@@ -265,7 +269,7 @@ public class LandManagerView implements Listener {
 
             if(pageNum < numPages-1 && event.getRawSlot()==35){
                 //35
-                player.playSound(player.getLocation(), Sound.CLICK, 1L, 1L);
+//todo                player.playSound(player.getLocation(), Sound.CLICK, 1L, 1L);
                 pageNum++;
                 updateUIData();
                 setToggles();
@@ -273,7 +277,7 @@ public class LandManagerView implements Listener {
             }
             if(pageNum > 0 && event.getRawSlot()==27){
                 //27
-                player.playSound(player.getLocation(), Sound.CLICK, 1L, 1L);
+//todo                player.playSound(player.getLocation(), Sound.CLICK, 1L, 1L);
                 pageNum--;
                 updateUIData();
                 setToggles();
