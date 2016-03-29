@@ -377,10 +377,8 @@ public class LandMap {
 
             }
 
-            //OfflinePlayer ofp = Bukkit.getOfflinePlayer(mapData[i].substring(5,17));
-            //todo String index out of range (17) ??? What broke?
+            //todo
             OfflinePlayer ofp = new myOfflinePlayer(mapData[i].substring(5, 17));
-            //String ofp = mapData[i].substring(5,17);
 
             Score score = objective.getScore(ofp.getName());
 
@@ -467,12 +465,15 @@ public class LandMap {
 
         }
 
-        //TODO
 
-        mapRows[mapRows.length - 3] = ChatColor.GREEN + "█-";         //mess if >28 map won't render
-        mapRows[mapRows.length - 2] = ChatColor.YELLOW + "█-";   //mess if >28 map won't render
-        mapRows[mapRows.length - 1] = ChatColor.RED + "█-";       //mess if >28 map won't render
         //mapRows[0] = "";
+
+
+        /**
+         * Locale strings are retrieved from file for use in map legend.
+         * Scoreboards do not cooperate with strings longer than 28 characters,
+         * therefore they will be truncated if too long.
+         */
 
         FileConfiguration messages = plugin.getMessageConfig();
 
@@ -480,22 +481,22 @@ public class LandMap {
         final String friends = messages.getString("map.labels.friends");
         final String others = messages.getString("map.labels.others");
 
-        if (yours.length() <= 26) {
-            mapRows[mapRows.length - 3].concat(yours);
+        if (yours.length() <= 25) {
+            mapRows[mapRows.length - 3] = ChatColor.GREEN + "█- " + yours;
         } else {
-            mapRows[mapRows.length - 3].concat("Yours");
+            mapRows[mapRows.length - 3] = ChatColor.GREEN + "█- " + yours.substring(0, 25);
         }
 
-        if (friends.length() <= 26) {
-            mapRows[mapRows.length - 2].concat(friends);
+        if (friends.length() <= 25) {
+            mapRows[mapRows.length - 2] = ChatColor.YELLOW + "█- " + friends;
         } else {
-            mapRows[mapRows.length - 2].concat("Friends'");
+            mapRows[mapRows.length - 2] = ChatColor.YELLOW + "█- " + friends.substring(0, 25);
         }
 
-        if (others.length() <= 26) {
-            mapRows[mapRows.length - 1].concat(friends);
+        if (others.length() <= 25) {
+            mapRows[mapRows.length - 1] = ChatColor.RED + "█- " + others;
         } else {
-            mapRows[mapRows.length - 1].concat("Others'");
+            mapRows[mapRows.length - 1] = ChatColor.RED + "█- " + others.substring(0, 25);
         }
 
         return mapRows;
