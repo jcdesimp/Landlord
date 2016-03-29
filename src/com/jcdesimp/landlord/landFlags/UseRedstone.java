@@ -29,9 +29,9 @@ public class UseRedstone extends Landflag {
     /**
      * Constructor needs to be defined and properly call super()
      */
-    public UseRedstone() {
+    public UseRedstone(Landlord plugin) {
         //mess all these constructor values
-        super(
+        super(plugin,
                 "Use Redstone",                                   //Display name (will be displayed to players)
                 "Gives permission to use buttons and|" +
                         "levers, and trip pressure plates,|" +    //Description (Lore of headerItem '|' will seperate lines of lore.)

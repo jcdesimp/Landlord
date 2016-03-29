@@ -1,5 +1,6 @@
 package com.jcdesimp.landlord.landFlags;
 
+import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.landManagement.Landflag;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
@@ -10,8 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Arrays;
 
 /**
  * File created by jcdesimp on 5/24/14.
@@ -24,9 +23,9 @@ import java.util.Arrays;
  */
 public class PVP extends Landflag {
 
-    public PVP() {
+    public PVP(Landlord plugin) {
         //mess all these constructor values
-        super(
+        super(plugin,
                 "PVP",                                          //Display name (will be displayed to players)
                 "Gives permission to attack|" +
                         "players on this land|" ,

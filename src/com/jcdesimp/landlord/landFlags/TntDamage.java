@@ -1,5 +1,6 @@
 package com.jcdesimp.landlord.landFlags;
 
+import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.landManagement.Landflag;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
@@ -15,7 +16,6 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,9 +34,9 @@ public class TntDamage extends Landflag {
     /**
      * Constructor needs to be defined and properly call super()
      */
-    public TntDamage() {
+    public TntDamage(Landlord plugin) {
         //mess all these constructor values
-        super(
+        super(plugin,
                 "TNT Damage",                         //Display name (will be displayed to players)
                 "Gives permission to cause block|" +
                         "damage with tnt.",           //Description (Lore of headerItem '|' will seperate lines of lore.)

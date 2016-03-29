@@ -1,5 +1,6 @@
 package com.jcdesimp.landlord.landFlags;
 
+import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.landManagement.Landflag;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
@@ -28,9 +29,9 @@ public class UseContainers extends Landflag {
     /**
      * Constructor needs to be defined and properly call super()
      */
-    public UseContainers() {
+    public UseContainers(Landlord plugin) {
         //mess all these constructor values
-        super(
+        super(plugin,
                 "Use Containers",                                       //Display name (will be displayed to players)
                 "Gives permission to use trap chests|" +
                         "chests, furnaces, anvils, hoppers,|" +           //Description (Lore of headerItem '|' will seperate lines of lore.)

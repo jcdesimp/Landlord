@@ -1,8 +1,10 @@
 package com.jcdesimp.landlord.landFlags;
 
+import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.landManagement.Landflag;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -37,9 +39,9 @@ public class Build extends Landflag {
     /**
      * Constructor needs to be defined and properly call super()
      */
-    public Build() {
+    public Build(Landlord plugin) {
         //mess all these constructor values
-        super(
+        super(plugin,
                 "Build",                                       //Display name (will be displayed to players)
                 "Gives permission to place|" +
                         "and break blocks and edit|" +

@@ -1,5 +1,6 @@
 package com.jcdesimp.landlord.landManagement;
 
+import com.jcdesimp.landlord.Landlord;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
@@ -7,6 +8,9 @@ import org.bukkit.inventory.ItemStack;
  * File created by jcdesimp on 4/11/14.
  */
 public abstract class Landflag implements Listener {
+
+    private Landlord plugin;
+
     //Data Fields
     private int permSlot;
     private String uniqueName;
@@ -20,13 +24,14 @@ public abstract class Landflag implements Listener {
     private String deniedTitle;
     private String deniedText;
 
-    protected Landflag(String displayName,
+    protected Landflag(Landlord plugin, String displayName,
                        String description,
                        ItemStack headerItem,
                        String allowedTitle,
                        String allowedText,
                        String deniedTitle,
                        String deniedText) {
+        this.plugin = plugin;
         this.displayName = displayName;
         this.description = description;
         this.headerItem = headerItem;
@@ -48,12 +53,12 @@ public abstract class Landflag implements Listener {
         return deniedText;
     }
 
-    public void setUniqueName(String uniqueName) {
-        this.uniqueName = uniqueName;
-    }
-
     public String getUniqueName() {
         return uniqueName;
+    }
+
+    public void setUniqueName(String uniqueName) {
+        this.uniqueName = uniqueName;
     }
 
     public String getDisplayName() {
@@ -78,5 +83,9 @@ public abstract class Landflag implements Listener {
 
     public String getDeniedTitle() {
         return deniedTitle;
+    }
+
+    public Landlord getPlugin() {
+        return plugin;
     }
 }

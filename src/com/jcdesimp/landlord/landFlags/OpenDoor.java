@@ -1,5 +1,6 @@
 package com.jcdesimp.landlord.landFlags;
 
+import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.landManagement.Landflag;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
@@ -28,9 +29,9 @@ public class OpenDoor extends Landflag {
     /**
      * Constructor needs to be defined and properly call super()
      */
-    public OpenDoor() {
+    public OpenDoor(Landlord plugin) {
         //mess all these constructor values
-        super(
+        super(plugin,
                 "Open Doors",                                       //Display name (will be displayed to players)
                 "Gives permission to open/close doors.",            //Description (Lore of headerItem '|' will seperate lines of lore.)
                 new ItemStack(Material.WOOD_DOOR),                  //Itemstack (represented in and manager)

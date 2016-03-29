@@ -115,25 +115,25 @@ public final class Landlord extends JavaPlugin {
 
         //Register default flags
         if(getConfig().getBoolean("enabled-flags.build")) {
-            flagManager.registerFlag(new Build());
+            flagManager.registerFlag(new Build(this));
         }
         if(getConfig().getBoolean("enabled-flags.harmAnimals")) {
-            flagManager.registerFlag(new HarmAnimals());
+            flagManager.registerFlag(new HarmAnimals(this));
         }
         if(getConfig().getBoolean("enabled-flags.useContainers")) {
-            flagManager.registerFlag(new UseContainers());
+            flagManager.registerFlag(new UseContainers(this));
         }
         if(getConfig().getBoolean("enabled-flags.tntDamage")) {
-            flagManager.registerFlag(new TntDamage());
+            flagManager.registerFlag(new TntDamage(this));
         }
         if(getConfig().getBoolean("enabled-flags.useRedstone")) {
-            flagManager.registerFlag(new UseRedstone());
+            flagManager.registerFlag(new UseRedstone(this));
         }
         if(getConfig().getBoolean("enabled-flags.openDoor")) {
-            flagManager.registerFlag(new OpenDoor());
+            flagManager.registerFlag(new OpenDoor(this));
         }
         if(getConfig().getBoolean("enabled-flags.pvp")) {
-            flagManager.registerFlag(new PVP());
+            flagManager.registerFlag(new PVP(this));
         }
         //flagManager.registerFlag(new OpenDoorDUPE1());
         //flagManager.registerFlag(new OpenDoorDUPE2());

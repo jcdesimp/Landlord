@@ -1,11 +1,11 @@
 package com.jcdesimp.landlord.landFlags;
 
+import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.landManagement.Landflag;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -13,7 +13,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.Arrays;
 
 /**
@@ -36,9 +35,9 @@ public class HarmAnimals extends Landflag {
     /*
      * Constructor needs to be defined and properly call super()
      */
-    public HarmAnimals() {
+    public HarmAnimals(Landlord plugin) {
         //mess all these constructor values
-        super(
+        super(plugin,
                 "Harm Animals",                                    //Display name (will be displayed to players)
                 "Gives permission to hurt or kill|" +
                         "pigs, sheep, cows, mooshrooms,|" +        //Description (Lore of headerItem '|' will seperate lines of lore.)
