@@ -181,7 +181,8 @@ commands:
         - "deleteallfriends"
         - "deletefriendall"
 map:
-  labels:
+  legend:
     yours: "Yours"
     friends: "Friends'"
     others: "Others'"
+  header: "Land Map"

@@ -288,15 +288,34 @@ public class LandMap {
         Team team = board.registerNewTeam("teamname");
         team.addPlayer(p);
 
+        FileConfiguration messages = plugin.getMessageConfig();
+        final String header = messages.getString("map.header");
+
         Objective objective = board.registerNewObjective("Land Map", "dummy");
         /*ChatColor.STRIKETHROUGH+""+ChatColor.DARK_GREEN+
         "=== "+ChatColor.RESET+""+ChatColor.DARK_GREEN +"Land Map"
                 +ChatColor.STRIKETHROUGH+""+ChatColor.DARK_GREEN+" ==="*/
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        objective.setDisplayName(ChatColor.YELLOW + "" + ChatColor.STRIKETHROUGH +
-                "==" + ChatColor.RESET + "" + ChatColor.GOLD + " " +
-                "Land Map"                               //mess !WARN! if len > 14 map will not render !Enforce
-                + " " + ChatColor.YELLOW + "" + ChatColor.STRIKETHROUGH + "==");
+
+        /**
+         * Locale string is retrieved from file for use in map header.
+         * Scoreboards do not cooperate with headers longer than 14 characters,
+         * therefore it will be truncated if too long.
+         */
+
+        if (header.length() <= 14) {
+            objective.setDisplayName(ChatColor.YELLOW + "" + ChatColor.STRIKETHROUGH +
+                    "==" + ChatColor.RESET + "" + ChatColor.GOLD + " " +
+                    header
+                    + " " + ChatColor.YELLOW + "" + ChatColor.STRIKETHROUGH + "==");
+        } else {
+            objective.setDisplayName(ChatColor.YELLOW + "" + ChatColor.STRIKETHROUGH +
+                    "==" + ChatColor.RESET + "" + ChatColor.GOLD + " " +
+                    header.substring(0, 14)
+                    + " " + ChatColor.YELLOW + "" + ChatColor.STRIKETHROUGH + "==");
+        }
+
+
         String[] mapData = buildMap(p);
         for (int i = 0; i < mapData.length; i++) {
             if (mapData[i].length() < 21) {
@@ -477,9 +496,9 @@ public class LandMap {
 
         FileConfiguration messages = plugin.getMessageConfig();
 
-        final String yours = messages.getString("map.labels.yours");
-        final String friends = messages.getString("map.labels.friends");
-        final String others = messages.getString("map.labels.others");
+        final String yours = messages.getString("map.legend.yours");
+        final String friends = messages.getString("map.legend.friends");
+        final String others = messages.getString("map.legend.others");
 
         if (yours.length() <= 25) {
             mapRows[mapRows.length - 3] = ChatColor.GREEN + "█- " + yours;
