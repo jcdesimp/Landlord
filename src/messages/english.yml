@@ -186,3 +186,87 @@ map:
     friends: "Friends'"
     others: "Others'"
   header: "Land Map"
+flags:
+  build:
+    displayName: "Build"
+    #note that the pipe '|' notifies Landlord to use a new line for flag descriptions.
+    description: "Gives permission to place|and break blocks and edit|things like item frames and|note blocks."
+    allowedTitle: "Allowed Build"
+    allowedText: "can build."
+    deniedTitle: "Denied Build"
+    deniedText: "cannot build."
+  harmAnimals:
+    displayName: "Harm Animals"
+    description: "Gives permission to hurt or kill|pigs, sheep, cows, mooshrooms,|chickens, horses, dogs, and cats."
+    allowedTitle: "Allowed Animal Damage"
+    allowedText: "can harm animals."
+    deniedTitle: "Denied Animal Damage"
+    deniedText: "cannot harm animals."
+  openDoor:
+    displayName: "Open Doors"
+    description: "Gives permission to open/close doors."
+    allowedTitle: "Allowed to Open Doors"
+    allowedText: "can open doors."
+    deniedTitle: "Not Allowed to Open Doors"
+    deniedText: "cannot open doors."
+  pvp:
+    displayName: "PVP"
+    description: "Gives permission to attack|players on this land|"
+    allowedTitle: "Allowed PvP"
+    allowedText: "can hurt other players."
+    deniedTitle: "Denied PvP"
+    deniedText: "cannot hurt other players."
+  tntDamage:
+    displayName: "TNT Damage"
+    description: "Gives permission to cause block|damage with tnt."
+    allowedTitle: "Allowed TNT Damage"
+    allowedText: "can damage with TNT."
+    deniedTitle: "Denied TNT Damage"
+    deniedText: "cannot damage with TNT."
+  useContainers:
+    displayName: "Use Containers"
+    description: "Gives permission to use trap chests|chests, furnaces, anvils, hoppers,|droppers, dispensers, beacons,|brewing stands, cauldrons,|and Jukeboxes."
+    allowedTitle: "Allowed Container Usage"
+    allowedText: "can use containers."
+    deniedTitle: "Denied Container Usage"
+    deniedText: "cannot use containers."
+  useRedstone:
+    displayName: "Use Redstone"
+    description: "Gives permission to use buttons and|levers, and trip pressure plates,|and tripwires."
+    allowedTitle: "Allowed Redstone Usage"
+    allowedText: "can use redstone."
+    deniedTitle: "Denied Redstone Usage"
+    deniedText: "cannot use redstone."
+event:
+  build:
+    blockPlace: "You are not allowed to build on this land."
+    blockBreak: "You are not allowed to break on this land."
+    pourBucket: "You cannot place that on this land."
+    fillBucket: "You cannot do that on this land."
+    hangingBreak: "You cannot break that on this land."
+    useArmorStand: "You cannot do that here!"
+    breakArmorStandWithMelee: "You cannot do that on this land."
+    breakArmorStandWithArrow: "You cannot do that on this land."
+    itemFrameRemoveWithMelee: "You cannot break that on this land."
+    itemFrameRemoveWithArrow: "You cannot break that on this land."
+    itemFrameRemoveDirectly: "You cannot break that on this land."
+    itemFrameRotate: "You cannot do that on this land."
+    paintingPlace: "You cannot place that on this land."
+    cropDestroy: "You are not allowed to destroy crops on this land."
+    useFireCharge: "You cannot do that on this land."
+    blockStateChange: "You cannot do that on this land."
+  harmAnimals:
+    melee: "You cannot harm animals on this land."
+    projectile: "You cannot harm animals on this land."
+  openDoor:
+    interact: "You cannot open doors on this land."
+  pvp:
+    melee: "You cannot harm other players on this land."
+    projectile: "You cannot harm other players on this land."
+  tntDamage:
+    detonate: "You cannot detonate TNT on this land."
+    ignite: "You are not allowed to ignite tnt on this land."
+  useContainers:
+    interact: "You are not allowed to use containers on this land."
+  useRedstone:
+    interact: "You cannot use redstone on this land."
