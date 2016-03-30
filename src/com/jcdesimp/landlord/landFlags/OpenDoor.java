@@ -30,15 +30,14 @@ public class OpenDoor extends Landflag {
      * Constructor needs to be defined and properly call super()
      */
     public OpenDoor(Landlord plugin) {
-        //mess all these constructor values
         super(plugin,
-                "Open Doors",                                       //Display name (will be displayed to players)
-                "Gives permission to open/close doors.",            //Description (Lore of headerItem '|' will seperate lines of lore.)
-                new ItemStack(Material.WOOD_DOOR),                  //Itemstack (represented in and manager)
-                "Allowed to Open Doors",                            //Text shown in manager for granted permission
-                "can open doors.",                                  //Description in manager for granted permission (ex: Friendly players <desc>)
-                "Not Allowed to Open Doors",                        //Text shown in manager for denied permission
-                "cannot open doors."                                //Desciption in manager for denied permission (ex: Regular players <desc>)
+                plugin.getMessageConfig().getString("flags.openDoor.displayName"),      //Display name (will be displayed to players)
+                plugin.getMessageConfig().getString("flags.openDoor.description"),
+                new ItemStack(Material.WOOD_DOOR),        //Itemstack (represented in manager)
+                plugin.getMessageConfig().getString("flags.openDoor.allowedTitle"),      //Text shown in manager for granted permission
+                plugin.getMessageConfig().getString("flags.openDoor.allowedText"),      //Description in manager for granted permission (ex: Friendly players <desc>)
+                plugin.getMessageConfig().getString("flags.openDoor.deniedTitle"),      //Text shown in manager for denied permission
+                plugin.getMessageConfig().getString("flags.openDoor.deniedText")       //Desciption in manager for denied permission (ex: Regular players <desc>)
         );
     }
 
@@ -91,7 +90,7 @@ public class OpenDoor extends Landflag {
                 return;
             }
 
-            p.sendMessage(ChatColor.RED+"You cannot open doors on this land."); //mess
+            p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.openDoor.interact"));
             event.setCancelled(true);
         }
 
