@@ -35,16 +35,14 @@ public class TntDamage extends Landflag {
      * Constructor needs to be defined and properly call super()
      */
     public TntDamage(Landlord plugin) {
-        //mess all these constructor values
         super(plugin,
-                "TNT Damage",                         //Display name (will be displayed to players)
-                "Gives permission to cause block|" +
-                        "damage with tnt.",           //Description (Lore of headerItem '|' will seperate lines of lore.)
-                new ItemStack(Material.TNT),          //Itemstack (represented in and manager)
-                "Allowed TNT Damage",                 //Text shown in manager for granted permission
-                "can damage with TNT.",               //Description in manager for granted permission (ex: Friendly players <desc>)
-                "Denied TNT Damage",                  //Text shown in manager for denied permission
-                "cannot damage with TNT."             //Desciption in manager for denied permission (ex: Regular players <desc>)
+                plugin.getMessageConfig().getString("flags.tntDamage.displayName"),      //Display name (will be displayed to players)
+                plugin.getMessageConfig().getString("flags.tntDamage.description"),
+                new ItemStack(Material.TNT),        //Itemstack (represented in manager)
+                plugin.getMessageConfig().getString("flags.tntDamage.allowedTitle"),      //Text shown in manager for granted permission
+                plugin.getMessageConfig().getString("flags.tntDamage.allowedText"),      //Description in manager for granted permission (ex: Friendly players <desc>)
+                plugin.getMessageConfig().getString("flags.tntDamage.deniedTitle"),      //Text shown in manager for denied permission
+                plugin.getMessageConfig().getString("flags.tntDamage.deniedText")       //Desciption in manager for denied permission (ex: Regular players <desc>)
         );
     }
 
@@ -87,7 +85,7 @@ public class TntDamage extends Landflag {
             if(tnt.getSource() != null && tnt.getSource().getType().equals(EntityType.PLAYER)){
                 Player p = (Player)tnt.getSource();
                 if(!land.hasPermTo(p,this)){
-                    p.sendMessage(ChatColor.RED+"You cannot detonate TNT on this land.");   //mess
+                    p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.tntDamage.detonate"));
                     event.setCancelled(true);
                     return;
                 }
@@ -162,14 +160,10 @@ public class TntDamage extends Landflag {
             }
             Player p = event.getPlayer();
             if (!land.hasPermTo(p, this)) {
-                p.sendMessage(ChatColor.RED + "You are not allowed to ignite tnt on this land.");       //mess
+                p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.tntDamage.ignite"));
                 event.setCancelled(true);
             }
         }
     }
-
-
-
-
 
 }
