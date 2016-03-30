@@ -1,6 +1,5 @@
 package com.jcdesimp.landlord;
 
-import com.jcdesimp.landlord.configuration.CustomConfig;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -14,7 +13,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * File created by jcdesimp on 4/30/14.
@@ -22,7 +20,7 @@ import java.util.List;
  */
 public class LandAlerter implements Listener {
 
-    HashMap<String,String> landIn = new HashMap<String, String>();
+    HashMap<String, String> landIn = new HashMap<String, String>();
 
 
     private Landlord plugin;
@@ -34,7 +32,7 @@ public class LandAlerter implements Listener {
 
     public void landAlertPlayer(Player player, Location loc) {
 
-       FileConfiguration messages = plugin.getMessageConfig();
+        FileConfiguration messages = plugin.getMessageConfig();
 
         String leaveOwn = messages.getString("info.alerts.leaveOwnLand");
         String leaveOther = messages.getString("info.alerts.leaveOtherLand");
@@ -44,13 +42,11 @@ public class LandAlerter implements Listener {
         OwnedLand land = OwnedLand.getApplicableLand(loc);
 
 
-
-
         //Leaving Land
-        if(landIn.containsKey(player.getName())){
-            if(land==null){
+        if (landIn.containsKey(player.getName())) {
+            if (land == null) {
                 String prevName = landIn.get(player.getName());
-                if(prevName.equals(player.getName())){
+                if (prevName.equals(player.getName())) {
                     player.sendMessage(ChatColor.YELLOW + "** " + leaveOwn);
                 } else {
                     player.sendMessage(ChatColor.YELLOW + "** " + (leaveOther.replace("#{owner}", prevName)));
@@ -58,25 +54,24 @@ public class LandAlerter implements Listener {
 
             } else {
                 String prevName = landIn.get(player.getName());
-                if(!prevName.equals(land.getOwnerUsername())){
-                    if(prevName.equals(player.getName())){
-                        player.sendMessage(ChatColor.YELLOW+ "** " + leaveOwn);
+                if (!prevName.equals(land.getOwnerUsername())) {
+                    if (prevName.equals(player.getName())) {
+                        player.sendMessage(ChatColor.YELLOW + "** " + leaveOwn);
                     } else {
-                        player.sendMessage(ChatColor.YELLOW+ "** " + (leaveOther.replace("#{owner}", prevName)));
+                        player.sendMessage(ChatColor.YELLOW + "** " + (leaveOther.replace("#{owner}", prevName)));
                     }
                 }
             }
         }
 
 
-
         //Entering Land
-        if(land==null){
+        if (land == null) {
             landIn.remove(player.getName());
             return;
         }
 
-        if(landIn.containsKey(player.getName())) {
+        if (landIn.containsKey(player.getName())) {
             String prevName = landIn.get(player.getName());
             if (!prevName.equals(land.getOwnerUsername())) {
                 landIn.put(player.getName(), land.getOwnerUsername());
@@ -102,12 +97,9 @@ public class LandAlerter implements Listener {
     }
 
 
-
     @EventHandler(priority = EventPriority.HIGH)
     public void alertPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-
-
 
 
         if (player.getVehicle() != null) {
@@ -121,8 +113,6 @@ public class LandAlerter implements Listener {
             landAlertPlayer(player, event.getTo());
 
 
-
-
         }
 
     }
@@ -133,7 +123,7 @@ public class LandAlerter implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void playerLeave(PlayerQuitEvent event){
+    public void playerLeave(PlayerQuitEvent event) {
         landIn.remove(event.getPlayer().getName());
     }
 

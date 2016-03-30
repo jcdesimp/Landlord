@@ -10,15 +10,14 @@ public abstract class Utils {
 
     /**
      * Create a formatted and colorized help string for a command
-     * @param usage The usage string with command field and params
-     * @param desc a brief, one line description of the command
+     *
+     * @param usage   The usage string with command field and params
+     * @param desc    a brief, one line description of the command
      * @param command the string to use for as the command
      * @return The fully formatted command help string
      */
     public static String helpString(String usage, String desc, String command) {
-        //mess
-
-        usage = usage.replace("#{cmd}",command); // replace cmd with the first (main) alias
+        usage = usage.replace("#{cmd}", command); // replace cmd with the first (main) alias
 
         // return the constructed and colorized help string
         return ChatColor.DARK_AQUA + usage + ChatColor.RESET + " - " + desc;

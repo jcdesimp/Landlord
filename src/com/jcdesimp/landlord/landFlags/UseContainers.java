@@ -54,6 +54,7 @@ public class UseContainers extends Landflag {
 
     /**
      * Event handler for block placements
+     *
      * @param event that happened
      */
 
@@ -65,28 +66,26 @@ public class UseContainers extends Landflag {
      * your flag to do it's job
      *************************************
      */
-
-
     @EventHandler(priority = EventPriority.HIGH)
-    public void useContainer(PlayerInteractEvent event){
+    public void useContainer(PlayerInteractEvent event) {
 
-        String[] blockAccess = {"CHEST","TRAPPED_CHEST","BURNING_FURNACE","FURNACE","ANVIL","DROPPER","DISPENSER","HOPPER","BREWING_STAND","SOIL","BEACON","JUKEBOX","CAULDRON"};
+        String[] blockAccess = {"CHEST", "TRAPPED_CHEST", "BURNING_FURNACE", "FURNACE", "ANVIL", "DROPPER", "DISPENSER", "HOPPER", "BREWING_STAND", "SOIL", "BEACON", "JUKEBOX", "CAULDRON"};
 
-        if(!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))){
+        if (!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))) {
             return;
         }
         //System.out.println(event.getAction().toString());
         //System.out.println(event.getClickedBlock().getType().toString());
         //System.out.println(event.getItem());
-        if(!Arrays.asList(blockAccess).contains(event.getClickedBlock().getType().toString())){
+        if (!Arrays.asList(blockAccess).contains(event.getClickedBlock().getType().toString())) {
             return;
         }
         OwnedLand land = OwnedLand.getApplicableLand(event.getClickedBlock().getLocation());
-        if(land == null){
+        if (land == null) {
             return;
         }
         Player p = event.getPlayer();
-        if(!land.hasPermTo(p, this)){
+        if (!land.hasPermTo(p, this)) {
             p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.useContainers.interact"));
             event.setCancelled(true);
         }

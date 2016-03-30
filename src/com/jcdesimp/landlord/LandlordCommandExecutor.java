@@ -18,7 +18,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
     //private Base baseCommand;
     private Help helpCommand;
 
-    public LandlordCommandExecutor(Landlord plugin){
+    public LandlordCommandExecutor(Landlord plugin) {
         this.registeredCommands = new HashMap<String, LandlordCommand>();
 
 
@@ -47,14 +47,15 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
     /**
      * Main command handler
+     *
      * @param sender who sent the command
-     * @param label exact command (or alias) run
-     * @param args given with command
+     * @param label  exact command (or alias) run
+     * @param args   given with command
      * @return boolean
      */
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(cmd.getName().equalsIgnoreCase("landlord")) { // If the player typed /land then do the following...
+        if (cmd.getName().equalsIgnoreCase("landlord")) { // If the player typed /land then do the following...
             // Check if the attempted command is registered
             if (args.length == 0 || !registeredCommands.containsKey(args[0].toLowerCase())) {
                 // if there is no command, or it's not registered, show the help text as the command given is unknown
@@ -72,6 +73,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
     /**
      * Register a new command
+     *
      * @param cmd LandlordCommand to register
      * @return boolean of success - should fail if a requested label (name, alias) is not available
      */
@@ -88,7 +90,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
         for (String trigger : commandTriggers) {
 
             // Check if the command is taken
-            if(registeredCommands.containsKey(trigger.toLowerCase())) {
+            if (registeredCommands.containsKey(trigger.toLowerCase())) {
                 System.out.println("Failed to register command with alias '" + trigger + "', already taken!");
                 continue;   // Command name is taken already
             }

@@ -21,9 +21,10 @@ public class Reload implements LandlordCommand {
 
     /**
      * Reload landlord configuration file
+     *
      * @param sender who executed the command
-     * @param args given with command
-     * @param label exact command (or alias) run
+     * @param args   given with command
+     * @param label  exact command (or alias) run
      * @return boolean of success
      */
     @Override
@@ -34,19 +35,19 @@ public class Reload implements LandlordCommand {
         final String configReloaded = messages.getString("commands.reload.alerts.configReloaded");
         final String noPerms = messages.getString("info.warnings.noPerms");
 
-        if(sender.hasPermission("landlord.admin.reload")){
+        if (sender.hasPermission("landlord.admin.reload")) {
             plugin.reloadConfig();
-            sender.sendMessage(ChatColor.GREEN+configReloaded);
+            sender.sendMessage(ChatColor.GREEN + configReloaded);
             return true;
         }
-        sender.sendMessage(ChatColor.RED+noPerms);    
+        sender.sendMessage(ChatColor.RED + noPerms);
         return true;
     }
 
     @Override
     public String getHelpText(CommandSender sender) {
 
-        if(!sender.hasPermission("landlord.admin.list")){
+        if (!sender.hasPermission("landlord.admin.list")) {
             return null;
         }
 

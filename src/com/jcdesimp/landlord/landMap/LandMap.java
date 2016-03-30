@@ -29,13 +29,13 @@ public class LandMap {
 
     public LandMap(Player p, Landlord plugin) {
         this.plugin = plugin;
-        this.mapViewer=p;
+        this.mapViewer = p;
         this.currChunk = p.getLocation().getChunk();
         //System.out.println("CURR: "+currChunk);
         this.nearbyLand = Landlord.getInstance().getDatabase().find(OwnedLand.class)
                 .where()
-                .ge("x", this.currChunk.getX()-3).le("x", this.currChunk.getX()+3)
-                .ge("z", this.currChunk.getZ()-3).le("z",this.currChunk.getZ()+3)
+                .ge("x", this.currChunk.getX() - 3).le("x", this.currChunk.getX() + 3)
+                .ge("z", this.currChunk.getZ() - 3).le("z", this.currChunk.getZ() + 3)
                 .eq("worldName", this.currChunk.getWorld().getName())
                 .findList();
         //displayMap(mapViewer);
@@ -56,7 +56,7 @@ public class LandMap {
 
         this.schedulerId = new BukkitRunnable() {
             public void run() {
-                if(!currDir.equals(getPlayerDirection(mapViewer)) || !currChunk.equals(mapViewer.getLocation().getChunk())){
+                if (!currDir.equals(getPlayerDirection(mapViewer)) || !currChunk.equals(mapViewer.getLocation().getChunk())) {
                     displayMap(mapViewer);
                     currDir = getPlayerDirection(mapViewer);
                 }
@@ -68,33 +68,53 @@ public class LandMap {
 
     }
 
-    public static String getPlayerDirection(Player playerSelf){
+    public static String getPlayerDirection(Player playerSelf) {
         String dir;
         float y = playerSelf.getLocation().getYaw();
-        if( y < 0 ){y += 360;}
+        if (y < 0) {
+            y += 360;
+        }
         y %= 360;
-        int i = (int)((y+8) / 22.5);
-        if(i == 0){dir = "south";}
-        else if(i == 1){dir = "south southwest";}
-        else if(i == 2){dir = "southwest";}
-        else if(i == 3){dir = "west southwest";}
-        else if(i == 4){dir = "west";}
-        else if(i == 5){dir = "west northwest";}
-        else if(i == 6){dir = "northwest";}
-        else if(i == 7){dir = "north northwest";}
-        else if(i == 8){dir = "north";}
-        else if(i == 9){dir = "north northeast";}
-        else if(i == 10){dir = "northeast";}
-        else if(i == 11){dir = "east northeast";}
-        else if(i == 12){dir = "east";}
-        else if(i == 13){dir = "east southeast";}
-        else if(i == 14){dir = "southeast";}
-        else if(i == 15){dir = "south southeast";}
-        else {dir = "south";}
+        int i = (int) ((y + 8) / 22.5);
+        if (i == 0) {
+            dir = "south";
+        } else if (i == 1) {
+            dir = "south southwest";
+        } else if (i == 2) {
+            dir = "southwest";
+        } else if (i == 3) {
+            dir = "west southwest";
+        } else if (i == 4) {
+            dir = "west";
+        } else if (i == 5) {
+            dir = "west northwest";
+        } else if (i == 6) {
+            dir = "northwest";
+        } else if (i == 7) {
+            dir = "north northwest";
+        } else if (i == 8) {
+            dir = "north";
+        } else if (i == 9) {
+            dir = "north northeast";
+        } else if (i == 10) {
+            dir = "northeast";
+        } else if (i == 11) {
+            dir = "east northeast";
+        } else if (i == 12) {
+            dir = "east";
+        } else if (i == 13) {
+            dir = "east southeast";
+        } else if (i == 14) {
+            dir = "southeast";
+        } else if (i == 15) {
+            dir = "south southeast";
+        } else {
+            dir = "south";
+        }
         return dir;
     }
 
-    public static String[][] getMapDir(String dir){
+    public static String[][] getMapDir(String dir) {
 
         String[][] mapDir = new String[][]{
                 {"▓", "▒", "▒", "∞", "▒", "▒", "▓"},
@@ -106,7 +126,7 @@ public class LandMap {
                 {"▒", "▓", "▓", "▓", "▓", "▓", "▒"}
         };
 
-        if(dir.equals("west")){
+        if (dir.equals("west")) {
             mapDir = new String[][]{
                     {"▓", "▒", "▒", "▒", "▒", "▒", "▓"},
                     {"▒", "▓", "▒", "▓", "▒", "▓", "▒"},
@@ -116,7 +136,7 @@ public class LandMap {
                     {"▓", "▒", "▓", "▓", "▓", "▒", "▓"},
                     {"▒", "▓", "▓", "▓", "▓", "▓", "▒"}
             };
-        } else if(dir.equals("west northwest")){
+        } else if (dir.equals("west northwest")) {
             mapDir = new String[][]{
                     {"▓", "▒", "▒", "▒", "▒", "▒", "▓"},
                     {"∞", "▓", "▒", "▓", "▒", "▓", "▒"},
@@ -126,7 +146,7 @@ public class LandMap {
                     {"▓", "▒", "▓", "▓", "▓", "▒", "▓"},
                     {"▒", "▓", "▓", "▓", "▓", "▓", "▒"}
             };
-        } else if(dir.equals("northwest")){
+        } else if (dir.equals("northwest")) {
             mapDir = new String[][]{
                     {"∞", "▒", "▒", "▒", "▒", "▒", "▓"},
                     {"▒", "∞", "▒", "▓", "▒", "▓", "▒"},
@@ -136,7 +156,7 @@ public class LandMap {
                     {"▓", "▒", "▓", "▓", "▓", "▒", "▓"},
                     {"▒", "▓", "▓", "▓", "▓", "▓", "▒"}
             };
-        } else if(dir.equals("north northwest")){
+        } else if (dir.equals("north northwest")) {
             mapDir = new String[][]{
                     {"▓", "∞", "▒", "▒", "▒", "▒", "▓"},
                     {"▒", "▓", "∞", "▓", "▒", "▓", "▒"},
@@ -146,7 +166,7 @@ public class LandMap {
                     {"▓", "▒", "▓", "▓", "▓", "▒", "▓"},
                     {"▒", "▓", "▓", "▓", "▓", "▓", "▒"}
             };
-        } else if(dir.equals("north")){
+        } else if (dir.equals("north")) {
             mapDir = new String[][]{
                     {"▓", "▒", "▒", "∞", "▒", "▒", "▓"},
                     {"▒", "▓", "▒", "∞", "▒", "▓", "▒"},
@@ -156,7 +176,7 @@ public class LandMap {
                     {"▓", "▒", "▓", "▓", "▓", "▒", "▓"},
                     {"▒", "▓", "▓", "▓", "▓", "▓", "▒"}
             };
-        } else if(dir.equals("north northeast")){
+        } else if (dir.equals("north northeast")) {
             mapDir = new String[][]{
                     {"▓", "▒", "▒", "▒", "▒", "∞", "▓"},
                     {"▒", "▓", "▒", "▓", "∞", "▓", "▒"},
@@ -166,7 +186,7 @@ public class LandMap {
                     {"▓", "▒", "▓", "▓", "▓", "▒", "▓"},
                     {"▒", "▓", "▓", "▓", "▓", "▓", "▒"}
             };
-        } else if(dir.equals("northeast")){
+        } else if (dir.equals("northeast")) {
             mapDir = new String[][]{
                     {"▓", "▒", "▒", "▒", "▒", "▒", "∞"},
                     {"▒", "▓", "▒", "▓", "▒", "∞", "▒"},
@@ -176,7 +196,7 @@ public class LandMap {
                     {"▓", "▒", "▓", "▓", "▓", "▒", "▓"},
                     {"▒", "▓", "▓", "▓", "▓", "▓", "▒"}
             };
-        } else if(dir.equals("east northeast")){
+        } else if (dir.equals("east northeast")) {
             mapDir = new String[][]{
                     {"▓", "▒", "▒", "▒", "▒", "▒", "▓"},
                     {"▒", "▓", "▒", "▓", "▒", "▓", "∞"},
@@ -186,7 +206,7 @@ public class LandMap {
                     {"▓", "▒", "▓", "▓", "▓", "▒", "▓"},
                     {"▒", "▓", "▓", "▓", "▓", "▓", "▒"}
             };
-        } else if(dir.equals("east")){
+        } else if (dir.equals("east")) {
             mapDir = new String[][]{
                     {"▓", "▒", "▒", "▒", "▒", "▒", "▓"},
                     {"▒", "▓", "▒", "▓", "▒", "▓", "▒"},
@@ -196,7 +216,7 @@ public class LandMap {
                     {"▓", "▒", "▓", "▓", "▓", "▒", "▓"},
                     {"▒", "▓", "▓", "▓", "▓", "▓", "▒"}
             };
-        } else if(dir.equals("east southeast")){
+        } else if (dir.equals("east southeast")) {
             mapDir = new String[][]{
                     {"▓", "▒", "▒", "▒", "▒", "▒", "▓"},
                     {"▒", "▓", "▒", "▓", "▒", "▓", "▒"},
@@ -206,7 +226,7 @@ public class LandMap {
                     {"▓", "▒", "▓", "▓", "▓", "▒", "∞"},
                     {"▒", "▓", "▓", "▓", "▓", "▓", "▒"}
             };
-        } else if(dir.equals("southeast")){
+        } else if (dir.equals("southeast")) {
             mapDir = new String[][]{
                     {"▓", "▒", "▒", "▒", "▒", "▒", "▓"},
                     {"▒", "▓", "▒", "▓", "▒", "▓", "▒"},
@@ -216,7 +236,7 @@ public class LandMap {
                     {"▓", "▒", "▓", "▓", "▓", "∞", "▓"},
                     {"▒", "▓", "▓", "▓", "▓", "▓", "∞"}
             };
-        } else if(dir.equals("south southeast")){
+        } else if (dir.equals("south southeast")) {
             mapDir = new String[][]{
                     {"▓", "▒", "▒", "▒", "▒", "▒", "▓"},
                     {"▒", "▓", "▒", "▓", "▒", "▓", "▒"},
@@ -226,7 +246,7 @@ public class LandMap {
                     {"▓", "▒", "▓", "▓", "∞", "▒", "▓"},
                     {"▒", "▓", "▓", "▓", "▓", "∞", "▒"}
             };
-        } else if(dir.equals("south")){
+        } else if (dir.equals("south")) {
             mapDir = new String[][]{
                     {"▓", "▒", "▒", "▒", "▒", "▒", "▓"},
                     {"▒", "▓", "▒", "▓", "▒", "▓", "▒"},
@@ -236,7 +256,7 @@ public class LandMap {
                     {"▓", "▒", "▓", "∞", "▓", "▒", "▓"},
                     {"▒", "▓", "▓", "∞", "▓", "▓", "▒"}
             };
-        } else if(dir.equals("south southwest")){
+        } else if (dir.equals("south southwest")) {
             mapDir = new String[][]{
                     {"▓", "▒", "▒", "▒", "▒", "▒", "▓"},
                     {"▒", "▓", "▒", "▓", "▒", "▓", "▒"},
@@ -246,7 +266,7 @@ public class LandMap {
                     {"▓", "▒", "∞", "▓", "▓", "▒", "▓"},
                     {"▒", "∞", "▓", "▓", "▓", "▓", "▒"}
             };
-        } else if(dir.equals("southwest")){
+        } else if (dir.equals("southwest")) {
             mapDir = new String[][]{
                     {"▓", "▒", "▒", "▒", "▒", "▒", "▓"},
                     {"▒", "▓", "▒", "▓", "▒", "▓", "▒"},
@@ -256,7 +276,7 @@ public class LandMap {
                     {"▓", "∞", "▓", "▓", "▓", "▒", "▓"},
                     {"∞", "▓", "▓", "▓", "▓", "▓", "▒"}
             };
-        } else if(dir.equals("west southwest")){
+        } else if (dir.equals("west southwest")) {
             mapDir = new String[][]{
                     {"▓", "▒", "▒", "▒", "▒", "▒", "▓"},
                     {"▒", "▓", "▒", "▓", "▒", "▓", "▒"},
@@ -420,11 +440,11 @@ public class LandMap {
         return board;
     }
 
-    public void updateMap(){
+    public void updateMap() {
         nearbyLand = Landlord.getInstance().getDatabase().find(OwnedLand.class)
                 .where()
-                .ge("x", currChunk.getX()-4).le("x", currChunk.getX()+4)
-                .ge("z", currChunk.getZ()-4).le("z",currChunk.getZ()+4)
+                .ge("x", currChunk.getX() - 4).le("x", currChunk.getX() + 4)
+                .ge("z", currChunk.getZ() - 4).le("z", currChunk.getZ() + 4)
                 .eq("worldName", currChunk.getWorld().getName())
                 .findList();
         currChunk = mapViewer.getLocation().getChunk();
@@ -440,37 +460,37 @@ public class LandMap {
 
         String[] mapRows = new String[mapBoard.length + 3];
 
-        if(!currChunk.equals(mapViewer.getLocation().getChunk())){
+        if (!currChunk.equals(mapViewer.getLocation().getChunk())) {
             updateMap();
         }
-        for(int z = 0; z < mapBoard.length; z++){
+        for (int z = 0; z < mapBoard.length; z++) {
             String row = "";
 
             //if curr chunk
-            for(int x = 0; x < mapBoard[z].length; x++){
+            for (int x = 0; x < mapBoard[z].length; x++) {
                 List<OwnedLand> filteredList =
                         Landlord.getInstance().getDatabase().filter(OwnedLand.class)
-                                .eq("x", currChunk.getX()-radius+x)
-                                .eq("z", currChunk.getZ()-radius+z)
+                                .eq("x", currChunk.getX() - radius + x)
+                                .eq("z", currChunk.getZ() - radius + z)
                                 .eq("worldName", currChunk.getWorld().getName())
                                 .filter(nearbyLand);
                 String currSpot = mapBoard[z][x];
 
 
-                if(!filteredList.isEmpty()){
+                if (!filteredList.isEmpty()) {
                     OwnedLand ol = filteredList.get(0);
-                    if(ol.ownerUUID().equals(p.getUniqueId())){
+                    if (ol.ownerUUID().equals(p.getUniqueId())) {
                         currSpot = ChatColor.GREEN + currSpot;
-                    } else if(ol.isFriend(p)){
+                    } else if (ol.isFriend(p)) {
                         currSpot = ChatColor.YELLOW + currSpot;
                     } else {
                         currSpot = ChatColor.RED + currSpot;
                     }
                 } else {
-                    if(currSpot.equals("∞") || currSpot.equals("\u2062")){
+                    if (currSpot.equals("∞") || currSpot.equals("\u2062")) {
                         currSpot = ChatColor.RESET + currSpot;
                     } else {
-                    currSpot = ChatColor.GRAY + currSpot;
+                        currSpot = ChatColor.GRAY + currSpot;
                     }
                 }
 

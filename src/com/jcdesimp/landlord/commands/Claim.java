@@ -23,6 +23,7 @@ public class Claim implements LandlordCommand {
 
     /**
      * Constructor for Claim command
+     *
      * @param plugin the main Landlord plugin
      */
     public Claim(Landlord plugin) {
@@ -32,8 +33,9 @@ public class Claim implements LandlordCommand {
     /**
      * Called when landlord claim command is executed
      * This command must be run by a player
+     *
      * @param sender who executed the command
-     * @param args given with command
+     * @param args   given with command
      * @return boolean
      */
     @Override
@@ -58,11 +60,10 @@ public class Claim implements LandlordCommand {
             sender.sendMessage(ChatColor.DARK_RED + notPlayer);
         } else {
             Player player = (Player) sender;
-            if(!player.hasPermission("landlord.player.own")){
-                player.sendMessage(ChatColor.RED+ noPerms);
+            if (!player.hasPermission("landlord.player.own")) {
+                player.sendMessage(ChatColor.RED + noPerms);
                 return true;
             }
-
 
 
             //sender.sendMessage(ChatColor.GOLD + "Current Location: " + player.getLocation().toString());
@@ -71,29 +72,28 @@ public class Claim implements LandlordCommand {
             List<String> disabledWorlds = plugin.getConfig().getStringList("disabled-worlds");
             for (String s : disabledWorlds) {
                 if (s.equalsIgnoreCase(currChunk.getWorld().getName())) {
-                    player.sendMessage(ChatColor.RED+ cannotClaim);
+                    player.sendMessage(ChatColor.RED + cannotClaim);
                     return true;
                 }
             }
 
             // Check if worldguard is installed
-            if(plugin.hasWorldGuard()){
+            if (plugin.hasWorldGuard()) {
                 // if it is make sure that the attempted land claim isn't with a protected worldguard region.
-                if(!plugin.getWgHandler().canClaim(player,currChunk)){
+                if (!plugin.getWgHandler().canClaim(player, currChunk)) {
                     player.sendMessage(ChatColor.RED + noClaimZone);
                     return true;
                 }
             }
 
 
-
             OwnedLand land = OwnedLand.landFromProperties(player, currChunk);
             OwnedLand dbLand = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
 
 
-            if(dbLand != null){
+            if (dbLand != null) {
                 //Check if they already own this land
-                if (dbLand.ownerUUID().equals(player.getUniqueId())){
+                if (dbLand.ownerUUID().equals(player.getUniqueId())) {
                     player.sendMessage(ChatColor.YELLOW + alreadyOwn);
                     return true;
                 }
@@ -101,41 +101,41 @@ public class Claim implements LandlordCommand {
                 return true;
 
             }
-            int orLimit = plugin.getConfig().getInt("limits.landLimit",10);
-            int limit = plugin.getConfig().getInt("limits.landLimit",10);
+            int orLimit = plugin.getConfig().getInt("limits.landLimit", 10);
+            int limit = plugin.getConfig().getInt("limits.landLimit", 10);
 
-            if(player.hasPermission("landlord.limit.extra5")){
-                limit=orLimit+plugin.getConfig().getInt("limits.extra5",0);
-            } else if(player.hasPermission("landlord.limit.extra4")){
-                limit=orLimit+plugin.getConfig().getInt("limits.extra4",0);
-            } else if(player.hasPermission("landlord.limit.extra3")){
-                limit=orLimit+plugin.getConfig().getInt("limits.extra3",0);
-            } else if(player.hasPermission("landlord.limit.extra2")){
-                limit=orLimit+plugin.getConfig().getInt("limits.extra2",0);
-            } else if(player.hasPermission("landlord.limit.extra")){
-                limit=orLimit+plugin.getConfig().getInt("limits.extra",0);
+            if (player.hasPermission("landlord.limit.extra5")) {
+                limit = orLimit + plugin.getConfig().getInt("limits.extra5", 0);
+            } else if (player.hasPermission("landlord.limit.extra4")) {
+                limit = orLimit + plugin.getConfig().getInt("limits.extra4", 0);
+            } else if (player.hasPermission("landlord.limit.extra3")) {
+                limit = orLimit + plugin.getConfig().getInt("limits.extra3", 0);
+            } else if (player.hasPermission("landlord.limit.extra2")) {
+                limit = orLimit + plugin.getConfig().getInt("limits.extra2", 0);
+            } else if (player.hasPermission("landlord.limit.extra")) {
+                limit = orLimit + plugin.getConfig().getInt("limits.extra", 0);
             }
 
-            if(limit >= 0 && !player.hasPermission("landlord.limit.override")){
-                if(plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId().toString()).findRowCount() >= limit){
-                    player.sendMessage(ChatColor.RED+ownLimit.replace("#{limit}", ""+limit));
+            if (limit >= 0 && !player.hasPermission("landlord.limit.override")) {
+                if (plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName", player.getUniqueId().toString()).findRowCount() >= limit) {
+                    player.sendMessage(ChatColor.RED + ownLimit.replace("#{limit}", "" + limit));
                     return true;
                 }
             }
 
             //Money Handling
-            if(plugin.hasVault()){
-                if(plugin.getvHandler().hasEconomy()){
+            if (plugin.hasVault()) {
+                if (plugin.getvHandler().hasEconomy()) {
                     Double amt = plugin.getConfig().getDouble("economy.buyPrice", 100.0);
-                    if(amt > 0){
+                    if (amt > 0) {
                         int numFree = plugin.getConfig().getInt("economy.freeLand", 0);
-                        if (numFree > 0 && plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId().toString()).findRowCount() < numFree) {
+                        if (numFree > 0 && plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName", player.getUniqueId().toString()).findRowCount() < numFree) {
                             //player.sendMessage(ChatColor.YELLOW+"You have been charged " + plugin.getvHandler().formatCash(amt) + " to purchase land.");
-                        } else if(!plugin.getvHandler().chargeCash(player, amt)){
-                            player.sendMessage(ChatColor.RED+ claimPrice.replace("#{cost}", plugin.getvHandler().formatCash(amt)));
+                        } else if (!plugin.getvHandler().chargeCash(player, amt)) {
+                            player.sendMessage(ChatColor.RED + claimPrice.replace("#{cost}", plugin.getvHandler().formatCash(amt)));
                             return true;
                         } else {
-                            player.sendMessage(ChatColor.YELLOW+ charged.replace("#{cost}", plugin.getvHandler().formatCash(amt)));
+                            player.sendMessage(ChatColor.YELLOW + charged.replace("#{cost}", plugin.getvHandler().formatCash(amt)));
                         }
                     }
 
@@ -148,7 +148,7 @@ public class Claim implements LandlordCommand {
                             .replace("#{chunkCoords}", "(" + currChunk.getX() + ", " + currChunk.getZ() + ")")
                             .replace("#{worldName}", currChunk.getWorld().getName()));
 
-            if(plugin.getConfig().getBoolean("options.soundEffects",true)){
+            if (plugin.getConfig().getBoolean("options.soundEffects", true)) {
 //TODO                player.playSound(player.getLocation(), Sound.FIREWORK_TWINKLE2,10,10);
             }
 
@@ -172,12 +172,12 @@ public class Claim implements LandlordCommand {
 
         helpString += Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
 
-        if(plugin.hasVault()){
-            if(plugin.getvHandler().hasEconomy() && plugin.getConfig().getDouble("economy.buyPrice", 100.0)>0){     //conf
-                helpString += ChatColor.YELLOW+" "+ChatColor.ITALIC+ priceWarning
+        if (plugin.hasVault()) {
+            if (plugin.getvHandler().hasEconomy() && plugin.getConfig().getDouble("economy.buyPrice", 100.0) > 0) {     //conf
+                helpString += ChatColor.YELLOW + " " + ChatColor.ITALIC + priceWarning
                         .replace(
-                            "#{pricetag}",                  // insert the formatted price string
-                            plugin.getvHandler().formatCash(plugin.getConfig().getDouble("economy.buyPrice", 100.0))        //conf
+                                "#{pricetag}",                  // insert the formatted price string
+                                plugin.getvHandler().formatCash(plugin.getConfig().getDouble("economy.buyPrice", 100.0))        //conf
                         );
             }
         }

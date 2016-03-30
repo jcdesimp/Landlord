@@ -24,8 +24,9 @@ public class Manage implements LandlordCommand {
 
     /**
      * Command for managing player land perms
+     *
      * @param sender who executed the command
-     * @param args given with command
+     * @param args   given with command
      * @return boolean
      */
     @Override
@@ -44,22 +45,22 @@ public class Manage implements LandlordCommand {
             sender.sendMessage(ChatColor.DARK_RED + notPlayer);
         } else {
             Player player = (Player) sender;
-            if(!player.hasPermission("landlord.player.own")){
-                player.sendMessage(ChatColor.RED+noPerms);
+            if (!player.hasPermission("landlord.player.own")) {
+                player.sendMessage(ChatColor.RED + noPerms);
                 return true;
             }
-            if(plugin.getFlagManager().getRegisteredFlags().size() <= 0){
-                player.sendMessage(ChatColor.RED+noLand);
+            if (plugin.getFlagManager().getRegisteredFlags().size() <= 0) {
+                player.sendMessage(ChatColor.RED + noLand);
                 return true;
             }
             Chunk currChunk = player.getLocation().getChunk();
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
-            if( land == null || ( !land.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.manage") ) ){
+            if (land == null || (!land.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.manage"))) {
                 player.sendMessage(ChatColor.RED + notOwner);
                 return true;
             }
-            if(!land.ownerUUID().equals(player.getUniqueId())){
-                player.sendMessage(ChatColor.YELLOW+otherLand);   
+            if (!land.ownerUUID().equals(player.getUniqueId())) {
+                player.sendMessage(ChatColor.YELLOW + otherLand);
             }
             plugin.getManageViewManager().activateView(player, land);
 

@@ -50,7 +50,7 @@ public class UnfriendAll implements LandlordCommand {
                 return true;
             }
 
-            List<OwnedLand> pLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId()).findList();
+            List<OwnedLand> pLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName", player.getUniqueId()).findList();
 
             OfflinePlayer possible = getOfflinePlayer(args[1]);
             if (!possible.hasPlayedBefore() && !possible.isOnline()) {
@@ -58,14 +58,14 @@ public class UnfriendAll implements LandlordCommand {
                 return true;
             }
 
-            if (pLand.size() > 0){
-                for(OwnedLand l : pLand){
+            if (pLand.size() > 0) {
+                for (OwnedLand l : pLand) {
                     l.removeFriend(Friend.friendFromOfflinePlayer(getOfflinePlayer(args[1])));
                 }
-                
+
                 plugin.getDatabase().save(pLand);
 
-                player.sendMessage(ChatColor.GREEN+playerRemoved.replace("#{playername}", args[1]));
+                player.sendMessage(ChatColor.GREEN + playerRemoved.replace("#{playername}", args[1]));
                 return true;
             } else {
                 player.sendMessage(ChatColor.YELLOW + noLand);

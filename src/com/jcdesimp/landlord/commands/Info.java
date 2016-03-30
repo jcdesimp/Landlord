@@ -38,14 +38,14 @@ public class Info implements LandlordCommand {
             sender.sendMessage(ChatColor.DARK_RED + notPlayer);
         } else {
             Player player = (Player) sender;
-            if(!player.hasPermission("landlord.player.info")){
-                player.sendMessage(ChatColor.RED+noPerms);
+            if (!player.hasPermission("landlord.player.info")) {
+                player.sendMessage(ChatColor.RED + noPerms);
                 return true;
             }
             Chunk currChunk = player.getLocation().getChunk();
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
             String owner = ChatColor.GRAY + "" + ChatColor.ITALIC + noOwner;
-            if( land != null ){
+            if (land != null) {
 
                 /*
                  * *************************************
@@ -54,17 +54,17 @@ public class Info implements LandlordCommand {
                  */
                 owner = ChatColor.GOLD + land.getOwnerUsername();
             } else {
-                land = OwnedLand.landFromProperties(null,currChunk);
+                land = OwnedLand.landFromProperties(null, currChunk);
             }
 
-            if(plugin.getConfig().getBoolean("options.particleEffects")){
+            if (plugin.getConfig().getBoolean("options.particleEffects")) {
                 land.highlightLand(player, Effect.LAVADRIP);
             }
 
             // Build the land info string
             String msg = ChatColor.DARK_GREEN + "--- " + landInfoString
-                    .replace("#{chunkCoords}",(ChatColor.GOLD + "(" + currChunk.getX() + ", " + currChunk.getZ() + ")" + ChatColor.DARK_GREEN))
-                    .replace("#{worldName}", ChatColor.GOLD + "\"" + currChunk.getWorld().getName()  + "\"") +
+                    .replace("#{chunkCoords}", (ChatColor.GOLD + "(" + currChunk.getX() + ", " + currChunk.getZ() + ")" + ChatColor.DARK_GREEN))
+                    .replace("#{worldName}", ChatColor.GOLD + "\"" + currChunk.getWorld().getName() + "\"") +
 
                     ChatColor.DARK_GREEN + "-----\n" + landOwnerString.replace("#{ownerName}", owner);
             player.sendMessage(msg);
@@ -76,7 +76,7 @@ public class Info implements LandlordCommand {
     @Override
     public String getHelpText(CommandSender sender) {
 
-        if(!sender.hasPermission("landlord.player.info")){   // make sure player has permission to do this command
+        if (!sender.hasPermission("landlord.player.info")) {   // make sure player has permission to do this command
             return null;
         }
 

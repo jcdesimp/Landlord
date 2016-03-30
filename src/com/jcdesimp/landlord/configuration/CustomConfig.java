@@ -26,17 +26,16 @@ public class CustomConfig {
         this.resourceLocation = resourceLocation;
         this.destination = destination;
 
-        Map<String,Object> oldConfig = get().getValues(true);
+        Map<String, Object> oldConfig = get().getValues(true);
 
         //this.reload();
         //this.save();
         this.saveDefault();
 
         // checks for missing entries and applies new ones
-        for (Map.Entry<String, Object> entry : customConfig.getDefaults().getValues(true).entrySet())
-        {
-            if(oldConfig.containsKey(entry.getKey())){
-                customConfig.set(entry.getKey(),oldConfig.get(entry.getKey()));
+        for (Map.Entry<String, Object> entry : customConfig.getDefaults().getValues(true).entrySet()) {
+            if (oldConfig.containsKey(entry.getKey())) {
+                customConfig.set(entry.getKey(), oldConfig.get(entry.getKey()));
             } else {
                 customConfig.set(entry.getKey(), entry.getValue());
             }
@@ -56,14 +55,14 @@ public class CustomConfig {
         Reader defConfigStream = null;
         try {
             InputStream resource = plugin.getResource(resourceLocation);
-            if(resource == null) {
-                plugin.getLogger().severe("Internal resource missing at " + resourceLocation + "!" );
+            if (resource == null) {
+                plugin.getLogger().severe("Internal resource missing at " + resourceLocation + "!");
                 return;
             }
             defConfigStream = new InputStreamReader(resource, "UTF8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-            plugin.getLogger().severe("Error reading internal resource at " + resourceLocation + "!" );
+            plugin.getLogger().severe("Error reading internal resource at " + resourceLocation + "!");
         }
         if (defConfigStream != null) {
             YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);

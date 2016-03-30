@@ -64,10 +64,11 @@ public class Build extends Landflag {
 
     /**
      * Event handler for block placements
+     *
      * @param event that happened
      */
     @EventHandler(priority = EventPriority.HIGH)
-    public void blockPlace(BlockPlaceEvent event){
+    public void blockPlace(BlockPlaceEvent event) {
 
         /*
          *******************************
@@ -77,7 +78,7 @@ public class Build extends Landflag {
          *******************************
          */
         OwnedLand land = OwnedLand.getApplicableLand(event.getBlock().getLocation());
-        if(land == null){
+        if (land == null) {
             return;
         }
 
@@ -92,7 +93,7 @@ public class Build extends Landflag {
          * have to cancel the event.
          *************************************
          */
-        if(!land.hasPermTo(p, this)){
+        if (!land.hasPermTo(p, this)) {
             p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.build.blockPlace"));
             event.setCancelled(true);
         }
@@ -107,59 +108,59 @@ public class Build extends Landflag {
      *************************************
      */
     @EventHandler(priority = EventPriority.HIGH)
-    public void blockBreak(BlockBreakEvent event){
+    public void blockBreak(BlockBreakEvent event) {
         OwnedLand land = OwnedLand.getApplicableLand(event.getBlock().getLocation());
-        if(land == null){
+        if (land == null) {
             return;
         }
         Player p = event.getPlayer();
 
-        if(!land.hasPermTo(p, this)){
+        if (!land.hasPermTo(p, this)) {
             p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.build.blockBreak"));
             event.setCancelled(true);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void liquidEmpty(PlayerBucketEmptyEvent event){
+    public void liquidEmpty(PlayerBucketEmptyEvent event) {
         OwnedLand land = OwnedLand.getApplicableLand(event.getBlockClicked().getLocation());
-        if(land == null){
+        if (land == null) {
             return;
         }
 
-        Player p=event.getPlayer();
+        Player p = event.getPlayer();
 
-        if(!land.hasPermTo(p, this)){
+        if (!land.hasPermTo(p, this)) {
             p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.build.bucketEmpty"));
             event.setCancelled(true);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void liquidFill(PlayerBucketFillEvent event){
+    public void liquidFill(PlayerBucketFillEvent event) {
         OwnedLand land = OwnedLand.getApplicableLand(event.getBlockClicked().getLocation());
-        if(land == null){
+        if (land == null) {
             return;
         }
-        Player p=event.getPlayer();
+        Player p = event.getPlayer();
 
-        if(!land.hasPermTo(p, this)){
+        if (!land.hasPermTo(p, this)) {
             p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.build.bucketFill"));
             event.setCancelled(true);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void paintingFrameBreak(HangingBreakByEntityEvent event){
+    public void paintingFrameBreak(HangingBreakByEntityEvent event) {
         org.bukkit.entity.Entity victim = event.getEntity();
         org.bukkit.entity.Entity remover = event.getRemover();
-         OwnedLand land = OwnedLand.getApplicableLand(victim.getLocation());
-        if(land == null){
+        OwnedLand land = OwnedLand.getApplicableLand(victim.getLocation());
+        if (land == null) {
             return;
         }
-        if(remover.getType().toString().equals("PLAYER")){
-            Player p = (Player)remover;
-            if(!land.hasPermTo(p, this)){
+        if (remover.getType().toString().equals("PLAYER")) {
+            Player p = (Player) remover;
+            if (!land.hasPermTo(p, this)) {
                 p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.build.hangingBreak"));
                 event.setCancelled(true);
             }
@@ -177,7 +178,7 @@ public class Build extends Landflag {
         }
 
         OwnedLand land = OwnedLand.getApplicableLand(event.getRightClicked().getLocation());
-        if(land == null){
+        if (land == null) {
             return;
         }
 
@@ -194,36 +195,36 @@ public class Build extends Landflag {
     public void destroyArmorStand(EntityDamageByEntityEvent event) {
         Entity victim = event.getEntity();
         //System.out.println("Victim: "+victim);
-        if(!victim.getType().equals(EntityType.ARMOR_STAND)) {
-           return;
+        if (!victim.getType().equals(EntityType.ARMOR_STAND)) {
+            return;
         }
 
         OwnedLand land = OwnedLand.getApplicableLand(victim.getLocation());
-        if(land == null){
+        if (land == null) {
             return;
         }
 
 
         if (event.getDamager().getType().equals(EntityType.PLAYER)) {
-            Player attacker = (Player)event.getDamager();
+            Player attacker = (Player) event.getDamager();
             //System.out.println(attacker.getName());
-            if(!land.hasPermTo(attacker ,this)){
+            if (!land.hasPermTo(attacker, this)) {
                 attacker.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.build.breakArmorStandWithMelee"));
                 event.setCancelled(true);
             }
 
         }
-         if (event.getDamager().getType().equals(EntityType.ARROW)) {
-             Arrow projectile = (Arrow)event.getDamager();
-             if(projectile.getShooter() instanceof Player) {
-                 Player attacker = (Player)projectile.getShooter();
-                 if(!land.hasPermTo(attacker ,this)){
-                     attacker.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.build.breakArmorStandWithArrow"));
-                     event.setCancelled(true);
-                 }
-             }
+        if (event.getDamager().getType().equals(EntityType.ARROW)) {
+            Arrow projectile = (Arrow) event.getDamager();
+            if (projectile.getShooter() instanceof Player) {
+                Player attacker = (Player) projectile.getShooter();
+                if (!land.hasPermTo(attacker, this)) {
+                    attacker.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.build.breakArmorStandWithArrow"));
+                    event.setCancelled(true);
+                }
+            }
 
-         }
+        }
         //System.out.println(event.getDamager().getType());
 
     }
@@ -234,37 +235,37 @@ public class Build extends Landflag {
         Entity victim = event.getEntity();
 
 
-        if (!victim.getType().equals(EntityType.ITEM_FRAME)){
+        if (!victim.getType().equals(EntityType.ITEM_FRAME)) {
             return;
         }
         Player p;
         Entity attacker = event.getDamager();
         //System.out.println("Attacker: "+attacker.getType().toString());
-        if(attacker.getType().toString().equals("PLAYER")) {
+        if (attacker.getType().toString().equals("PLAYER")) {
             p = (Player) attacker;
 
             OwnedLand land = OwnedLand.getApplicableLand(victim.getLocation());
-            if(land == null){
+            if (land == null) {
                 return;
             }
-            if(!land.hasPermTo(p ,this)){
+            if (!land.hasPermTo(p, this)) {
                 p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.build.itemFrameRemoveWithMelee"));
                 event.setCancelled(true);
             }
 
-        } else if (attacker.getType().toString().equals("ARROW")){
-            Arrow a = (Arrow)attacker;
-            if(a.getShooter() instanceof Player){
-                p = (Player)a.getShooter();
+        } else if (attacker.getType().toString().equals("ARROW")) {
+            Arrow a = (Arrow) attacker;
+            if (a.getShooter() instanceof Player) {
+                p = (Player) a.getShooter();
             } else {
                 return;
             }
 
             OwnedLand land = OwnedLand.getApplicableLand(victim.getLocation());
-            if(land == null){
+            if (land == null) {
                 return;
             }
-            if(!land.hasPermTo(p ,this)){
+            if (!land.hasPermTo(p, this)) {
                 p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.build.itemFrameRemoveWithArrow"));
                 event.setCancelled(true);
             }
@@ -277,36 +278,38 @@ public class Build extends Landflag {
     public void removeItemFromFrame(PlayerInteractEntityEvent event) {
         Entity entity = event.getRightClicked();
         Player p = event.getPlayer();
-        if (!entity.getType().equals(EntityType.ITEM_FRAME)) { return; }
+        if (!entity.getType().equals(EntityType.ITEM_FRAME)) {
+            return;
+        }
         ItemFrame iFrame = (ItemFrame) entity;
         if (iFrame.getItem() != null && !iFrame.getItem().getType().equals(Material.AIR))
             return;
         OwnedLand land = OwnedLand.getApplicableLand(entity.getLocation());
-        if(land == null){
+        if (land == null) {
             return;
         }
-        if(!land.hasPermTo(p ,this)){
+        if (!land.hasPermTo(p, this)) {
             p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.build.itemFrameRemoveDirectly"));
             event.setCancelled(true);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void rotateItemInFrame(PlayerInteractEntityEvent event){
+    public void rotateItemInFrame(PlayerInteractEntityEvent event) {
         Entity entity = event.getRightClicked();
         Player p = event.getPlayer();
         if (!entity.getType().equals(EntityType.ITEM_FRAME)) {
             return;
         }
-        ItemFrame iFrame = (ItemFrame)entity;
+        ItemFrame iFrame = (ItemFrame) entity;
         if ((iFrame.getItem().equals(null)) || (iFrame.getItem().getType().equals(Material.AIR))) {
             return;
         }
         OwnedLand land = OwnedLand.getApplicableLand(entity.getLocation());
-        if(land == null){
+        if (land == null) {
             return;
         }
-        if(!land.hasPermTo(p ,this)){
+        if (!land.hasPermTo(p, this)) {
             p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.build.itemFrameRotate"));
             event.setCancelled(true);
         }
@@ -314,16 +317,16 @@ public class Build extends Landflag {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void paintingFramePlace(HangingPlaceEvent event){
+    public void paintingFramePlace(HangingPlaceEvent event) {
         org.bukkit.entity.Entity placer = event.getPlayer();
         OwnedLand land = OwnedLand.getApplicableLand(event.getBlock().getLocation());
-        if(land == null){
+        if (land == null) {
             return;
         }
 
-        if(placer.getType().toString().equals("PLAYER")){
-            Player p = (Player)placer;
-            if(!land.hasPermTo(p, this)){
+        if (placer.getType().toString().equals("PLAYER")) {
+            Player p = (Player) placer;
+            if (!land.hasPermTo(p, this)) {
                 p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.build.paintingPlace"));
                 event.setCancelled(true);
             }
@@ -335,7 +338,7 @@ public class Build extends Landflag {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void CropTrampleOrFireCharge(PlayerInteractEvent event) {
-        if(event.getClickedBlock()==null){
+        if (event.getClickedBlock() == null) {
             return;
         }
 
@@ -343,12 +346,12 @@ public class Build extends Landflag {
         Player p = event.getPlayer();
 
         //trampling crops
-        if (p!=null && event.getAction().equals(Action.PHYSICAL) && event.getClickedBlock().getType().toString().equals("SOIL")) {
+        if (p != null && event.getAction().equals(Action.PHYSICAL) && event.getClickedBlock().getType().toString().equals("SOIL")) {
             OwnedLand land = OwnedLand.getApplicableLand(event.getClickedBlock().getLocation());
             if (land == null) {
                 return;
             }
-            if(land.hasPermTo(p, this)){
+            if (land.hasPermTo(p, this)) {
                 return;
             }
             p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.build.cropDestroy"));
@@ -358,12 +361,12 @@ public class Build extends Landflag {
 
         //Using fire charge
         ItemStack item = event.getItem();
-        if (p!=null && item!=null && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.getItem().getType().equals(Material.FIREBALL)) {
+        if (p != null && item != null && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.getItem().getType().equals(Material.FIREBALL)) {
             OwnedLand land = OwnedLand.getApplicableLand(event.getClickedBlock().getLocation());
             if (land == null) {
                 return;
             }
-            if(land.hasPermTo(p, this)){
+            if (land.hasPermTo(p, this)) {
                 return;
             }
             p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.build.useFireCharge"));
@@ -372,21 +375,21 @@ public class Build extends Landflag {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void protectBlockStates(PlayerInteractEvent event){
+    public void protectBlockStates(PlayerInteractEvent event) {
         Material[] blockedItems = {Material.NOTE_BLOCK, Material.REDSTONE_COMPARATOR_OFF, Material.REDSTONE_COMPARATOR_ON,
                 Material.DIODE_BLOCK_OFF, Material.DIODE_BLOCK_ON, Material.FLOWER_POT, Material.CAKE_BLOCK};
-        if(event.getClickedBlock()==null){
+        if (event.getClickedBlock() == null) {
             return;
         }
         Player p = event.getPlayer();
         //System.out.println(event.getClickedBlock().getType());
-        if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) &&
-                Arrays.asList(blockedItems).contains(event.getClickedBlock().getType())){
+        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) &&
+                Arrays.asList(blockedItems).contains(event.getClickedBlock().getType())) {
             OwnedLand land = OwnedLand.getApplicableLand(event.getClickedBlock().getLocation());
             if (land == null) {
                 return;
             }
-            if(land.hasPermTo(p,this)){
+            if (land.hasPermTo(p, this)) {
                 return;
             }
 

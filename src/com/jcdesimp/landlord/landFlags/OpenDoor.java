@@ -54,6 +54,7 @@ public class OpenDoor extends Landflag {
 
     /**
      * Event handler for block placements
+     *
      * @param event that happened
      */
 
@@ -65,10 +66,8 @@ public class OpenDoor extends Landflag {
      * your flag to do it's job
      *************************************
      */
-
-
     @EventHandler(priority = EventPriority.HIGH)
-    public void protectBlockStates(PlayerInteractEvent event){
+    public void protectBlockStates(PlayerInteractEvent event) {
         Material[] blockedItems = {Material.WOOD_DOOR, Material.TRAP_DOOR, Material.WOODEN_DOOR, Material.FENCE_GATE,
                 Material.ACACIA_DOOR, Material.ACACIA_FENCE_GATE,
                 Material.DARK_OAK_DOOR, Material.DARK_OAK_FENCE_GATE,
@@ -76,17 +75,17 @@ public class OpenDoor extends Landflag {
                 Material.JUNGLE_DOOR, Material.JUNGLE_FENCE_GATE,
                 Material.SPRUCE_DOOR, Material.SPRUCE_FENCE_GATE,};
 
-        if(event.getClickedBlock()==null){
+        if (event.getClickedBlock() == null) {
             return;
         }
         Player p = event.getPlayer();
-        if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) &&
-                Arrays.asList(blockedItems).contains(event.getClickedBlock().getType())){
+        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) &&
+                Arrays.asList(blockedItems).contains(event.getClickedBlock().getType())) {
             OwnedLand land = OwnedLand.getApplicableLand(event.getClickedBlock().getLocation());
             if (land == null) {
                 return;
             }
-            if(land.hasPermTo(p,this)){
+            if (land.hasPermTo(p, this)) {
                 return;
             }
 

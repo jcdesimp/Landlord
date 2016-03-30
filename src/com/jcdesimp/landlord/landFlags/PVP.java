@@ -37,23 +37,23 @@ public class PVP extends Landflag {
 
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void playerDamage(EntityDamageByEntityEvent event){
+    public void playerDamage(EntityDamageByEntityEvent event) {
         //String[] safeAnimals = {"OCELOT","WOLF","HORSE","COW","PIG","MUSHROOM_COW","SHEEP","CHICKEN"};
         org.bukkit.entity.Entity victim = event.getEntity();
-        if(!(victim instanceof Player)){
+        if (!(victim instanceof Player)) {
             return;
         }
 
 
         org.bukkit.entity.Entity attacker = event.getDamager();
 
-        if(attacker.getType().toString().equals("PLAYER")){
-            Player p = (Player)attacker;
+        if (attacker.getType().toString().equals("PLAYER")) {
+            Player p = (Player) attacker;
             OwnedLand land = OwnedLand.getApplicableLand(victim.getLocation());
-            if(land==null){
+            if (land == null) {
                 return;
             }
-            if(!land.hasPermTo(p, this)){
+            if (!land.hasPermTo(p, this)) {
 
                 p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.pvp.melee"));
 
@@ -61,18 +61,18 @@ public class PVP extends Landflag {
 
             }
 
-        } else if(attacker.getType().toString().equalsIgnoreCase("Arrow") || attacker.getType().toString().equalsIgnoreCase("SPLASH_POTION")){
-            Projectile a = (Projectile)attacker;
+        } else if (attacker.getType().toString().equalsIgnoreCase("Arrow") || attacker.getType().toString().equalsIgnoreCase("SPLASH_POTION")) {
+            Projectile a = (Projectile) attacker;
             Player p;
-            if(a.getShooter() instanceof Player){
+            if (a.getShooter() instanceof Player) {
                 OwnedLand land = OwnedLand.getApplicableLand(victim.getLocation());
-                p = (Player)a.getShooter();
-                if(land==null){
+                p = (Player) a.getShooter();
+                if (land == null) {
                     return;
                 }
                 //System.out.println(a.getType());
-                if(!land.hasPermTo(p, this)){
-                    if(a.getType().toString().equals("ARROW")) {
+                if (!land.hasPermTo(p, this)) {
+                    if (a.getType().toString().equals("ARROW")) {
                         p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.pvp.projectile"));
                     }
                     a.remove();

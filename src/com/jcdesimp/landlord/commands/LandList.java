@@ -73,7 +73,7 @@ public class LandList implements LandlordCommand {
                 player.sendMessage(ChatColor.YELLOW + noLand);
             } else {
                 String header = ChatColor.DARK_GREEN + " | " + outputHeader + " |\n";
-                ArrayList<String> landList = new ArrayList<String>();
+                ArrayList<String> landList = new ArrayList<>();
                 //OwnedLand curr = myLand.get(0);
                 for (OwnedLand aMyLand : myLand) {
                     landList.add((ChatColor.GOLD + " (" + aMyLand.getXBlock() + ", " + aMyLand.getZBlock() + ") - (" + aMyLand.getX() + ", " + aMyLand.getZ() + ") - "
@@ -91,7 +91,7 @@ public class LandList implements LandlordCommand {
 
                 //String pMsg = ChatColor.DARK_GREEN + "--- " + ChatColor.YELLOW + ownedLandString + ChatColor.DARK_GREEN + " ---" + ChatColor.YELLOW + " Page " + pageNumber + ChatColor.DARK_GREEN + " ---\n" + header;
                 String pMsg = (ChatColor.DARK_GREEN + "--- " + ChatColor.YELLOW + ownedLandString + ChatColor.DARK_GREEN + " --- " + ChatColor.YELLOW + pageNum)
-                        .replace("#{pageNum}", pageNumber+"")
+                        .replace("#{pageNum}", pageNumber + "")
                         + ChatColor.DARK_GREEN + " ---\n" + header;
 
 
@@ -107,7 +107,7 @@ public class LandList implements LandlordCommand {
                     //pMsg += ChatColor.DARK_GREEN + "--- do" + ChatColor.YELLOW + " /" + label + " list " + (pageNumber + 1) + ChatColor.DARK_GREEN + " for next page ---";
 
                     pMsg += ChatColor.DARK_GREEN + "--- " + ChatColor.YELLOW + nextPageString
-                            .replace("#{label}", "/"+label)
+                            .replace("#{label}", "/" + label)
                             .replace("#{cmd}", args[0])
                             .replace("#{pageNumber}", "" + (pageNumber + 1))
                             + ChatColor.DARK_GREEN + " ---";

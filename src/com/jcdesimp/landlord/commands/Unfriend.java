@@ -30,8 +30,9 @@ public class Unfriend implements LandlordCommand {
     /**
      * Removes a friend from an owned chunk
      * Called when landlord remfriend is executed
+     *
      * @param sender who executed the command
-     * @param args given with command
+     * @param args   given with command
      * @return boolean
      */
     @Override
@@ -49,13 +50,13 @@ public class Unfriend implements LandlordCommand {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.DARK_RED + notPlayer);
         } else {
-            if (args.length < 2){
+            if (args.length < 2) {
                 sender.sendMessage(ChatColor.RED + usage.replace("#{label}", label).replace("#{command}", args[0]));
                 return true;
             }
             Player player = (Player) sender;
-            if(!player.hasPermission("landlord.player.own")){
-                player.sendMessage(ChatColor.RED+noPerms);
+            if (!player.hasPermission("landlord.player.own")) {
+                player.sendMessage(ChatColor.RED + noPerms);
                 return true;
             }
 
@@ -67,22 +68,22 @@ public class Unfriend implements LandlordCommand {
              */
             Friend frd = Friend.friendFromOfflinePlayer(getOfflinePlayer(args[1]));
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
-            if( land == null || (!land.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.modifyfriends")) ){
+            if (land == null || (!land.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.modifyfriends"))) {
                 player.sendMessage(ChatColor.RED + notOwner);
                 return true;
             }
-            if(!land.removeFriend(frd)){
+            if (!land.removeFriend(frd)) {
                 player.sendMessage(ChatColor.YELLOW + notFriend.replace("#{playerName}", args[1]));
                 return true;
             }
-            if(plugin.getConfig().getBoolean("options.particleEffects",true)) { //conf
+            if (plugin.getConfig().getBoolean("options.particleEffects", true)) { //conf
                 land.highlightLand(player, Effect.VILLAGER_THUNDERCLOUD, 2);
             }
             plugin.getDatabase().save(land);
-            if(plugin.getConfig().getBoolean("options.soundEffects",true)){ //conf
+            if (plugin.getConfig().getBoolean("options.soundEffects", true)) { //conf
 //TODO                player.playSound(player.getLocation(), Sound.ZOMBIE_INFECT,10,.5f);
             }
-            player.sendMessage(ChatColor.GREEN + unfriended.replace("#{playerName}",args[1]));
+            player.sendMessage(ChatColor.GREEN + unfriended.replace("#{playerName}", args[1]));
 
         }
         return true;

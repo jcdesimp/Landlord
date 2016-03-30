@@ -94,16 +94,16 @@ public class Unclaim implements LandlordCommand {
                 } catch (NumberFormatException e) {
                     //e.printStackTrace();
                     player.sendMessage(ChatColor.RED + usage
-                                    .replace("#{label}", label)
-                                    .replace("#{command}", args[0])
+                            .replace("#{label}", label)
+                            .replace("#{command}", args[0])
 
                     );
                     return true;
 
                 } catch (ArrayIndexOutOfBoundsException e) {
                     player.sendMessage(ChatColor.RED + usage
-                                    .replace("#{label}", label)
-                                    .replace("#{command}", args[0])
+                            .replace("#{label}", label)
+                            .replace("#{command}", args[0])
 
                     );
                     return true;
@@ -136,7 +136,7 @@ public class Unclaim implements LandlordCommand {
             }
             plugin.getDatabase().delete(dbLand);
             dbLand.highlightLand(player, Effect.WITCH_MAGIC);
-            
+
             sender.sendMessage(
                     ChatColor.YELLOW + unclaimed
                             .replace("#{chunkCoords}",

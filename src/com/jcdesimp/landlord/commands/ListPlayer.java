@@ -26,10 +26,9 @@ public class ListPlayer implements LandlordCommand {
     }
 
     /**
-     *
      * @param sender who sent the command
-     * @param args  array of arguments given with the command
-     * @param label the actual command/alias that was entered.
+     * @param args   array of arguments given with the command
+     * @param label  the actual command/alias that was entered.
      * @return Boolean of success
      */
     @Override
@@ -37,7 +36,6 @@ public class ListPlayer implements LandlordCommand {
 
         FileConfiguration messages = plugin.getMessageConfig();
 
-        //mess ready
         final String usage = messages.getString("commands.listPlayer.usage");
         final String noPerms = messages.getString("info.warnings.noPerms");
         final String badPage = messages.getString("info.warnings.badPage");
@@ -51,25 +49,25 @@ public class ListPlayer implements LandlordCommand {
         String owner;
 
         //sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");
-        if(args.length>1){
+        if (args.length > 1) {
             owner = args[1];
         } else {
-            sender.sendMessage(ChatColor.RED+usage.replace("#{label}", label));
+            sender.sendMessage(ChatColor.RED + usage.replace("#{label}", label));
             return true;
         }
 
         //Player player = (Player) sender;
-        if(!sender.hasPermission("landlord.admin.list")){
-            sender.sendMessage(ChatColor.RED+noPerms);
+        if (!sender.hasPermission("landlord.admin.list")) {
+            sender.sendMessage(ChatColor.RED + noPerms);
             return true;
         }
 
         //check if page number is valid
         int pageNumber = 1;
-        if (args.length > 2){
-            try{
-                pageNumber = Integer.parseInt(args[2]);}
-            catch (NumberFormatException e){
+        if (args.length > 2) {
+            try {
+                pageNumber = Integer.parseInt(args[2]);
+            } catch (NumberFormatException e) {
                 sender.sendMessage(ChatColor.RED + badPage);
                 return true;
             }
@@ -85,39 +83,39 @@ public class ListPlayer implements LandlordCommand {
             return true;
         }
         List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().ieq("ownerName", getOfflinePlayer(owner).getUniqueId().toString()).findList();
-        if(myLand.size()==0){
+        if (myLand.size() == 0) {
             sender.sendMessage(ChatColor.YELLOW + ownsNone.replace("#{owner}", owner));
         } else {
-            String header = ChatColor.DARK_GREEN+" | "+ listHeader + " |     \n";
+            String header = ChatColor.DARK_GREEN + " | " + listHeader + " |     \n";
             ArrayList<String> landList = new ArrayList<>();
             //OwnedLand curr = myLand.get(0);
             for (OwnedLand aMyLand : myLand) {
-                landList.add((ChatColor.GOLD + " ("+ aMyLand.getXBlock() +", "+ aMyLand.getZBlock() +") - (" + aMyLand.getX() + ", " + aMyLand.getZ() + ") - "
+                landList.add((ChatColor.GOLD + " (" + aMyLand.getXBlock() + ", " + aMyLand.getZBlock() + ") - (" + aMyLand.getX() + ", " + aMyLand.getZ() + ") - "
                         + aMyLand.getWorldName()) + "\n");
             }
             //Amount to be displayed per page
             final int numPerPage = 7;
 
-            int numPages = ceil((double)landList.size()/(double)numPerPage);
-            if(pageNumber > numPages){
-                sender.sendMessage(ChatColor.RED+badPage);
+            int numPages = ceil((double) landList.size() / (double) numPerPage);
+            if (pageNumber > numPages) {
+                sender.sendMessage(ChatColor.RED + badPage);
                 return true;
             }
-            String pMsg = ChatColor.DARK_GREEN+"--- " +ChatColor.YELLOW + ownersLand.replace("#{owner}", owner)  + ChatColor.DARK_GREEN+" ---"+ChatColor.YELLOW +
-                    pageNum.replace("#{pageNumber}", ""+pageNumber) + ChatColor.DARK_GREEN+" ---\n" +
+            String pMsg = ChatColor.DARK_GREEN + "--- " + ChatColor.YELLOW + ownersLand.replace("#{owner}", owner) + ChatColor.DARK_GREEN + " ---" + ChatColor.YELLOW +
+                    pageNum.replace("#{pageNumber}", "" + pageNumber) + ChatColor.DARK_GREEN + " ---\n" +
                     header;
-            if (pageNumber == numPages){
-                for(int i = (numPerPage*pageNumber-numPerPage); i<landList.size(); i++){
-                    pMsg+=landList.get(i);
+            if (pageNumber == numPages) {
+                for (int i = (numPerPage * pageNumber - numPerPage); i < landList.size(); i++) {
+                    pMsg += landList.get(i);
                 }
-                pMsg+=ChatColor.DARK_GREEN+"------------------------------";
+                pMsg += ChatColor.DARK_GREEN + "------------------------------";
             } else {
-                for(int i = (numPerPage*pageNumber-numPerPage); i<(numPerPage*pageNumber); i++){
-                    pMsg+=landList.get(i);
+                for (int i = (numPerPage * pageNumber - numPerPage); i < (numPerPage * pageNumber); i++) {
+                    pMsg += landList.get(i);
                 }
 
                 pMsg += ChatColor.DARK_GREEN + "--- " + ChatColor.YELLOW + nextPageString
-                        .replace("#{label}", "/"+label)
+                        .replace("#{label}", "/" + label)
                         .replace("#{cmd}", args[0])
                         .replace("#{pageNumber}", "" + pageNumber + 1)
                         + " ---";
@@ -127,13 +125,13 @@ public class ListPlayer implements LandlordCommand {
         }
 
 
-        return  true;
+        return true;
     }
 
     @Override
     public String getHelpText(CommandSender sender) {
 
-        if(!sender.hasPermission("landlord.admin.list")){   // Don't bother showing command help if player can't do it
+        if (!sender.hasPermission("landlord.admin.list")) {   // Don't bother showing command help if player can't do it
             return null;
         }
 

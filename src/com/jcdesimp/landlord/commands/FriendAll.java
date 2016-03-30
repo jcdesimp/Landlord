@@ -50,15 +50,15 @@ public class FriendAll implements LandlordCommand {
                 return true;
             }
 
-            List<OwnedLand> pLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId()).findList();
+            List<OwnedLand> pLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName", player.getUniqueId()).findList();
             OfflinePlayer possible = getOfflinePlayer(args[1]);
             if (!possible.hasPlayedBefore() && !possible.isOnline()) {
                 player.sendMessage(ChatColor.RED + unknownPlayer);
                 return true;
             }
 
-            if (pLand.size() > 0){
-                for(OwnedLand l : pLand){
+            if (pLand.size() > 0) {
+                for (OwnedLand l : pLand) {
                     l.addFriend(Friend.friendFromOfflinePlayer(getOfflinePlayer(args[1])));
                 }
 
@@ -68,7 +68,7 @@ public class FriendAll implements LandlordCommand {
                 player.sendMessage(ChatColor.GREEN + friendAddedString.replace("#{player}", args[1]));
                 return true;
             } else {
-                player.sendMessage(ChatColor.YELLOW+noLandString);
+                player.sendMessage(ChatColor.YELLOW + noLandString);
             }
 
         }

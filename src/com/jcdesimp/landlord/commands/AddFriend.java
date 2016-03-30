@@ -27,14 +27,14 @@ public class AddFriend implements LandlordCommand {
         this.plugin = plugin;
     }
 
-
     /**
      * Adds a friend to an owned chunk
      * Called when landlord addfriend command is executed
      * This command must be run by a player
+     *
      * @param sender who executed the command
-     * @param args given with command
-     * @param label base command executed
+     * @param args   given with command
+     * @param label  base command executed
      * @return boolean
      */
     @Override
@@ -54,12 +54,12 @@ public class AddFriend implements LandlordCommand {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.DARK_RED + notPlayer);
         } else {
-            if (args.length < 2){
+            if (args.length < 2) {
                 sender.sendMessage(ChatColor.RED + usage.replace("#{label}", label).replace("#{cmd}", args[0]));
                 return true;
             }
             Player player = (Player) sender;
-            if(!player.hasPermission("landlord.player.own")){
+            if (!player.hasPermission("landlord.player.own")) {
                 player.sendMessage(ChatColor.RED + noPerms);
                 return true;
             }
@@ -69,8 +69,8 @@ public class AddFriend implements LandlordCommand {
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
 
             //Does land exist, and if so does player own it
-            if( land == null || (!land.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.modifyfriends")) ){
-                player.sendMessage(ChatColor.RED +  notOwner);
+            if (land == null || (!land.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.modifyfriends"))) {
+                player.sendMessage(ChatColor.RED + notOwner);
                 return true;
             }
             //
@@ -86,16 +86,16 @@ public class AddFriend implements LandlordCommand {
              * *************************************
              */
 
-            if (! land.addFriend(friend)) {
+            if (!land.addFriend(friend)) {
                 player.sendMessage(ChatColor.YELLOW + alreadyFriend.replace("#{player}", args[1]));
                 return true;
             }
-            if(plugin.getConfig().getBoolean("options.particleEffects",true)){      //conf
+            if (plugin.getConfig().getBoolean("options.particleEffects", true)) {      //conf
                 land.highlightLand(player, Effect.HEART, 2);
             }
 
             plugin.getDatabase().save(land);
-            if(plugin.getConfig().getBoolean("options.soundEffects",true)){     //conf
+            if (plugin.getConfig().getBoolean("options.soundEffects", true)) {     //conf
 //TODO                player.playSound(player.getLocation(), Sound.ORB_PICKUP,10,.2f);
             }
             sender.sendMessage(ChatColor.GREEN + nowFriend.replace("#{player}", args[1]));

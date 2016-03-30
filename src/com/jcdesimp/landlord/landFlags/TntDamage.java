@@ -59,6 +59,7 @@ public class TntDamage extends Landflag {
 
     /**
      * Event handler for block placements
+     *
      * @param event that happened
      */
 
@@ -71,26 +72,26 @@ public class TntDamage extends Landflag {
      *************************************
      */
     @EventHandler(priority = EventPriority.HIGH)
-    public void tntExplode( EntityExplodeEvent event ){
-        if(event.getEntityType()==null){
+    public void tntExplode(EntityExplodeEvent event) {
+        if (event.getEntityType() == null) {
             return;
         }
-        if(!(event.getEntityType().equals(EntityType.PRIMED_TNT))){
+        if (!(event.getEntityType().equals(EntityType.PRIMED_TNT))) {
             return;
         }
 
-        TNTPrimed tnt = (TNTPrimed)event.getEntity();
+        TNTPrimed tnt = (TNTPrimed) event.getEntity();
         OwnedLand land = OwnedLand.getApplicableLand(event.getLocation());
         if (land != null) {
-            if(tnt.getSource() != null && tnt.getSource().getType().equals(EntityType.PLAYER)){
-                Player p = (Player)tnt.getSource();
-                if(!land.hasPermTo(p,this)){
+            if (tnt.getSource() != null && tnt.getSource().getType().equals(EntityType.PLAYER)) {
+                Player p = (Player) tnt.getSource();
+                if (!land.hasPermTo(p, this)) {
                     p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.tntDamage.detonate"));
                     event.setCancelled(true);
                     return;
                 }
 
-            } else if(!land.canEveryone(this)){
+            } else if (!land.canEveryone(this)) {
                 event.setCancelled(true);
                 return;
             }
@@ -100,7 +101,7 @@ public class TntDamage extends Landflag {
         while (it.hasNext()) {
             Block block = it.next();
             OwnedLand lnd = OwnedLand.getApplicableLand(block.getLocation());
-            if (lnd != null && !lnd.canEveryone(this) ) {
+            if (lnd != null && !lnd.canEveryone(this)) {
                 if (!(tnt.getSource() instanceof Player) || !lnd.hasPermTo((Player) tnt.getSource(), this)) {
                     it.remove();
                 }
@@ -112,17 +113,17 @@ public class TntDamage extends Landflag {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void tntMinecartExplode( EntityExplodeEvent event ){
-        if(event.getEntityType()==null){
+    public void tntMinecartExplode(EntityExplodeEvent event) {
+        if (event.getEntityType() == null) {
             return;
         }
-        if(!event.getEntityType().equals(EntityType.MINECART_TNT)){
+        if (!event.getEntityType().equals(EntityType.MINECART_TNT)) {
             return;
         }
 
         OwnedLand land = OwnedLand.getApplicableLand(event.getLocation());
         if (land != null) {
-            if(!land.canEveryone(this)){
+            if (!land.canEveryone(this)) {
                 event.setCancelled(true);
                 return;
             }
@@ -144,15 +145,15 @@ public class TntDamage extends Landflag {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void igniteTnt(PlayerInteractEvent event){
+    public void igniteTnt(PlayerInteractEvent event) {
 
-        if(!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))){
+        if (!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))) {
             return;
         }
         //System.out.println(event.getAction().toString());
         //System.out.println(event.getClickedBlock().getType().toString());
         //System.out.println(event.getItem().getType());
-        if((event.getClickedBlock().getType().equals(Material.TNT)) && event.getItem() != null &&event.getItem().getType().equals(Material.FLINT_AND_STEEL)) {
+        if ((event.getClickedBlock().getType().equals(Material.TNT)) && event.getItem() != null && event.getItem().getType().equals(Material.FLINT_AND_STEEL)) {
 
             OwnedLand land = OwnedLand.getApplicableLand(event.getClickedBlock().getLocation());
             if (land == null) {

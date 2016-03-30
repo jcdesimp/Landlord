@@ -1,11 +1,8 @@
 package com.jcdesimp.landlord.landManagement;
 
 import com.jcdesimp.landlord.Landlord;
-import com.jcdesimp.landlord.persistantData.DBVersion;
 import com.jcdesimp.landlord.persistantData.LandFlagPerm;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -16,7 +13,7 @@ public class FlagManager {
     Landlord plugin;
 
     public FlagManager(Landlord plugin) {
-        this.registeredFlags = new HashMap<String, Landflag>();
+        this.registeredFlags = new HashMap<>();
         this.plugin = plugin;
 
     }
@@ -26,16 +23,16 @@ public class FlagManager {
     }
 
     public boolean registerFlag(Landflag f) {
-        if(registeredFlags.containsKey(f.getClass().getSimpleName())) {
-            plugin.getLogger().warning("Could not register flag \""+f.getClass().getSimpleName()+"\" because a flag is already registered with that name!");
+        if (registeredFlags.containsKey(f.getClass().getSimpleName())) {
+            plugin.getLogger().warning("Could not register flag \"" + f.getClass().getSimpleName() + "\" because a flag is already registered with that name!");
             f.setUniqueName(f.getClass().getSimpleName());
 
             return false;
         }
-        LandFlagPerm lfp = plugin.getDatabase().find(LandFlagPerm.class).where().eq("identifier",f.getClass().getSimpleName()).findUnique();
-        if(lfp == null){
-            plugin.getLogger().info("Registering new land flag: "+f.getClass().getSimpleName());
-            lfp = LandFlagPerm.flagPermFromData(f.getClass().getSimpleName(),plugin.getDatabase().find(LandFlagPerm.class).findRowCount()+1);
+        LandFlagPerm lfp = plugin.getDatabase().find(LandFlagPerm.class).where().eq("identifier", f.getClass().getSimpleName()).findUnique();
+        if (lfp == null) {
+            plugin.getLogger().info("Registering new land flag: " + f.getClass().getSimpleName());
+            lfp = LandFlagPerm.flagPermFromData(f.getClass().getSimpleName(), plugin.getDatabase().find(LandFlagPerm.class).findRowCount() + 1);
             plugin.getDatabase().save(lfp);
         }
         f.setPermSlot(lfp.getPermSlot());
@@ -43,14 +40,13 @@ public class FlagManager {
             plugin.getServer().getPluginManager().registerEvents(f, plugin);
             registeredFlags.put(f.getClass().getSimpleName(), f);
         } catch (Exception e) {
-            plugin.getLogger().warning("Error occured while registering flag \""+f.getClass().getSimpleName()+"\":");
+            plugin.getLogger().warning("Error occured while registering flag \"" + f.getClass().getSimpleName() + "\":");
             e.printStackTrace();
             return false;
         }
 
-        plugin.getLogger().info("Registered flag: "+f.getClass().getSimpleName());
+        plugin.getLogger().info("Registered flag: " + f.getClass().getSimpleName());
         return true;
-
 
 
     }

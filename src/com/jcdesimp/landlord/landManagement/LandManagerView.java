@@ -48,8 +48,8 @@ public class LandManagerView implements Listener {
         this.perms = mLand.getLandPerms();
         this.ui = Bukkit.createInventory(null, 36, "Land Manager");     //mess
         this.updateUIData();
-        this.numPages = (int)ceil(((double)permCols.size())/8.0);
-        if(numPages==1){
+        this.numPages = (int) ceil(((double) permCols.size()) / 8.0);
+        if (numPages == 1) {
             this.ui = Bukkit.createInventory(null, 27, "Land Manager");         //mess
         }
 
@@ -57,17 +57,16 @@ public class LandManagerView implements Listener {
         this.buildUI();
 
 
-
         //this.showUI();
     }
 
-    private ItemStack makeButton(String displayName, String[] lore, Material material){
+    private ItemStack makeButton(String displayName, String[] lore, Material material) {
         return makeButton(displayName, lore, new ItemStack(material));
 
 
     }
 
-    private ItemStack makeButton(String displayName, String[] lore, ItemStack stack){
+    private ItemStack makeButton(String displayName, String[] lore, ItemStack stack) {
         ItemMeta meta = stack.getItemMeta();
         meta.setDisplayName(displayName);
         meta.setLore(Arrays.asList(lore));
@@ -76,8 +75,7 @@ public class LandManagerView implements Listener {
     }
 
 
-
-    public void showUI(){
+    public void showUI() {
         player.openInventory(ui);
     }
 
@@ -87,59 +85,59 @@ public class LandManagerView implements Listener {
     }
     */
 
-    private void updateUIData(){
+    private void updateUIData() {
         //Generate dynamic items based on land perms
         permSlots.clear();
         permCols.clear();
-        for(Map.Entry<String, Landflag> entry : Landlord.getInstance().getFlagManager().getRegisteredFlags().entrySet()){
+        for (Map.Entry<String, Landflag> entry : Landlord.getInstance().getFlagManager().getRegisteredFlags().entrySet()) {
             Landflag l = entry.getValue();
             permSlots.add(new Integer(l.getPermSlot()));
             String[] loreData = l.getDescription().split("\\|");
             String[] desc = colorLore(loreData);
-            ItemStack header = makeButton(ChatColor.YELLOW+l.getDisplayName(),desc,l.getHeaderItem());
+            ItemStack header = makeButton(ChatColor.YELLOW + l.getDisplayName(), desc, l.getHeaderItem());
             ItemStack allState;
             //System.out.println("VALUE: "+mLand.getLandPerms()[0][l.getPermSlot()]);
-            if(perms[0][l.getPermSlot()].equals("1")){
+            if (perms[0][l.getPermSlot()].equals("1")) {
                 desc = colorLore((
-                        ("Regular players "+l.getAllowedText())+"|"+ChatColor.YELLOW+"Click to toggle.").split("\\|"));     //mess
-                allState = makeButton(ChatColor.GREEN+l.getAllowedTitle(), desc, new ItemStack(Material.WOOL,1, (short)5));
+                        ("Regular players " + l.getAllowedText()) + "|" + ChatColor.YELLOW + "Click to toggle.").split("\\|"));     //mess
+                allState = makeButton(ChatColor.GREEN + l.getAllowedTitle(), desc, new ItemStack(Material.WOOL, 1, (short) 5));
             } else {
-                desc = colorLore((("Regular players "+l.getDeniedText()+"|"+ChatColor.YELLOW+"Click to toggle.")).split("\\|"));    //mess
-                allState = makeButton(ChatColor.RED+l.getDeniedTitle(), desc, new ItemStack(Material.WOOL,1, (short)14));
+                desc = colorLore((("Regular players " + l.getDeniedText() + "|" + ChatColor.YELLOW + "Click to toggle.")).split("\\|"));    //mess
+                allState = makeButton(ChatColor.RED + l.getDeniedTitle(), desc, new ItemStack(Material.WOOL, 1, (short) 14));
             }
 
             ItemStack friendState;
-            if(perms[1][l.getPermSlot()].equals("1")){
-                desc = colorLore((("Friends of this land "+l.getAllowedText())+"|"+ChatColor.YELLOW+"Click to toggle.").split("\\|"));      //mess
-                friendState = makeButton(ChatColor.GREEN+l.getAllowedTitle(), desc, new ItemStack(Material.WOOL,1, (short)5));
+            if (perms[1][l.getPermSlot()].equals("1")) {
+                desc = colorLore((("Friends of this land " + l.getAllowedText()) + "|" + ChatColor.YELLOW + "Click to toggle.").split("\\|"));      //mess
+                friendState = makeButton(ChatColor.GREEN + l.getAllowedTitle(), desc, new ItemStack(Material.WOOL, 1, (short) 5));
             } else {
-                desc = colorLore((("Friends of this land "+l.getDeniedText()+"|"+ChatColor.YELLOW+"Click to toggle.")).split("\\|"));       //mess
-                friendState = makeButton(ChatColor.RED+l.getDeniedTitle(), desc, new ItemStack(Material.WOOL,1, (short)14));
+                desc = colorLore((("Friends of this land " + l.getDeniedText() + "|" + ChatColor.YELLOW + "Click to toggle.")).split("\\|"));       //mess
+                friendState = makeButton(ChatColor.RED + l.getDeniedTitle(), desc, new ItemStack(Material.WOOL, 1, (short) 14));
             }
 
 
-            permCols.add(new ItemStack[] {header,allState,friendState});
+            permCols.add(new ItemStack[]{header, allState, friendState});
         }
     }
 
-    private String[] colorLore(String[] loreData){
+    private String[] colorLore(String[] loreData) {
         String[] desc = new String[loreData.length];
-        for(int s = 0; s<loreData.length; s++){
-            desc[s] = ChatColor.RESET+loreData[s];
+        for (int s = 0; s < loreData.length; s++) {
+            desc[s] = ChatColor.RESET + loreData[s];
         }
         return desc;
     }
 
-    private void buildUI(){
+    private void buildUI() {
         // Static Items Help and row/column markers
         //mess this help text
-        ui.setItem(0,makeButton(ChatColor.GOLD+"Help",
+        ui.setItem(0, makeButton(ChatColor.GOLD + "Help",
                 new String[]{
-                ChatColor.RESET+"Click each wool block",
-                ChatColor.RESET+"to toggle a permission for a group.",
-                ChatColor.RESET+"Red wool means not allowed",
-                ChatColor.RESET+"and green wool means allowed.",
-                ChatColor.RESET+"Mouseover each item for more information."
+                        ChatColor.RESET + "Click each wool block",
+                        ChatColor.RESET + "to toggle a permission for a group.",
+                        ChatColor.RESET + "Red wool means not allowed",
+                        ChatColor.RESET + "and green wool means allowed.",
+                        ChatColor.RESET + "Mouseover each item for more information."
                 }, Material.ENCHANTED_BOOK));
 
         /*
@@ -150,67 +148,63 @@ public class LandManagerView implements Listener {
                 ChatColor.RESET+"chests, furnaces, anvils, hoppers,", ChatColor.RESET+"droppers, and dispensers."}, Material.CHEST));
         */
         //mess all this item data being set
-        ui.setItem(9,makeButton(ChatColor.YELLOW+"Everyone", new String[]{ChatColor.RESET+"Permissions in this row apply to",
-                ChatColor.RESET+"people that aren't friends",ChatColor.RESET+"of this land."},
-                new ItemStack(Material.SKULL_ITEM, 1, (short)2)));
-        ui.setItem(18,makeButton(ChatColor.YELLOW+"Friends", new String[]{ChatColor.RESET+"Permissions in this row apply to", ChatColor.RESET+"friends of this land."},
-                new ItemStack(Material.SKULL_ITEM, 1, (short)3)));
-        if(pageNum < numPages-1){
+        ui.setItem(9, makeButton(ChatColor.YELLOW + "Everyone", new String[]{ChatColor.RESET + "Permissions in this row apply to",
+                        ChatColor.RESET + "people that aren't friends", ChatColor.RESET + "of this land."},
+                new ItemStack(Material.SKULL_ITEM, 1, (short) 2)));
+        ui.setItem(18, makeButton(ChatColor.YELLOW + "Friends", new String[]{ChatColor.RESET + "Permissions in this row apply to", ChatColor.RESET + "friends of this land."},
+                new ItemStack(Material.SKULL_ITEM, 1, (short) 3)));
+        if (pageNum < numPages - 1) {
             //35
-            ui.setItem(35,makeButton(ChatColor.YELLOW+"Next Page", new String[]{ChatColor.RESET+"View next page of options."},
+            ui.setItem(35, makeButton(ChatColor.YELLOW + "Next Page", new String[]{ChatColor.RESET + "View next page of options."},
                     new ItemStack(Material.PAPER)));
         }
-        if(pageNum > 0){
+        if (pageNum > 0) {
             //27
-            ui.setItem(27,makeButton(ChatColor.YELLOW+"Previous Page", new String[]{ChatColor.RESET+"View previous page of options."},
+            ui.setItem(27, makeButton(ChatColor.YELLOW + "Previous Page", new String[]{ChatColor.RESET + "View previous page of options."},
                     new ItemStack(Material.PAPER)));
         }
-
-
-
 
 
     }
 
-    private void setToggles(){
+    private void setToggles() {
 
-        int startIndex = pageNum*8;
+        int startIndex = pageNum * 8;
         int endIndex;
         ui.clear();
-        if(pageNum==numPages-1){
+        if (pageNum == numPages - 1) {
             endIndex = permCols.size();
         } else {
-            endIndex = startIndex+8;
+            endIndex = startIndex + 8;
         }
         int slot = 1;
-        for(int i=startIndex; i<endIndex; i++){
-            ui.setItem(slot,permCols.get(i)[0]);
-            ui.setItem(slot+9,permCols.get(i)[1]);
-            ui.setItem(slot+18,permCols.get(i)[2]);
+        for (int i = startIndex; i < endIndex; i++) {
+            ui.setItem(slot, permCols.get(i)[0]);
+            ui.setItem(slot + 9, permCols.get(i)[1]);
+            ui.setItem(slot + 18, permCols.get(i)[2]);
             slot++;
         }
-
 
 
     }
 
 
     @EventHandler
-    public void onInventoryClose(InventoryCloseEvent event){
+    public void onInventoryClose(InventoryCloseEvent event) {
         HumanEntity p = event.getPlayer();
 
         //player.sendMessage(ChatColor.GREEN + "Closing: " + event.getInventory().getTitle() + " of type "+ event.getInventory().getType());
         //player.sendMessage(ChatColor.GREEN + "Viewer:" +
-                //" " + event.getViewers().toString());
+        //" " + event.getViewers().toString());
         //todo customizing the name of the land management UI creates possible a risk, player check addresses this
         // mess
-        if(event.getInventory().getTitle().contains("Land Manager") && p.getName().equalsIgnoreCase(player.getName()) && isOpen ){
+        if (event.getInventory().getTitle().contains("Land Manager") && p.getName().equalsIgnoreCase(player.getName()) && isOpen) {
 
 
             mLand.setPermissions(mLand.permsToString(perms));
             Landlord.getInstance().getDatabase().save(mLand);
             player.sendMessage(ChatColor.GREEN + "Land permissions saved!");        //mess
-            if(Landlord.getInstance().getConfig().getBoolean("options.soundEffects",true)){
+            if (Landlord.getInstance().getConfig().getBoolean("options.soundEffects", true)) {
 //todo                player.playSound(player.getLocation(),Sound.FIZZ,10,10);
             }
             mLand.highlightLand(player, Effect.LAVADRIP);
@@ -223,43 +217,43 @@ public class LandManagerView implements Listener {
     }
 
     @EventHandler
-    public void clickButton(InventoryClickEvent event){
-        if(event.getInventory().getTitle().contains("Land Manager") && event.getWhoClicked().getName().equalsIgnoreCase(player.getName())){
+    public void clickButton(InventoryClickEvent event) {
+        if (event.getInventory().getTitle().contains("Land Manager") && event.getWhoClicked().getName().equalsIgnoreCase(player.getName())) {
             //player.sendMessage(ChatColor.GREEN+"CLICK!");
             //System.out.println(event.getSlot() +"");
             event.setCancelled(true);
             //System.out.println("ClickedSlot: "+event.getRawSlot());
             int slot = event.getRawSlot();
 
-            HashMap<String, Landflag>  pSlots = Landlord.getInstance().getFlagManager().getRegisteredFlags();
+            HashMap<String, Landflag> pSlots = Landlord.getInstance().getFlagManager().getRegisteredFlags();
 
             //RowCount
-            int row = slot/9;
+            int row = slot / 9;
             //System.out.println("ROW: "+row);
 
             //ColCount
-            int col = slot%9;
+            int col = slot % 9;
             //System.out.println("COL: "+col);
 
             //System.out.println("PAGES: "+pageNum);
-            int startIndex = pageNum*8;
+            int startIndex = pageNum * 8;
             int endIndex;
-            if(pageNum==numPages-1){
+            if (pageNum == numPages - 1) {
                 endIndex = permCols.size();
             } else {
-                endIndex = startIndex+8;
+                endIndex = startIndex + 8;
             }
             //System.out.println("EndIndex: "+endIndex);
             //System.out.println("StartIndex: "+startIndex);
-            if((col<=(endIndex-startIndex) && col>0)) {
+            if ((col <= (endIndex - startIndex) && col > 0)) {
 
-                if(row == 1) {
+                if (row == 1) {
 //todo                    player.playSound(player.getLocation(), Sound.CLICK, 1L, 1L);
-                    perms[0][permSlots.get((col-1)+((pageNum)*8))] = bSwap(perms[0][permSlots.get((col-1)+((pageNum)*8))]);
-                } else if (row == 2){
+                    perms[0][permSlots.get((col - 1) + ((pageNum) * 8))] = bSwap(perms[0][permSlots.get((col - 1) + ((pageNum) * 8))]);
+                } else if (row == 2) {
 //todo                    player.playSound(player.getLocation(), Sound.CLICK, 1L, 1L);
                     //System.out.println((col-1)+((pageNum)*8));
-                    perms[1][permSlots.get((col-1)+((pageNum)*8))] = bSwap(perms[1][permSlots.get((col-1)+((pageNum)*8))]);
+                    perms[1][permSlots.get((col - 1) + ((pageNum) * 8))] = bSwap(perms[1][permSlots.get((col - 1) + ((pageNum) * 8))]);
                     //System.out.println(perms[1][permSlots.get((col-1)+((pageNum)*8))]);
                 }
                 updateUIData();
@@ -267,7 +261,7 @@ public class LandManagerView implements Listener {
                 buildUI();
             }
 
-            if(pageNum < numPages-1 && event.getRawSlot()==35){
+            if (pageNum < numPages - 1 && event.getRawSlot() == 35) {
                 //35
 //todo                player.playSound(player.getLocation(), Sound.CLICK, 1L, 1L);
                 pageNum++;
@@ -275,7 +269,7 @@ public class LandManagerView implements Listener {
                 setToggles();
                 buildUI();
             }
-            if(pageNum > 0 && event.getRawSlot()==27){
+            if (pageNum > 0 && event.getRawSlot() == 27) {
                 //27
 //todo                player.playSound(player.getLocation(), Sound.CLICK, 1L, 1L);
                 pageNum--;
@@ -288,21 +282,17 @@ public class LandManagerView implements Listener {
 
     }
 
-    private String bSwap(String s){
-        if(s.equals("0")){
+    private String bSwap(String s) {
+        if (s.equals("0")) {
             return "1";
         } else {
             return "0";
         }
     }
 
-    public void closeView(){
+    public void closeView() {
         player.closeInventory();
     }
-
-
-
-
 
 
 }

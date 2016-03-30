@@ -38,14 +38,13 @@ public class ClearWorld implements LandlordCommand {
         final String confirmation = messages.getString("commands.clearWorld.alerts.success");
 
 
-
-        if(!sender.hasPermission("landlord.admin.clearworld")){
-            sender.sendMessage(ChatColor.RED+noPerms);
+        if (!sender.hasPermission("landlord.admin.clearworld")) {
+            sender.sendMessage(ChatColor.RED + noPerms);
             return true;
         }
-        if(args.length > 1){
+        if (args.length > 1) {
             List<OwnedLand> land;
-            if(args.length > 2){
+            if (args.length > 2) {
                 /*
                  * *************************************
                  * mark for possible change    !!!!!!!!!
@@ -56,25 +55,25 @@ public class ClearWorld implements LandlordCommand {
                     sender.sendMessage(ChatColor.RED + unknownPlayer);
                     return true;
                 }
-                land = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",possible.getUniqueId().toString()).eq("worldName",args[1]).findList();
+                land = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName", possible.getUniqueId().toString()).eq("worldName", args[1]).findList();
             } else {
-                if(sender instanceof Player){
-                    sender.sendMessage(ChatColor.RED+notConsole);
+                if (sender instanceof Player) {
+                    sender.sendMessage(ChatColor.RED + notConsole);
                     return true;
                 }
-                land = plugin.getDatabase().find(OwnedLand.class).where().eq("worldName",args[1]).findList();
+                land = plugin.getDatabase().find(OwnedLand.class).where().eq("worldName", args[1]).findList();
             }
-            if(land.isEmpty()){
+            if (land.isEmpty()) {
                 sender.sendMessage(ChatColor.RED + noLand);
                 return true;
             }
 
             plugin.getDatabase().delete(land);
             plugin.getMapManager().updateAll();
-            sender.sendMessage(ChatColor.GREEN+ confirmation);
+            sender.sendMessage(ChatColor.GREEN + confirmation);
 
         } else {
-            sender.sendMessage(ChatColor.RED + usage.replace("#{label}", label).replace("#{cmd}", args[0]) );
+            sender.sendMessage(ChatColor.RED + usage.replace("#{label}", label).replace("#{cmd}", args[0]));
         }
         return true;
     }
@@ -83,7 +82,7 @@ public class ClearWorld implements LandlordCommand {
     public String getHelpText(CommandSender sender) {
 
         // only bother showing them this command if they have permission to do it.
-        if(!sender.hasPermission("landlord.admin.clearworld")){
+        if (!sender.hasPermission("landlord.admin.clearworld")) {
             return null;
         }
 
@@ -101,8 +100,8 @@ public class ClearWorld implements LandlordCommand {
         helpString += Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
 
         // If chunk regen is on, warn them that bulk deletions will not regen
-        if(plugin.getConfig().getBoolean("options.regenOnUnclaim",false)){  //conf
-            helpString += ChatColor.YELLOW+" "+ChatColor.ITALIC+ chunkWarning;
+        if (plugin.getConfig().getBoolean("options.regenOnUnclaim", false)) {  //conf
+            helpString += ChatColor.YELLOW + " " + ChatColor.ITALIC + chunkWarning;
         }
 
         // return the constructed and colorized help string
