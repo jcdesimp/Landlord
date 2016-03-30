@@ -138,7 +138,7 @@ commands:
         - "map"
         - "grid"
   unclaim:
-      usage: "usage: /#{label} #{command} [x, y] [world]."
+      usage: "/#{label} #{cmd} [x, y] [world]."
       description: "Unclaim this chunk."
       alerts:
         noWorld: "World #{worldName} does not exist."
@@ -151,7 +151,7 @@ commands:
         - "unclaim"
         - "sell"
   unfriend:
-      usage: "/#{label} #{command} <player>"
+      usage: "/#{label} #{cmd} <player>"
       description: "Remove friend from this land."
       alerts:
         notFriend: "Player #{playerName} is not a friend of this land."
@@ -164,7 +164,7 @@ commands:
         - "deletefriend"
         - "untrust"
   unfriendAll:
-      usage: "/#{label} #{command} <player>"
+      usage: "/#{label} #{cmd} <player>"
       description: "Remove friend from all your land."
       alerts:
         playerRemoved: "#{playername} has been removed as a friend from all of your land."
