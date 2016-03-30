@@ -19,8 +19,7 @@ public class LandlordCommandExecutor implements CommandExecutor {
     private Help helpCommand;
 
     public LandlordCommandExecutor(Landlord plugin) {
-        this.registeredCommands = new HashMap<String, LandlordCommand>();
-
+        this.registeredCommands = new HashMap<>();
 
         this.helpCommand = new Help(plugin, this);
 

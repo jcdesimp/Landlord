@@ -270,3 +270,39 @@ event:
     interact: "You are not allowed to use containers on this land."
   useRedstone:
     interact: "You cannot use redstone on this land."
+manager:
+  title: "Land Manager"
+  toggle: "Click to toggle."
+  saved: "Land permissions saved!"
+  players:
+    friends: "Friends of this land"
+    others: "Regular players"
+  help:
+    button: "Help"
+    text:
+      - "Click each wool block"
+      - "to toggle a permission for a group."
+      - "Red wool means not allowed"
+      - "and green wool means allowed."
+      - "Mouse over each item for more information."
+  table:
+    friends:
+      title: "Friends"
+      description:
+        - "Permissions in this row apply to"
+        - "friends of this land."
+    others:
+      title: "Everyone"
+      description:
+        - "Permissions in this row apply to"
+        - "people that aren't friends"
+        - "of this land."
+  pagination:
+    next:
+      title: "Next Page"
+      description:
+        - "View next page of options."
+    previous:
+      title: "Previous Page"
+      description:
+        - "View previous page of options."

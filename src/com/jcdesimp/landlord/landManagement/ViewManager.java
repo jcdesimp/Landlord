@@ -1,5 +1,6 @@
 package com.jcdesimp.landlord.landManagement;
 
+import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.entity.Player;
 
@@ -18,8 +19,8 @@ public class ViewManager {
         this.activeViews = new HashMap<String, LandManagerView>();
     }
 
-    public void activateView(Player p, OwnedLand land) {
-        LandManagerView newView = new LandManagerView(p, land);
+    public void activateView(Player p, OwnedLand land, Landlord plugin) {
+        LandManagerView newView = new LandManagerView(p, land, plugin);
         newView.showUI();
         activeViews.put(p.getName(), newView);
     }

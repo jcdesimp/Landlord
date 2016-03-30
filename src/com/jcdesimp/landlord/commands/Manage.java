@@ -62,7 +62,7 @@ public class Manage implements LandlordCommand {
             if (!land.ownerUUID().equals(player.getUniqueId())) {
                 player.sendMessage(ChatColor.YELLOW + otherLand);
             }
-            plugin.getManageViewManager().activateView(player, land);
+            plugin.getManageViewManager().activateView(player, land, plugin);
 
 
         }
