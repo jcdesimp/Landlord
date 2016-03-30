@@ -241,8 +241,8 @@ event:
   build:
     blockPlace: "You are not allowed to build on this land."
     blockBreak: "You are not allowed to break on this land."
-    pourBucket: "You cannot place that on this land."
-    fillBucket: "You cannot do that on this land."
+    bucketEmpty: "You cannot place that on this land."
+    bucketFill: "You cannot do that on this land."
     hangingBreak: "You cannot break that on this land."
     useArmorStand: "You cannot do that here!"
     breakArmorStandWithMelee: "You cannot do that on this land."
