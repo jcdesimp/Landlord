@@ -30,19 +30,14 @@ public class UseContainers extends Landflag {
      * Constructor needs to be defined and properly call super()
      */
     public UseContainers(Landlord plugin) {
-        //mess all these constructor values
         super(plugin,
-                "Use Containers",                                       //Display name (will be displayed to players)
-                "Gives permission to use trap chests|" +
-                        "chests, furnaces, anvils, hoppers,|" +           //Description (Lore of headerItem '|' will seperate lines of lore.)
-                        "droppers, dispensers, beacons,|" +
-                        "brewing stands, cauldrons,|" +
-                        "and Jukeboxes.",
-                new ItemStack(Material.CHEST),                      //Itemstack (represented in and manager)
-                "Allowed Container Usage",                              //Text shown in manager for granted permission
-                "can use containers.",                                  //Description in manager for granted permission (ex: Friendly players <desc>)
-                "Denied Container Usage",                               //Text shown in manager for denied permission
-                "cannot use containers."                                //Desciption in manager for denied permission (ex: Regular players <desc>)
+                plugin.getMessageConfig().getString("flags.useContainers.displayName"),      //Display name (will be displayed to players)
+                plugin.getMessageConfig().getString("flags.useContainers.description"),
+                new ItemStack(Material.CHEST),        //Itemstack (represented in manager)
+                plugin.getMessageConfig().getString("flags.useContainers.allowedTitle"),      //Text shown in manager for granted permission
+                plugin.getMessageConfig().getString("flags.useContainers.allowedText"),      //Description in manager for granted permission (ex: Friendly players <desc>)
+                plugin.getMessageConfig().getString("flags.useContainers.deniedTitle"),      //Text shown in manager for denied permission
+                plugin.getMessageConfig().getString("flags.useContainers.deniedText")       //Desciption in manager for denied permission (ex: Regular players <desc>)
         );
     }
 
@@ -92,13 +87,9 @@ public class UseContainers extends Landflag {
         }
         Player p = event.getPlayer();
         if(!land.hasPermTo(p, this)){
-            p.sendMessage(ChatColor.RED + "You are not allowed to use containers on this land.");   //mess
+            p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.useContainers.interact"));
             event.setCancelled(true);
         }
     }
-
-
-
-
 
 }
