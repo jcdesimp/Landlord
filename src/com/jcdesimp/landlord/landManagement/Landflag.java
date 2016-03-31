@@ -1,5 +1,6 @@
 package com.jcdesimp.landlord.landManagement;
 
+import com.jcdesimp.landlord.Landlord;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
@@ -7,28 +8,32 @@ import org.bukkit.inventory.ItemStack;
  * File created by jcdesimp on 4/11/14.
  */
 public abstract class Landflag implements Listener {
+
+    private Landlord plugin;
+
     //Data Fields
     private int permSlot;
     private String uniqueName;
 
     //Display Fields
     private String displayName;
-    private String descrition;
+    private String description;
     private ItemStack headerItem;
     private String allowedTitle;
     private String allowedText;
     private String deniedTitle;
     private String deniedText;
 
-    protected Landflag(String displayName,
-                       String descrition,
+    protected Landflag(Landlord plugin, String displayName,
+                       String description,
                        ItemStack headerItem,
                        String allowedTitle,
                        String allowedText,
                        String deniedTitle,
                        String deniedText) {
+        this.plugin = plugin;
         this.displayName = displayName;
-        this.descrition = descrition;
+        this.description = description;
         this.headerItem = headerItem;
         this.allowedTitle = allowedTitle;
         this.allowedText = allowedText;
@@ -48,12 +53,12 @@ public abstract class Landflag implements Listener {
         return deniedText;
     }
 
-    public void setUniqueName(String uniqueName) {
-        this.uniqueName = uniqueName;
-    }
-
     public String getUniqueName() {
         return uniqueName;
+    }
+
+    public void setUniqueName(String uniqueName) {
+        this.uniqueName = uniqueName;
     }
 
     public String getDisplayName() {
@@ -61,7 +66,7 @@ public abstract class Landflag implements Listener {
     }
 
     public String getDescription() {
-        return descrition;
+        return description;
     }
 
     public ItemStack getHeaderItem() {
@@ -78,5 +83,9 @@ public abstract class Landflag implements Listener {
 
     public String getDeniedTitle() {
         return deniedTitle;
+    }
+
+    public Landlord getPlugin() {
+        return plugin;
     }
 }

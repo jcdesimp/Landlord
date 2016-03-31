@@ -6,7 +6,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Effect;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 /**
  * Created by jcdesimp on 2/19/15.
@@ -22,18 +25,27 @@ public class Info implements LandlordCommand {
 
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
+
+        FileConfiguration messages = plugin.getMessageConfig();
+
+        final String notPlayer = messages.getString("info.warnings.playerCommand");
+        final String noPerms = messages.getString("info,warnings.noPerms");
+        final String noOwner = messages.getString("info.alerts.noOwner");
+        final String landInfoString = messages.getString("commands.info.alerts.landInfo");
+        final String landOwnerString = messages.getString("commands.info.alerts.landOwner");
+
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");   //mess
+            sender.sendMessage(ChatColor.DARK_RED + notPlayer);
         } else {
             Player player = (Player) sender;
-            if(!player.hasPermission("landlord.player.info")){
-                player.sendMessage(ChatColor.RED+"You do not have permission.");        //mess
+            if (!player.hasPermission("landlord.player.info")) {
+                player.sendMessage(ChatColor.RED + noPerms);
                 return true;
             }
             Chunk currChunk = player.getLocation().getChunk();
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
-            String owner = ChatColor.GRAY + "" + ChatColor.ITALIC + "None";     //mess
-            if( land != null ){
+            String owner = ChatColor.GRAY + "" + ChatColor.ITALIC + noOwner;
+            if (land != null) {
 
                 /*
                  * *************************************
@@ -42,17 +54,19 @@ public class Info implements LandlordCommand {
                  */
                 owner = ChatColor.GOLD + land.getOwnerUsername();
             } else {
-                land = OwnedLand.landFromProperties(null,currChunk);
+                land = OwnedLand.landFromProperties(null, currChunk);
             }
 
-            if(plugin.getConfig().getBoolean("options.particleEffects")){
+            if (plugin.getConfig().getBoolean("options.particleEffects")) {
                 land.highlightLand(player, Effect.LAVADRIP);
             }
 
-            //mess
-            String msg = ChatColor.DARK_GREEN + "--- You are in chunk " + ChatColor.GOLD + "(" + currChunk.getX() + ", " + currChunk.getZ() + ") " +
-                    ChatColor.DARK_GREEN + " in world \"" + ChatColor.GOLD + currChunk.getWorld().getName()  + ChatColor.DARK_GREEN + "\"\n"+ "----- Owned by: " +
-                    owner;
+            // Build the land info string
+            String msg = ChatColor.DARK_GREEN + "--- " + landInfoString
+                    .replace("#{chunkCoords}", (ChatColor.GOLD + "(" + currChunk.getX() + ", " + currChunk.getZ() + ")" + ChatColor.DARK_GREEN))
+                    .replace("#{worldName}", ChatColor.GOLD + "\"" + currChunk.getWorld().getName() + "\"") +
+
+                    ChatColor.DARK_GREEN + "-----\n" + landOwnerString.replace("#{ownerName}", owner);
             player.sendMessage(msg);
 
         }
@@ -62,13 +76,14 @@ public class Info implements LandlordCommand {
     @Override
     public String getHelpText(CommandSender sender) {
 
-        if(!sender.hasPermission("landlord.player.info")){   // make sure player has permission to do this command
+        if (!sender.hasPermission("landlord.player.info")) {   // make sure player has permission to do this command
             return null;
         }
 
-        //mess ready
-        String usage = "/#{label} #{cmd}"; // get the base usage string
-        String desc = "View info about this chunk.";   // get the description
+        FileConfiguration messages = plugin.getMessageConfig();
+
+        final String usage = messages.getString("commands.info.usage"); // get the base usage string
+        final String desc = messages.getString("commands.info.description");   // get the description
 
         // return the constructed and colorized help string
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
@@ -76,6 +91,7 @@ public class Info implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"info"};
+        final List<String> triggers = plugin.getMessageConfig().getStringList("commands.info.triggers");
+        return triggers.toArray(new String[triggers.size()]);
     }
 }

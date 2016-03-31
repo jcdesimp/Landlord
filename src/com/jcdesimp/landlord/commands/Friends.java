@@ -8,9 +8,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Effect;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.bukkit.util.NumberConversions.ceil;
 
@@ -28,84 +30,100 @@ public class Friends implements LandlordCommand {
 
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
+        FileConfiguration messages = plugin.getMessageConfig();
+
+        final String notPlayer = messages.getString("info.warnings.playerCommand");
+        final String noPerms = messages.getString("info.warnings.noPerms");
+        final String notOwner = messages.getString("info.warnings.notOwner");
+        final String badPageNum = messages.getString("info.warnings.badPage");
+        final String friendListHeader = messages.getString("commands.friends.alerts.listHeader");
+        final String noFriends = messages.getString("commands.friends.alerts.noFriends");
+        final String onlineString = messages.getString("commands.friends.alerts.online");
+        final String offlineString = messages.getString("commands.friends.alerts.offline");
+        final String invalidPage = messages.getString("info.warnings.badPage");
+        final String nextPageString = messages.getString("info.alerts.nextPage");
+
+
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");   //mess
+            sender.sendMessage(ChatColor.DARK_RED + notPlayer);
         } else {
             Player player = (Player) sender;
-            if(!player.hasPermission("landlord.player.own")){
-                player.sendMessage(ChatColor.RED+"You do not have permission.");        //mess
+            if (!player.hasPermission("landlord.player.own")) {
+                player.sendMessage(ChatColor.RED + noPerms);
                 return true;
             }
             Chunk currChunk = player.getLocation().getChunk();
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
-            if( land == null || ( !land.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.friends") ) ){
-                player.sendMessage(ChatColor.RED + "You do not own this land.");    //mess
+            if (land == null || (!land.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.friends"))) {
+                player.sendMessage(ChatColor.RED + notOwner);
                 return true;
             }
-            if(!land.getOwnerName().equals(player.getUniqueId())){
-                //player.sendMessage(ChatColor.YELLOW+"Viewing friends of someone else's land.");
-            }
-            if(plugin.getConfig().getBoolean("options.particleEffects",true)) {     //conf
+//            if(!land.getOwnerName().equals(player.getUniqueId())){
+//                //player.sendMessage(ChatColor.YELLOW+"Viewing friends of someone else's land.");
+//            }
+            if (plugin.getConfig().getBoolean("options.particleEffects", true)) {     //conf
                 land.highlightLand(player, Effect.HEART, 3);
             }
             //check if page number is valid
             int pageNumber = 1;
-            if (args.length > 1 && args[0].equals("friends")){
+            if (args.length > 1 && args[0].equals("friends")) {
                 try {
                     pageNumber = Integer.parseInt(args[1]);
-                } catch (NumberFormatException e){
-                    player.sendMessage(ChatColor.RED+"That is not a valid page number.");       //mess
+                } catch (NumberFormatException e) {
+                    player.sendMessage(ChatColor.RED + badPageNum);
                     return true;
                 }
             }
 
             //List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getName()).findList();
 
-            String header = ChatColor.DARK_GREEN + "----- Friends of this Land -----\n";        //mess
-
+            String header = ChatColor.DARK_GREEN + "----- " + friendListHeader + " -----\n";
             ArrayList<String> friendList = new ArrayList<String>();
-            if(land.getFriends().isEmpty()){
-                player.sendMessage(ChatColor.YELLOW+"This land has no friends.");   //mess
+            if (land.getFriends().isEmpty()) {
+                player.sendMessage(ChatColor.YELLOW + noFriends);
                 return true;
             }
-            for(Friend f: land.getFriends()){
-                String fr = ChatColor.DARK_GREEN+" - "+ChatColor.GOLD+f.getName()+ChatColor.DARK_GREEN+" - ";   //mess
+            for (Friend f : land.getFriends()) {
+                String fr = ChatColor.DARK_GREEN + " - " + ChatColor.GOLD + f.getName() + ChatColor.DARK_GREEN + " - ";
                 /*
                  * *************************************
                  * mark for possible change    !!!!!!!!!
                  * *************************************
                  */
-                if(Bukkit.getOfflinePlayer(f.getUUID()).isOnline()){
-                    fr+= ChatColor.GREEN+""+ChatColor.ITALIC+" Online"; //mess
+                if (Bukkit.getOfflinePlayer(f.getUUID()).isOnline()) {
+                    fr += ChatColor.GREEN + "" + ChatColor.ITALIC + onlineString;
                 } else {
-                    fr+= ChatColor.RED+""+ChatColor.ITALIC+" Offline";  //mess
+                    fr += ChatColor.RED + "" + ChatColor.ITALIC + offlineString;
                 }
 
-                fr+="\n";
+                fr += "\n";
                 friendList.add(fr);
             }
 
             //Amount to be displayed per page
             final int numPerPage = 8;
 
-            int numPages = ceil((double)friendList.size()/(double)numPerPage);
-            if(pageNumber > numPages){
-                sender.sendMessage(ChatColor.RED+"That is not a valid page number.");   //mess
+            int numPages = ceil((double) friendList.size() / (double) numPerPage);
+            if (pageNumber > numPages) {
+                sender.sendMessage(ChatColor.RED + invalidPage);
                 return true;
             }
             String pMsg = header;
-            if (pageNumber == numPages){
-                for(int i = (numPerPage*pageNumber-numPerPage); i<friendList.size(); i++){
-                    pMsg+=friendList.get(i);
+            if (pageNumber == numPages) {
+                for (int i = (numPerPage * pageNumber - numPerPage); i < friendList.size(); i++) {
+                    pMsg += friendList.get(i);
                 }
-                pMsg+=ChatColor.DARK_GREEN+"------------------------------";    //mess
+                pMsg += ChatColor.DARK_GREEN + "------------------------------";
             } else {
-                for(int i = (numPerPage*pageNumber-numPerPage); i<(numPerPage*pageNumber); i++){
-                    pMsg+=friendList.get(i);
+                for (int i = (numPerPage * pageNumber - numPerPage); i < (numPerPage * pageNumber); i++) {
+                    pMsg += friendList.get(i);
                 }
 
-                //mess
-                pMsg+=ChatColor.DARK_GREEN+"--- do"+ChatColor.YELLOW+" /"+label+" friends "+(pageNumber+1)+ChatColor.DARK_GREEN+" for next page ---";
+                pMsg += "\n" + ChatColor.DARK_GREEN + "--- " + nextPageString
+                        .replace("#{label}", ChatColor.YELLOW + "/" + label)
+                        .replace("#{cmd}", args[0])
+                        .replace("#{pageNumber}", "" + (pageNumber + 1) + ChatColor.DARK_GREEN)
+                        + " ---";
             }
             player.sendMessage(pMsg);
 
@@ -116,10 +134,10 @@ public class Friends implements LandlordCommand {
 
     @Override
     public String getHelpText(CommandSender sender) {
+        FileConfiguration messages = plugin.getMessageConfig();
 
-        //mess
-        String usage = "/#{label} #{cmd}"; // get the base usage string
-        String desc = "List friends of this land.";   // get the description
+        final String usage = messages.getString("commands.friends.usage"); // get the base usage string
+        final String desc = messages.getString("commands.friends.description");   // get the description
 
         // return the constructed and colorized help string
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
@@ -128,6 +146,7 @@ public class Friends implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"friends"};
+        final List<String> triggers = plugin.getMessageConfig().getStringList("commands.friends.triggers");
+        return triggers.toArray(new String[triggers.size()]);
     }
 }

@@ -5,6 +5,7 @@ import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -25,13 +26,25 @@ public class ClearWorld implements LandlordCommand {
 
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
-        if(!sender.hasPermission("landlord.admin.clearworld")){
-            sender.sendMessage(ChatColor.RED+"You do not have permission.");        //mess
+
+        FileConfiguration messages = plugin.getMessageConfig();
+
+        final String usage = messages.getString("commands.clearWorld.usage");
+
+        final String noPerms = messages.getString("info.warnings.noPerms");
+        final String unknownPlayer = messages.getString("info.warnings.unknownPlayer");
+        final String notConsole = messages.getString("commands.clearWorld.alerts.notConsole");
+        final String noLand = messages.getString("commands.clearWorld.alerts.noLand");
+        final String confirmation = messages.getString("commands.clearWorld.alerts.success");
+
+
+        if (!sender.hasPermission("landlord.admin.clearworld")) {
+            sender.sendMessage(ChatColor.RED + noPerms);
             return true;
         }
-        if(args.length > 1){
+        if (args.length > 1) {
             List<OwnedLand> land;
-            if(args.length > 2){
+            if (args.length > 2) {
                 /*
                  * *************************************
                  * mark for possible change    !!!!!!!!!
@@ -39,28 +52,28 @@ public class ClearWorld implements LandlordCommand {
                  */
                 OfflinePlayer possible = getOfflinePlayer(args[2]);
                 if (!possible.hasPlayedBefore() && !possible.isOnline()) {
-                    sender.sendMessage(ChatColor.RED+"That player is not recognized.");     //mess
+                    sender.sendMessage(ChatColor.RED + unknownPlayer);
                     return true;
                 }
-                land = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",possible.getUniqueId().toString()).eq("worldName",args[1]).findList();
+                land = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName", possible.getUniqueId().toString()).eq("worldName", args[1]).findList();
             } else {
-                if(sender instanceof Player){
-                    sender.sendMessage(ChatColor.RED+"You can only delete entire worlds from the console.");    //mess
+                if (sender instanceof Player) {
+                    sender.sendMessage(ChatColor.RED + notConsole);
                     return true;
                 }
-                land = plugin.getDatabase().find(OwnedLand.class).where().eq("worldName",args[1]).findList();
+                land = plugin.getDatabase().find(OwnedLand.class).where().eq("worldName", args[1]).findList();
             }
-            if(land.isEmpty()){
-                sender.sendMessage(ChatColor.RED + "No land to remove.");       //mess
+            if (land.isEmpty()) {
+                sender.sendMessage(ChatColor.RED + noLand);
                 return true;
             }
 
             plugin.getDatabase().delete(land);
             plugin.getMapManager().updateAll();
-            sender.sendMessage(ChatColor.GREEN+"Land(s) deleted!");     //mess
+            sender.sendMessage(ChatColor.GREEN + confirmation);
 
         } else {
-            sender.sendMessage(ChatColor.RED + "format: " + label + " clearworld <world> [<player>]");  //mess DUPE OF HELP, should probably make call to getHelpText
+            sender.sendMessage(ChatColor.RED + usage.replace("#{label}", label).replace("#{cmd}", args[0]));
         }
         return true;
     }
@@ -69,16 +82,15 @@ public class ClearWorld implements LandlordCommand {
     public String getHelpText(CommandSender sender) {
 
         // only bother showing them this command if they have permission to do it.
-        if(!sender.hasPermission("landlord.admin.clearworld")){
+        if (!sender.hasPermission("landlord.admin.clearworld")) {
             return null;
         }
 
+        FileConfiguration messages = plugin.getMessageConfig();
 
-        //mess ready
-        String usage = "/#{label} #{cmd} <world> [player]";             // get the base usage string
-        String desc = "Delete all land owned by a player in a " +       // get the description
-                "world. Delete all land of a world (console only).";
-        String chunkWarning = "Does not regenerate chunks.";            // get the "chunks won't regen" warning
+        final String usage = messages.getString("commands.clearWorld.usage");             // get the base usage string
+        final String desc = messages.getString("commands.clearWorld.description");
+        final String chunkWarning = messages.getString("commands.clearWorld.alerts.chunkWarning");            // get the "chunks won't regen" warning
 
 
         String helpString = ""; // start building the help string
@@ -88,8 +100,8 @@ public class ClearWorld implements LandlordCommand {
         helpString += Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
 
         // If chunk regen is on, warn them that bulk deletions will not regen
-        if(plugin.getConfig().getBoolean("options.regenOnUnclaim",false)){  //conf
-            helpString += ChatColor.YELLOW+" "+ChatColor.ITALIC+ chunkWarning;
+        if (plugin.getConfig().getBoolean("options.regenOnUnclaim", false)) {  //conf
+            helpString += ChatColor.YELLOW + " " + ChatColor.ITALIC + chunkWarning;
         }
 
         // return the constructed and colorized help string
@@ -99,6 +111,7 @@ public class ClearWorld implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"clearworld"};
+        final List<String> triggers = plugin.getMessageConfig().getStringList("commands.clearWorld.triggers");
+        return triggers.toArray(new String[triggers.size()]);
     }
 }

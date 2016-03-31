@@ -6,6 +6,7 @@ import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -26,39 +27,48 @@ public class FriendAll implements LandlordCommand {
 
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
+        FileConfiguration messages = plugin.getMessageConfig();
+        final String notPlayerString = messages.getString("info.warnings.playerCommand");
+        final String usageString = messages.getString("commands.friendAll.usage");
+        final String noPermsString = messages.getString("info.warnings.noPerms");
+        final String unknownPlayer = messages.getString("info.warnings.unknownPlayer");
+        final String friendAddedString = messages.getString("commands.friendAll.alerts.success");
+        final String noLandString = messages.getString("commands.friendAll.alerts.noLand");
+
+
         //is sender a player
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");   //mess
+            sender.sendMessage(ChatColor.DARK_RED + notPlayerString);
         } else {
             if (args.length < 2) {
-                sender.sendMessage(ChatColor.RED + "usage: /land friendall <player>");  //mess
+                sender.sendMessage(ChatColor.RED + usageString.replace("#{label}", label));
                 return true;
             }
             Player player = (Player) sender;
             if (!player.hasPermission("landlord.player.own")) {
-                player.sendMessage(ChatColor.RED + "You do not have permission.");  //mess
+                player.sendMessage(ChatColor.RED + noPermsString);
                 return true;
             }
 
-            List<OwnedLand> pLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName",player.getUniqueId()).findList();
+            List<OwnedLand> pLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName", player.getUniqueId()).findList();
             OfflinePlayer possible = getOfflinePlayer(args[1]);
             if (!possible.hasPlayedBefore() && !possible.isOnline()) {
-                player.sendMessage(ChatColor.RED + "That player is not recognized.");       //mess
+                player.sendMessage(ChatColor.RED + unknownPlayer);
                 return true;
             }
 
-            if (pLand.size() > 0){
-                for(OwnedLand l : pLand){
+            if (pLand.size() > 0) {
+                for (OwnedLand l : pLand) {
                     l.addFriend(Friend.friendFromOfflinePlayer(getOfflinePlayer(args[1])));
                 }
 
                 plugin.getDatabase().save(pLand);
 
 
-                player.sendMessage(ChatColor.GREEN+args[1]+" has been added as a friend to all of your land.");     //mess
+                player.sendMessage(ChatColor.GREEN + friendAddedString.replace("#{player}", args[1]));
                 return true;
             } else {
-                player.sendMessage(ChatColor.YELLOW+"You do not own any land!");        //mess
+                player.sendMessage(ChatColor.YELLOW + noLandString);
             }
 
         }
@@ -67,10 +77,10 @@ public class FriendAll implements LandlordCommand {
 
     @Override
     public String getHelpText(CommandSender sender) {
+        FileConfiguration messages = plugin.getMessageConfig();
 
-        //mess
-        String usage = "/#{label} #{cmd} <player>"; // get the base usage string
-        String desc = "Add friend to all your land.";   // get the description
+        final String usage = messages.getString("commands.friendAll.usage"); // get the base usage string
+        final String desc = messages.getString("commands.friendAll.description");   // get the description
 
         // return the constructed and colorized help string
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
@@ -79,6 +89,7 @@ public class FriendAll implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"friendall","addfriendall"};
+        final List<String> triggers = plugin.getMessageConfig().getStringList("commands.friendAll.triggers");
+        return triggers.toArray(new String[triggers.size()]);
     }
 }

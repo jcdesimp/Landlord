@@ -5,7 +5,10 @@ import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 /**
  * Created by jcdesimp on 2/18/15.
@@ -21,34 +24,45 @@ public class Manage implements LandlordCommand {
 
     /**
      * Command for managing player land perms
+     *
      * @param sender who executed the command
-     * @param args given with command
+     * @param args   given with command
      * @return boolean
      */
     @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
+
+        FileConfiguration messages = plugin.getMessageConfig();
+
+        final String notPlayer = messages.getString("info.warnings.playerCommand");
+        final String noPerms = messages.getString("info.warnings.noPerms");
+        final String noLand = messages.getString("commands.manage.alerts.noLand");
+        final String notOwner = messages.getString("info.warnings.notOwner");
+        final String otherLand = messages.getString("commands.manage.alerts.otherLand");
+
+
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "This command can only be run by a player.");   //mess
+            sender.sendMessage(ChatColor.DARK_RED + notPlayer);
         } else {
             Player player = (Player) sender;
-            if(!player.hasPermission("landlord.player.own")){
-                player.sendMessage(ChatColor.RED+"You do not have permission.");                    //mess
+            if (!player.hasPermission("landlord.player.own")) {
+                player.sendMessage(ChatColor.RED + noPerms);
                 return true;
             }
-            if(plugin.getFlagManager().getRegisteredFlags().size() <= 0){
-                player.sendMessage(ChatColor.RED+"There is nothing to manage!");                    //mess
+            if (plugin.getFlagManager().getRegisteredFlags().size() <= 0) {
+                player.sendMessage(ChatColor.RED + noLand);
                 return true;
             }
             Chunk currChunk = player.getLocation().getChunk();
             OwnedLand land = OwnedLand.getLandFromDatabase(currChunk.getX(), currChunk.getZ(), currChunk.getWorld().getName());
-            if( land == null || ( !land.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.manage") ) ){
-                player.sendMessage(ChatColor.RED + "You do not own this land.");        //mess
+            if (land == null || (!land.ownerUUID().equals(player.getUniqueId()) && !player.hasPermission("landlord.admin.manage"))) {
+                player.sendMessage(ChatColor.RED + notOwner);
                 return true;
             }
-            if(!land.ownerUUID().equals(player.getUniqueId())){
-                player.sendMessage(ChatColor.YELLOW+"Managing someone else's land.");      //mess
+            if (!land.ownerUUID().equals(player.getUniqueId())) {
+                player.sendMessage(ChatColor.YELLOW + otherLand);
             }
-            plugin.getManageViewManager().activateView(player, land);
+            plugin.getManageViewManager().activateView(player, land, plugin);
 
 
         }
@@ -57,9 +71,11 @@ public class Manage implements LandlordCommand {
 
     @Override
     public String getHelpText(CommandSender sender) {
-        //mess
-        String usage = "/#{label} #{cmd}"; // get the base usage string
-        String desc = "Manage permissions for this land.";   // get the description
+
+        FileConfiguration messages = plugin.getMessageConfig();
+
+        final String usage = messages.getString("commands.manage.usage");       // get the base usage string
+        final String desc = messages.getString("commands.manage.description");   // get the description
 
         // return the constructed and colorized help string
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
@@ -68,6 +84,7 @@ public class Manage implements LandlordCommand {
 
     @Override
     public String[] getTriggers() {
-        return new String[]{"manage"};
+        final List<String> triggers = plugin.getMessageConfig().getStringList("commands.manage.triggers");
+        return triggers.toArray(new String[triggers.size()]);
     }
 }

@@ -1,5 +1,6 @@
 package com.jcdesimp.landlord.landFlags;
 
+import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.landManagement.Landflag;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
@@ -10,8 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Arrays;
 
 /**
  * File created by jcdesimp on 5/24/14.
@@ -24,58 +23,57 @@ import java.util.Arrays;
  */
 public class PVP extends Landflag {
 
-    public PVP() {
-        super(
-                "PVP",                                          //Display name (will be displayed to players)
-                "Gives permission to attack|" +
-                        "players on this land|" ,
-                new ItemStack(Material.IRON_SWORD),              //Itemstack (represented in and manager)
-                "Allowed PvP",                                    //Text shown in manager for granted permission
-                "can hurt other players.",                        //Description in manager for granted permission (ex: Friendly players <desc>)
-                "Denied PvP",                                     //Text shown in manager for denied permission
-                "cannot hurt other players."                      //Desciption in manager for denied permission (ex: Regular players <desc>)
+    public PVP(Landlord plugin) {
+        super(plugin,
+                plugin.getMessageConfig().getString("flags.pvp.displayName"),      //Display name (will be displayed to players)
+                plugin.getMessageConfig().getString("flags.pvp.description"),
+                new ItemStack(Material.IRON_SWORD),        //Itemstack (represented in manager)
+                plugin.getMessageConfig().getString("flags.pvp.allowedTitle"),      //Text shown in manager for granted permission
+                plugin.getMessageConfig().getString("flags.pvp.allowedText"),      //Description in manager for granted permission (ex: Friendly players <desc>)
+                plugin.getMessageConfig().getString("flags.pvp.deniedTitle"),      //Text shown in manager for denied permission
+                plugin.getMessageConfig().getString("flags.pvp.deniedText")       //Desciption in manager for denied permission (ex: Regular players <desc>)
         );
     }
 
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void playerDamage(EntityDamageByEntityEvent event){
+    public void playerDamage(EntityDamageByEntityEvent event) {
         //String[] safeAnimals = {"OCELOT","WOLF","HORSE","COW","PIG","MUSHROOM_COW","SHEEP","CHICKEN"};
         org.bukkit.entity.Entity victim = event.getEntity();
-        if(!(victim instanceof Player)){
+        if (!(victim instanceof Player)) {
             return;
         }
 
 
         org.bukkit.entity.Entity attacker = event.getDamager();
 
-        if(attacker.getType().toString().equals("PLAYER")){
-            Player p = (Player)attacker;
+        if (attacker.getType().toString().equals("PLAYER")) {
+            Player p = (Player) attacker;
             OwnedLand land = OwnedLand.getApplicableLand(victim.getLocation());
-            if(land==null){
+            if (land == null) {
                 return;
             }
-            if(!land.hasPermTo(p, this)){
+            if (!land.hasPermTo(p, this)) {
 
-                p.sendMessage(ChatColor.RED+"You cannot harm other players on this land.");
+                p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.pvp.melee"));
 
                 event.setCancelled(true);
 
             }
 
-        } else if(attacker.getType().toString().equalsIgnoreCase("Arrow") || attacker.getType().toString().equalsIgnoreCase("SPLASH_POTION")){
-            Projectile a = (Projectile)attacker;
+        } else if (attacker.getType().toString().equalsIgnoreCase("Arrow") || attacker.getType().toString().equalsIgnoreCase("SPLASH_POTION")) {
+            Projectile a = (Projectile) attacker;
             Player p;
-            if(a.getShooter() instanceof Player){
+            if (a.getShooter() instanceof Player) {
                 OwnedLand land = OwnedLand.getApplicableLand(victim.getLocation());
-                p = (Player)a.getShooter();
-                if(land==null){
+                p = (Player) a.getShooter();
+                if (land == null) {
                     return;
                 }
                 //System.out.println(a.getType());
-                if(!land.hasPermTo(p, this)){
-                    if(a.getType().toString().equals("ARROW")) {
-                        p.sendMessage(ChatColor.RED + "You cannot harm other players on this land.");
+                if (!land.hasPermTo(p, this)) {
+                    if (a.getType().toString().equals("ARROW")) {
+                        p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.pvp.projectile"));
                     }
                     a.remove();
                     event.setCancelled(true);
@@ -85,7 +83,5 @@ public class PVP extends Landflag {
 
         }
     }
-
-
 
 }

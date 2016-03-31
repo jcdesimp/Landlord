@@ -1,5 +1,6 @@
 package com.jcdesimp.landlord.landManagement;
 
+import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.entity.Player;
 
@@ -18,36 +19,34 @@ public class ViewManager {
         this.activeViews = new HashMap<String, LandManagerView>();
     }
 
-    public void activateView(Player p, OwnedLand land){
-        LandManagerView newView = new LandManagerView(p, land);
+    public void activateView(Player p, OwnedLand land, Landlord plugin) {
+        LandManagerView newView = new LandManagerView(p, land, plugin);
         newView.showUI();
-        activeViews.put(p.getName(),newView) ;
+        activeViews.put(p.getName(), newView);
     }
 
-    public void deactivateView(Player p){
-        if(activeViews.containsKey(p.getName())){
+    public void deactivateView(Player p) {
+        if (activeViews.containsKey(p.getName())) {
             activeViews.get(p.getName()).closeView();
             activeViews.remove(p.getName());
         }
     }
 
-    public void deactivateView(String pName){
-        if(activeViews.containsKey(pName)){
+    public void deactivateView(String pName) {
+        if (activeViews.containsKey(pName)) {
             activeViews.get(pName).closeView();
             activeViews.remove(pName);
         }
     }
 
-    public void NoCloseDeactivateView(Player p){
-        if(activeViews.containsKey(p.getName())){
+    public void NoCloseDeactivateView(Player p) {
+        if (activeViews.containsKey(p.getName())) {
             activeViews.remove(p.getName());
         }
     }
 
-    public void deactivateAll(){
-        for(String s : activeViews.keySet()) {
-            deactivateView(s);
-        }
+    public void deactivateAll() {
+        activeViews.keySet().forEach(this::deactivateView);
     }
 
 }
