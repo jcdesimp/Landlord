@@ -18,30 +18,32 @@ import java.util.HashMap;
 public class MapManager implements Listener {
     private HashMap<String, LandMap> mapList;
 
-    public MapManager() {
-        this.mapList = new HashMap<String, LandMap>();
+    private Landlord plugin;
 
+    public MapManager(Landlord plugin) {
+        this.mapList = new HashMap<String, LandMap>();
+        this.plugin = plugin;
     }
 
 
-    private void addMap(LandMap m){
+    private void addMap(LandMap m) {
         mapList.put(m.getMapViewer().getName(), m);
 
     }
 
-    public void toggleMap(Player p){
-        if( mapList.containsKey(p.getName()) ){
+    public void toggleMap(Player p) {
+        if (mapList.containsKey(p.getName())) {
             remMap(p.getName());
         } else {
-            addMap(new LandMap(p));
+            addMap(new LandMap(p, this.plugin));
         }
         //System.out.println(mapList.toString());
 
     }
 
-    public void remMap(String pName){
+    public void remMap(String pName) {
 
-        if( mapList.containsKey(pName) ){
+        if (mapList.containsKey(pName)) {
             LandMap curr = mapList.get(pName);
             curr.removeMap();
             mapList.remove(pName);
@@ -49,31 +51,31 @@ public class MapManager implements Listener {
         //System.out.println("After Rem: "+mapList.toString());
     }
 
-    public void removeAllMaps(){
-        for (String k : mapList.keySet()){
+    public void removeAllMaps() {
+        for (String k : mapList.keySet()) {
             mapList.get(k).removeMap();
         }
         mapList.clear();
     }
 
-    public void updateAll(){
-        for (String k : mapList.keySet()){
+    public void updateAll() {
+        for (String k : mapList.keySet()) {
             mapList.get(k).updateMap();
         }
     }
 
 
     @EventHandler
-    public void playerLeave(PlayerQuitEvent event){
-        if(mapList.containsKey(event.getPlayer().getName())){
+    public void playerLeave(PlayerQuitEvent event) {
+        if (mapList.containsKey(event.getPlayer().getName())) {
             remMap(event.getPlayer().getName());
         }
 
     }
 
     @EventHandler
-    public void playerWorldChange(PlayerChangedWorldEvent event){
-        if (mapList.containsKey(event.getPlayer().getName())){
+    public void playerWorldChange(PlayerChangedWorldEvent event) {
+        if (mapList.containsKey(event.getPlayer().getName())) {
             remMap(event.getPlayer().getName());
         }
     }
@@ -81,10 +83,11 @@ public class MapManager implements Listener {
 
     /**
      * Update map when player teleports
+     *
      * @param event that was triggered
      */
     @EventHandler
-    public void playerTeleportKeepMap(PlayerTeleportEvent event){
+    public void playerTeleportKeepMap(PlayerTeleportEvent event) {
         final Player p = event.getPlayer();
         //mapList.get(p.getName()).updateMap();
 
@@ -103,7 +106,7 @@ public class MapManager implements Listener {
     }
 
     @EventHandler
-    public void playerRespawn(PlayerRespawnEvent event){
+    public void playerRespawn(PlayerRespawnEvent event) {
         final Player p = event.getPlayer();
         if (mapList.containsKey(event.getPlayer().getName())) {
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Landlord.getInstance(), new Runnable() {

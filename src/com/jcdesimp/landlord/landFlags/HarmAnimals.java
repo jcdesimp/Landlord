@@ -1,11 +1,11 @@
 package com.jcdesimp.landlord.landFlags;
 
+import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.landManagement.Landflag;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -13,7 +13,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.Arrays;
 
 /**
@@ -36,17 +35,15 @@ public class HarmAnimals extends Landflag {
     /*
      * Constructor needs to be defined and properly call super()
      */
-    public HarmAnimals() {
-        super(
-                "Harm Animals",                                    //Display name (will be displayed to players)
-                "Gives permission to hurt or kill|" +
-                        "pigs, sheep, cows, mooshrooms,|" +        //Description (Lore of headerItem '|' will seperate lines of lore.)
-                        "chickens, horses, dogs, and cats.",
-                new ItemStack(Material.LEATHER),                   //Itemstack (represented in land manager)
-                "Allowed Animal Damage",                           //Text shown in manager for granted permission
-                "can harm animals.",                               //Description in manager for granted permission (ex: Friendly players <desc>)
-                "Denied Animal Damage",                            //Text shown in manager for denied permission
-                "cannot harm animals."                             //Desciption in manager for denied permission (ex: Regular players <desc>)
+    public HarmAnimals(Landlord plugin) {
+        super(plugin,
+                plugin.getMessageConfig().getString("flags.harmAnimals.displayName"),      //Display name (will be displayed to players)
+                plugin.getMessageConfig().getString("flags.harmAnimals.description"),
+                new ItemStack(Material.LEATHER),        //Itemstack (represented in manager)
+                plugin.getMessageConfig().getString("flags.harmAnimals.allowedTitle"),      //Text shown in manager for granted permission
+                plugin.getMessageConfig().getString("flags.harmAnimals.allowedText"),      //Description in manager for granted permission (ex: Friendly players <desc>)
+                plugin.getMessageConfig().getString("flags.harmAnimals.deniedTitle"),      //Text shown in manager for denied permission
+                plugin.getMessageConfig().getString("flags.harmAnimals.deniedText")       //Desciption in manager for denied permission (ex: Regular players <desc>)
         );
     }
 
@@ -63,6 +60,7 @@ public class HarmAnimals extends Landflag {
 
     /**
      * Event handler for block placements
+     *
      * @param event that happened
      */
 
@@ -74,47 +72,46 @@ public class HarmAnimals extends Landflag {
      * your flag to do it's job
      *************************************
      */
-
     @EventHandler(priority = EventPriority.HIGH)
-    public void animalDamage(EntityDamageByEntityEvent event){
-        //String[] ssafeAnimals = {"OCELOT","WOLF","HORSE","COW","PIG","MUSHROOM_COW","SHEEP","CHICKEN"};
+    public void animalDamage(EntityDamageByEntityEvent event) {
+        //String[] safeAnimals = {"OCELOT","WOLF","HORSE","COW","PIG","MUSHROOM_COW","SHEEP","CHICKEN"};
         EntityType[] safeAnimals = {EntityType.OCELOT, EntityType.WOLF, EntityType.HORSE, EntityType.COW, EntityType.PIG,
-            EntityType.MUSHROOM_COW, EntityType.SHEEP, EntityType.CHICKEN, EntityType.RABBIT};
+                EntityType.MUSHROOM_COW, EntityType.SHEEP, EntityType.CHICKEN, EntityType.RABBIT};
         org.bukkit.entity.Entity victim = event.getEntity();
-        if(!Arrays.asList(safeAnimals).contains(victim.getType())){
+        if (!Arrays.asList(safeAnimals).contains(victim.getType())) {
             return;
         }
 
 
         org.bukkit.entity.Entity attacker = event.getDamager();
 
-        if(attacker.getType().toString().equals("PLAYER")){
-            Player p = (Player)attacker;
+        if (attacker.getType().toString().equals("PLAYER")) {
+            Player p = (Player) attacker;
             OwnedLand land = OwnedLand.getApplicableLand(victim.getLocation());
-            if(land==null){
+            if (land == null) {
                 return;
             }
-            if(!land.hasPermTo(p, this)){
+            if (!land.hasPermTo(p, this)) {
 
-                p.sendMessage(ChatColor.RED+"You cannot harm animals on this land.");
+                p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.harmAnimals.melee"));
 
                 event.setCancelled(true);
 
             }
 
-        } else if(attacker.getType().toString().equalsIgnoreCase("Arrow") || attacker.getType().toString().equalsIgnoreCase("SPLASH_POTION")){
-            Projectile a = (Projectile)attacker;
+        } else if (attacker.getType().toString().equalsIgnoreCase("Arrow") || attacker.getType().toString().equalsIgnoreCase("SPLASH_POTION")) {
+            Projectile a = (Projectile) attacker;
             Player p;
-            if(a.getShooter() instanceof Player){
+            if (a.getShooter() instanceof Player) {
                 OwnedLand land = OwnedLand.getApplicableLand(victim.getLocation());
-                p = (Player)a.getShooter();
-                if(land==null){
+                p = (Player) a.getShooter();
+                if (land == null) {
                     return;
                 }
                 //System.out.println(a.getType());
-                if(!land.hasPermTo(p, this)){
-                    if(a.getType().toString().equals("ARROW")) {
-                        p.sendMessage(ChatColor.RED + "You cannot harm animals on this land.");
+                if (!land.hasPermTo(p, this)) {
+                    if (a.getType().toString().equals("ARROW")) {
+                        p.sendMessage(ChatColor.RED + getPlugin().getMessageConfig().getString("event.harmAnimals.projectile"));
                     }
                     a.remove();
                     event.setCancelled(true);
@@ -124,9 +121,6 @@ public class HarmAnimals extends Landflag {
 
         }
     }
-
-
-
 
 
 }

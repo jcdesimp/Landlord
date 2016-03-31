@@ -1,15 +1,15 @@
 package com.jcdesimp.landlord;
 
 import com.avaje.ebean.EbeanServer;
-//import com.lennardf1989.bukkitex.MyDatabase;
+import com.jcdesimp.landlord.configuration.CustomConfig;
 import com.jcdesimp.landlord.landFlags.*;
 import com.jcdesimp.landlord.landManagement.FlagManager;
-//import com.jcdesimp.landlord.landManagement.LandListener;
 import com.jcdesimp.landlord.landManagement.ViewManager;
 import com.jcdesimp.landlord.landMap.MapManager;
 import com.jcdesimp.landlord.persistantData.*;
 import com.jcdesimp.landlord.pluginHooks.VaultHandler;
 import com.jcdesimp.landlord.pluginHooks.WorldguardHandler;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.milkbowl.vault.Vault;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.Configuration;
@@ -20,35 +20,38 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-
-import static org.bukkit.Bukkit.getLogger;
 import static org.bukkit.Bukkit.getOfflinePlayer;
 
+//import com.lennardf1989.bukkitex.MyDatabase;
+//import com.jcdesimp.landlord.landManagement.LandListener;
+
 /**
- *
  * Main plugin class for Landlord
- *
  */
 public final class Landlord extends JavaPlugin {
 
     private MyDatabase database;
     private Landlord plugin;
-    private MapManager mapManager = new MapManager();
+    private MapManager mapManager;
     private WorldguardHandler wgHandler;
     private VaultHandler vHandler;
     private FlagManager flagManager;
     private ViewManager manageViewManager;
     private LandAlerter pListen;
 
+    private CustomConfig mainConfig;
+    private CustomConfig messagesConfig;
 
-
+    public static Landlord getInstance() {
+        return (Landlord) Bukkit.getPluginManager().getPlugin("Landlord");
+        //return Bukkit.getPluginManager().getPlugin("MyPlugin");
+    }
 
     @Override
     public void onEnable() {
         plugin = this;
+        mapManager = new MapManager(this);
         //listner = new LandListener();
         //getServer().getPluginManager().registerEvents(new LandListener(this), this);
         flagManager = new FlagManager(this);
@@ -56,36 +59,13 @@ public final class Landlord extends JavaPlugin {
         getServer().getPluginManager().registerEvents(mapManager, this);
 
 
-
-        //// CONFIG FILE MANAGEMENT ////
-
-
-        Map<String,Object> oldConfig = getConfig().getValues(true);
-        //Generates new config file if not present
-        saveDefaultConfig();
-        //String header = getConfig().options().header();
-        FileConfiguration config = getConfig();
-
-
-        // checks for missing entries and applies new ones
-        for (Map.Entry<String, Object> entry : config.getDefaults().getValues(true).entrySet())
-        {
-            if(oldConfig.containsKey(entry.getKey())){
-                config.set(entry.getKey(),oldConfig.get(entry.getKey()));
-            } else {
-                config.set(entry.getKey(), entry.getValue());
-            }
-
-        }
-
-        saveConfig();
-
-        ////////////////////////////////
-
-
+        // generate/load the main config file
+        mainConfig = new CustomConfig(this, "config.yml", "config.yml");
+        // generate/load the main language file based on language value in config.
+        messagesConfig = new CustomConfig(this, "messages/english.yml", "messages/" + (mainConfig.get().getString("options.messagesFile").replace("/", ".")));
         // Registering Alert Listener
-        pListen = new LandAlerter();
-        if(getConfig().getBoolean("options.showLandAlerts",true)) {
+        pListen = new LandAlerter(plugin);
+        if (getConfig().getBoolean("options.showLandAlerts", true)) {
             getServer().getPluginManager().registerEvents(pListen, this);
         }
 
@@ -105,25 +85,24 @@ public final class Landlord extends JavaPlugin {
         }
 
 
-
         // Command Executor
         getCommand("landlord").setExecutor(new LandlordCommandExecutor(this));
 
         //Worldguard Check
-        if(!hasWorldGuard() && this.getConfig().getBoolean("worldguard.blockRegionClaim", true)){
+        if (!hasWorldGuard() && this.getConfig().getBoolean("worldguard.blockRegionClaim", true)) {
             getLogger().warning("Worldguard not found, worldguard features disabled.");
-        } else if(hasWorldGuard()) {
+        } else if (hasWorldGuard()) {
             getLogger().info("Worldguard found!");
             wgHandler = new WorldguardHandler(getWorldGuard());
         }
 
         //Vault Check
-        if(!hasVault() && this.getConfig().getBoolean("economy.enable", true)){
+        if (!hasVault() && this.getConfig().getBoolean("economy.enable", true)) {
             getLogger().warning("Vault not found, economy features disabled.");
         } else if (hasVault()) {
             getLogger().info("Vault found!");
             vHandler = new VaultHandler();
-            if(!vHandler.hasEconomy()){
+            if (!vHandler.hasEconomy()) {
                 getLogger().warning("No economy found, economy features disabled.");
             }
         }
@@ -132,26 +111,26 @@ public final class Landlord extends JavaPlugin {
 
 
         //Register default flags
-        if(getConfig().getBoolean("enabled-flags.build")) {
-            flagManager.registerFlag(new Build());
+        if (getConfig().getBoolean("enabled-flags.build")) {
+            flagManager.registerFlag(new Build(this));
         }
-        if(getConfig().getBoolean("enabled-flags.harmAnimals")) {
-            flagManager.registerFlag(new HarmAnimals());
+        if (getConfig().getBoolean("enabled-flags.harmAnimals")) {
+            flagManager.registerFlag(new HarmAnimals(this));
         }
-        if(getConfig().getBoolean("enabled-flags.useContainers")) {
-            flagManager.registerFlag(new UseContainers());
+        if (getConfig().getBoolean("enabled-flags.useContainers")) {
+            flagManager.registerFlag(new UseContainers(this));
         }
-        if(getConfig().getBoolean("enabled-flags.tntDamage")) {
-            flagManager.registerFlag(new TntDamage());
+        if (getConfig().getBoolean("enabled-flags.tntDamage")) {
+            flagManager.registerFlag(new TntDamage(this));
         }
-        if(getConfig().getBoolean("enabled-flags.useRedstone")) {
-            flagManager.registerFlag(new UseRedstone());
+        if (getConfig().getBoolean("enabled-flags.useRedstone")) {
+            flagManager.registerFlag(new UseRedstone(this));
         }
-        if(getConfig().getBoolean("enabled-flags.openDoor")) {
-            flagManager.registerFlag(new OpenDoor());
+        if (getConfig().getBoolean("enabled-flags.openDoor")) {
+            flagManager.registerFlag(new OpenDoor(this));
         }
-        if(getConfig().getBoolean("enabled-flags.pvp")) {
-            flagManager.registerFlag(new PVP());
+        if (getConfig().getBoolean("enabled-flags.pvp")) {
+            flagManager.registerFlag(new PVP(this));
         }
         //flagManager.registerFlag(new OpenDoorDUPE1());
         //flagManager.registerFlag(new OpenDoorDUPE2());
@@ -168,6 +147,18 @@ public final class Landlord extends JavaPlugin {
         pListen.clearPtrack();
     }
 
+    @Override
+    public FileConfiguration getConfig() {
+        return mainConfig.get();
+    }
+
+    public FileConfiguration getMessageConfig() {
+        return messagesConfig.get();
+    }
+
+    private FileConfiguration getMessages() {
+        return messagesConfig.get();
+    }
 
     public FlagManager getFlagManager() {
         return flagManager;
@@ -181,11 +172,6 @@ public final class Landlord extends JavaPlugin {
         return manageViewManager;
     }
 
-    public static Landlord getInstance() {
-        return (Landlord)Bukkit.getPluginManager().getPlugin("Landlord");
-        //return Bukkit.getPluginManager().getPlugin("MyPlugin");
-    }
-
 
 
     /*
@@ -193,7 +179,6 @@ public final class Landlord extends JavaPlugin {
      *      Dependency Stuff
      * ***************************
      */
-
 
     /*
      * **************
@@ -214,9 +199,10 @@ public final class Landlord extends JavaPlugin {
 
     /**
      * Provides access to the Landlord WorldGuardHandler
+     *
      * @return ll wg handler
      */
-    public WorldguardHandler getWgHandler(){
+    public WorldguardHandler getWgHandler() {
         return wgHandler;
     }
 
@@ -243,23 +229,16 @@ public final class Landlord extends JavaPlugin {
      * **************
      */
 
-    public boolean hasVault(){
+    public boolean hasVault() {
         Plugin plugin = getServer().getPluginManager().getPlugin("Vault");
 
 
-
-
-
-
         // WorldGuard may not be loaded
-        if (plugin == null || !(plugin instanceof Vault) || !this.getConfig().getBoolean("economy.enable", true)) {
-            return false;
-        }
+        return !(plugin == null || !(plugin instanceof Vault) || !this.getConfig().getBoolean("economy.enable", true));
 
-        return true;
     }
 
-    public VaultHandler getvHandler(){
+    public VaultHandler getvHandler() {
         return vHandler;
     }
 
@@ -284,15 +263,15 @@ public final class Landlord extends JavaPlugin {
                 list.add(LandFlagPerm.class);
 
                 return list;
-            };
+            }
         };
 
         database.initializeDatabase(
-                config.getString("database.driver","org.sqlite.JDBC"),
-                config.getString("database.url","jdbc:sqlite:{DIR}{NAME}.db"),
-                config.getString("database.username","bukkit"),
-                config.getString("database.password","walrus"),
-                config.getString("database.isolation","SERIALIZABLE"),
+                config.getString("database.driver", "org.sqlite.JDBC"),
+                config.getString("database.url", "jdbc:sqlite:{DIR}{NAME}.db"),
+                config.getString("database.username", "bukkit"),
+                config.getString("database.password", "walrus"),
+                config.getString("database.isolation", "SERIALIZABLE"),
                 config.getBoolean("database.logging", false),
                 config.getBoolean("database.rebuild", false)
         );
@@ -317,19 +296,19 @@ public final class Landlord extends JavaPlugin {
 
     public void verifyDatabaseVersion() {
         int CURRENT_VERSION = 1;
-        if (this.getDatabase().find(DBVersion.class).where().eq("identifier","version").findUnique() == null) {
+        if (this.getDatabase().find(DBVersion.class).where().eq("identifier", "version").findUnique() == null) {
             //Convert Database
             this.getLogger().info("Starting OwnedLand conversion...");
             List<OwnedLand> allLand = plugin.getDatabase().find(OwnedLand.class).findList();
-            for (OwnedLand l : allLand){
-                if(l.getOwnerName().length() < 32){
+            for (OwnedLand l : allLand) {
+                if (l.getOwnerName().length() < 32) {
                     //plugin.getLogger().info("Converting "+ l.getId() + "...");
                         /*
                          * *************************************
                          * mark for possible change    !!!!!!!!!
                          * *************************************
                          */
-                    if(getOfflinePlayer(l.getOwnerName()).hasPlayedBefore()) {
+                    if (getOfflinePlayer(l.getOwnerName()).hasPlayedBefore()) {
                         //plugin.getLogger().info("Converting "+ l.getId() + "... Owner: "+l.getOwnerName());
                         l.setOwnerName(getOfflinePlayer(l.getOwnerName()).getUniqueId().toString());
                         plugin.getDatabase().save(l);
@@ -346,15 +325,15 @@ public final class Landlord extends JavaPlugin {
 
             this.getLogger().info("Starting Friend conversion...");
             List<Friend> allFriends = plugin.getDatabase().find(Friend.class).findList();
-            for (Friend f : allFriends){
-                if(f.getPlayerName().length() < 32){
+            for (Friend f : allFriends) {
+                if (f.getPlayerName().length() < 32) {
                     //plugin.getLogger().info("Converting "+ l.getId() + "...");
                         /*
                          * *************************************
                          * mark for possible change    !!!!!!!!!
                          * *************************************
                          */
-                    if(getOfflinePlayer(f.getPlayerName()).hasPlayedBefore()) {
+                    if (getOfflinePlayer(f.getPlayerName()).hasPlayedBefore()) {
                         //plugin.getLogger().info("Converting "+ f.getId() + "... Name: "+f.getPlayerName());
                         f.setPlayerName(getOfflinePlayer(f.getPlayerName()).getUniqueId().toString());
                         plugin.getDatabase().save(f);
@@ -370,14 +349,14 @@ public final class Landlord extends JavaPlugin {
             this.getLogger().info("Friend Conversion completed!");
             this.getLogger().info("Starting Permission conversion...");
             allLand = plugin.getDatabase().find(OwnedLand.class).findList();
-            for (OwnedLand l : allLand){
-                if(l.getPermissions() != null) {
+            for (OwnedLand l : allLand) {
+                if (l.getPermissions() != null) {
 
 
                     String[] currPerms = l.getPermissions().split("\\|");
                     String newPermString = "";
                     for (int i = 0; i < currPerms.length; i++) {
-                        currPerms[i]=currPerms[i].substring(0,3);
+                        currPerms[i] = currPerms[i].substring(0, 3);
                         newPermString += Integer.toString(Integer.parseInt(currPerms[i], 2));
                         if (i < currPerms.length - 1) {
                             newPermString += "|";
@@ -389,9 +368,9 @@ public final class Landlord extends JavaPlugin {
                 }
             }
             //Entries for legacy flags
-            this.getDatabase().save(LandFlagPerm.flagPermFromData("Build",1));
-            this.getDatabase().save(LandFlagPerm.flagPermFromData("HarmAnimals",2));
-            this.getDatabase().save(LandFlagPerm.flagPermFromData("UseContainers",3));
+            this.getDatabase().save(LandFlagPerm.flagPermFromData("Build", 1));
+            this.getDatabase().save(LandFlagPerm.flagPermFromData("HarmAnimals", 2));
+            this.getDatabase().save(LandFlagPerm.flagPermFromData("UseContainers", 3));
 
             this.getLogger().info("Permission Conversion completed!");
             DBVersion vUpdate = new DBVersion();
@@ -399,8 +378,8 @@ public final class Landlord extends JavaPlugin {
             vUpdate.setIntData(1);
             this.getDatabase().save(vUpdate);
         }
-        int currVersion = this.getDatabase().find(DBVersion.class).where().eq("identifier","version").findUnique().getIntData();
-        if(currVersion < CURRENT_VERSION){
+        int currVersion = this.getDatabase().find(DBVersion.class).where().eq("identifier", "version").findUnique().getIntData();
+        if (currVersion < CURRENT_VERSION) {
             this.getLogger().info("Database outdated!");
         }
 
