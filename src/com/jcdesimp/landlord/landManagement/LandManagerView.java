@@ -2,10 +2,7 @@ package com.jcdesimp.landlord.landManagement;
 
 import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Effect;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -210,7 +207,7 @@ public class LandManagerView implements Listener {
             Landlord.getInstance().getDatabase().save(mLand);
             player.sendMessage(ChatColor.GREEN + messages.getString("manager.saved"));
             if (Landlord.getInstance().getConfig().getBoolean("options.soundEffects", true)) {
-//todo                player.playSound(player.getLocation(),Sound.FIZZ,10,10);
+                player.playSound(player.getLocation(), Sound.BLOCK_LAVA_EXTINGUISH, 10, 10);
             }
             mLand.highlightLand(player, Effect.LAVADRIP);
             //InventoryCloseEvent.getHandlerList().unregister(this);
@@ -254,10 +251,10 @@ public class LandManagerView implements Listener {
             if ((col <= (endIndex - startIndex) && col > 0)) {
 
                 if (row == 1) {
-//todo                    player.playSound(player.getLocation(), Sound.CLICK, 1L, 1L);
+                    player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1L, 1L);
                     perms[0][permSlots.get((col - 1) + ((pageNum) * 8))] = bSwap(perms[0][permSlots.get((col - 1) + ((pageNum) * 8))]);
                 } else if (row == 2) {
-//todo                    player.playSound(player.getLocation(), Sound.CLICK, 1L, 1L);
+                    player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1L, 1L);
                     //System.out.println((col-1)+((pageNum)*8));
                     perms[1][permSlots.get((col - 1) + ((pageNum) * 8))] = bSwap(perms[1][permSlots.get((col - 1) + ((pageNum) * 8))]);
                     //System.out.println(perms[1][permSlots.get((col-1)+((pageNum)*8))]);
@@ -269,7 +266,7 @@ public class LandManagerView implements Listener {
 
             if (pageNum < numPages - 1 && event.getRawSlot() == 35) {
                 //35
-//todo                player.playSound(player.getLocation(), Sound.CLICK, 1L, 1L);
+                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1L, 1L);
                 pageNum++;
                 updateUIData();
                 setToggles();
@@ -277,7 +274,7 @@ public class LandManagerView implements Listener {
             }
             if (pageNum > 0 && event.getRawSlot() == 27) {
                 //27
-//todo                player.playSound(player.getLocation(), Sound.CLICK, 1L, 1L);
+                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1L, 1L);
                 pageNum--;
                 updateUIData();
                 setToggles();

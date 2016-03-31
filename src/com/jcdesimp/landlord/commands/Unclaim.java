@@ -5,6 +5,7 @@ import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Effect;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -151,7 +152,7 @@ public class Unclaim implements LandlordCommand {
             }
 
             if (plugin.getConfig().getBoolean("options.soundEffects", true)) {
-//TODO                player.playSound(player.getLocation(), Sound.ENDERMAN_HIT, 10, .5f);
+                player.playSound(player.getLocation(), Sound.ENTITY_ENDERMEN_HURT, 10, .5f);
             }
             plugin.getMapManager().updateAll();
 

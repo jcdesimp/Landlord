@@ -15,7 +15,6 @@ public class LandlordCommandExecutor implements CommandExecutor {
 
     private HashMap<String, LandlordCommand> registeredCommands;
 
-    //private Base baseCommand;
     private Help helpCommand;
 
     public LandlordCommandExecutor(Landlord plugin) {

@@ -5,6 +5,7 @@ import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Effect;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -149,7 +150,7 @@ public class Claim implements LandlordCommand {
                             .replace("#{worldName}", currChunk.getWorld().getName()));
 
             if (plugin.getConfig().getBoolean("options.soundEffects", true)) {
-//TODO                player.playSound(player.getLocation(), Sound.FIREWORK_TWINKLE2,10,10);
+                player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_TWINKLE, 10, 10);
             }
 
 

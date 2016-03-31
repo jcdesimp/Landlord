@@ -3,10 +3,7 @@ package com.jcdesimp.landlord.commands;
 import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.persistantData.Friend;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
-import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
-import org.bukkit.Effect;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -96,7 +93,7 @@ public class AddFriend implements LandlordCommand {
 
             plugin.getDatabase().save(land);
             if (plugin.getConfig().getBoolean("options.soundEffects", true)) {     //conf
-//TODO                player.playSound(player.getLocation(), Sound.ORB_PICKUP,10,.2f);
+                player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10, .2f);
             }
             sender.sendMessage(ChatColor.GREEN + nowFriend.replace("#{player}", args[1]));
             plugin.getMapManager().updateAll();

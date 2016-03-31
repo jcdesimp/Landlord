@@ -6,6 +6,7 @@ import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Effect;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -81,7 +82,7 @@ public class Unfriend implements LandlordCommand {
             }
             plugin.getDatabase().save(land);
             if (plugin.getConfig().getBoolean("options.soundEffects", true)) { //conf
-//TODO                player.playSound(player.getLocation(), Sound.ZOMBIE_INFECT,10,.5f);
+                player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 10, .5f);
             }
             player.sendMessage(ChatColor.GREEN + unfriended.replace("#{playerName}", args[1]));
 
