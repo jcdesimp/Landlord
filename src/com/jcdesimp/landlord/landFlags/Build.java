@@ -377,7 +377,8 @@ public class Build extends Landflag {
     @EventHandler(priority = EventPriority.HIGH)
     public void protectBlockStates(PlayerInteractEvent event) {
         Material[] blockedItems = {Material.NOTE_BLOCK, Material.REDSTONE_COMPARATOR_OFF, Material.REDSTONE_COMPARATOR_ON,
-                Material.DIODE_BLOCK_OFF, Material.DIODE_BLOCK_ON, Material.FLOWER_POT, Material.CAKE_BLOCK};
+                Material.DIODE_BLOCK_OFF, Material.DIODE_BLOCK_ON, Material.FLOWER_POT, Material.CAKE_BLOCK, Material.DAYLIGHT_DETECTOR 
+, Material.DAYLIGHT_DETECTOR_INVERTED};
         if (event.getClickedBlock() == null) {
             return;
         }
