@@ -35,7 +35,6 @@ public class Unclaim implements LandlordCommand {
      * @param args   given with command
      * @return boolean
      */
-    @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
 
         FileConfiguration messages = plugin.getMessageConfig();
@@ -48,7 +47,7 @@ public class Unclaim implements LandlordCommand {
         final String notOwner = messages.getString("info.warnings.notOwner");
         final String landSold = messages.getString("commands.unclaim.alerts.landSold");
         final String unclaimOther = messages.getString("commands.unclaim.alerts.unclaimOther");
-        final String unclaimed = messages.getString("commands.unclaim.alerts.unclaim");
+        final String unclaimed = messages.getString("commands.unclaim.alerts.unclaimed");
 
 
         //is sender a player
@@ -160,7 +159,6 @@ public class Unclaim implements LandlordCommand {
         return true;
     }
 
-    @Override
     public String getHelpText(CommandSender sender) {
 
         FileConfiguration messages = plugin.getMessageConfig();
@@ -193,7 +191,6 @@ public class Unclaim implements LandlordCommand {
         return helpString;
     }
 
-    @Override
     public String[] getTriggers() {
         final List<String> triggers = plugin.getMessageConfig().getStringList("commands.unclaim.triggers");
         return triggers.toArray(new String[triggers.size()]);
