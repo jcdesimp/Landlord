@@ -21,19 +21,15 @@ public class Help implements LandlordCommand {
     private Landlord plugin;
     private ArrayList<LandlordCommand> registeredCommands;
 
-
     public Help(Landlord plugin, LandlordCommandExecutor commandHandler) {
         this.plugin = plugin;
         this.registeredCommands = new ArrayList<LandlordCommand>();
     }
 
-
     public void addCommand(LandlordCommand lc) {
         registeredCommands.add(lc);
     }
 
-
-    @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
         FileConfiguration messages = plugin.getMessageConfig();
 
@@ -107,7 +103,6 @@ public class Help implements LandlordCommand {
         return true;
     }
 
-    @Override
     public String getHelpText(CommandSender sender) {
 
         FileConfiguration messages = plugin.getMessageConfig();
@@ -119,7 +114,6 @@ public class Help implements LandlordCommand {
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
     }
 
-    @Override
     public String[] getTriggers() {
         final List<String> triggers = plugin.getMessageConfig().getStringList("commands.help.triggers");
         return triggers.toArray(new String[triggers.size()]);

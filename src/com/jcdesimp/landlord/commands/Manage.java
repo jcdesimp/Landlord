@@ -29,7 +29,6 @@ public class Manage implements LandlordCommand {
      * @param args   given with command
      * @return boolean
      */
-    @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
 
         FileConfiguration messages = plugin.getMessageConfig();
@@ -69,7 +68,6 @@ public class Manage implements LandlordCommand {
         return true;
     }
 
-    @Override
     public String getHelpText(CommandSender sender) {
 
         FileConfiguration messages = plugin.getMessageConfig();
@@ -82,7 +80,6 @@ public class Manage implements LandlordCommand {
 
     }
 
-    @Override
     public String[] getTriggers() {
         final List<String> triggers = plugin.getMessageConfig().getStringList("commands.manage.triggers");
         return triggers.toArray(new String[triggers.size()]);

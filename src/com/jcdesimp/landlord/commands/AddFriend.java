@@ -34,7 +34,6 @@ public class AddFriend implements LandlordCommand {
      * @param label  base command executed
      * @return boolean
      */
-    @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
         //is sender a player
         FileConfiguration messages = plugin.getMessageConfig();
@@ -102,7 +101,6 @@ public class AddFriend implements LandlordCommand {
         return true;
     }
 
-    @Override
     public String getHelpText(CommandSender sender) {
         FileConfiguration messages = plugin.getMessageConfig();
 
@@ -113,7 +111,6 @@ public class AddFriend implements LandlordCommand {
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
     }
 
-    @Override
     public String[] getTriggers() {
         final List<String> triggers = plugin.getMessageConfig().getStringList("commands.addFriend.triggers");
         return triggers.toArray(new String[triggers.size()]);

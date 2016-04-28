@@ -31,7 +31,6 @@ public class LandList implements LandlordCommand {
      * @param args   given with command
      * @return boolean
      */
-    @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
 
 
@@ -120,8 +119,6 @@ public class LandList implements LandlordCommand {
         return true;
     }
 
-
-    @Override
     public String getHelpText(CommandSender sender) {
         FileConfiguration messages = plugin.getMessageConfig();
         final String usage = messages.getString("commands.landList.usage"); // get the base usage string
@@ -131,7 +128,6 @@ public class LandList implements LandlordCommand {
 
     }
 
-    @Override
     public String[] getTriggers() {
         final List<String> triggers = plugin.getMessageConfig().getStringList("commands.landList.triggers");
         return triggers.toArray(new String[triggers.size()]);

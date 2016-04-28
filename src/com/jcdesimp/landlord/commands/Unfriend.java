@@ -27,7 +27,6 @@ public class Unfriend implements LandlordCommand {
         this.plugin = plugin;
     }
 
-
     /**
      * Removes a friend from an owned chunk
      * Called when landlord remfriend is executed
@@ -36,7 +35,6 @@ public class Unfriend implements LandlordCommand {
      * @param args   given with command
      * @return boolean
      */
-    @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
 
         FileConfiguration messages = plugin.getMessageConfig();
@@ -90,7 +88,6 @@ public class Unfriend implements LandlordCommand {
         return true;
     }
 
-    @Override
     public String getHelpText(CommandSender sender) {
 
         FileConfiguration messages = plugin.getMessageConfig();
@@ -102,7 +99,6 @@ public class Unfriend implements LandlordCommand {
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
     }
 
-    @Override
     public String[] getTriggers() {
         final List<String> triggers = plugin.getMessageConfig().getStringList("commands.unfriend.triggers");
         return triggers.toArray(new String[triggers.size()]);

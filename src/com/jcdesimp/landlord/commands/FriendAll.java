@@ -25,7 +25,6 @@ public class FriendAll implements LandlordCommand {
         this.plugin = plugin;
     }
 
-    @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
         FileConfiguration messages = plugin.getMessageConfig();
         final String notPlayerString = messages.getString("info.warnings.playerCommand");
@@ -75,7 +74,6 @@ public class FriendAll implements LandlordCommand {
         return true;
     }
 
-    @Override
     public String getHelpText(CommandSender sender) {
         FileConfiguration messages = plugin.getMessageConfig();
 
@@ -87,7 +85,6 @@ public class FriendAll implements LandlordCommand {
 
     }
 
-    @Override
     public String[] getTriggers() {
         final List<String> triggers = plugin.getMessageConfig().getStringList("commands.friendAll.triggers");
         return triggers.toArray(new String[triggers.size()]);

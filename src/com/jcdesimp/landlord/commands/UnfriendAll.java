@@ -25,7 +25,6 @@ public class UnfriendAll implements LandlordCommand {
         this.plugin = plugin;
     }
 
-    @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
 
         FileConfiguration messages = plugin.getMessageConfig();
@@ -75,7 +74,6 @@ public class UnfriendAll implements LandlordCommand {
         return true;
     }
 
-    @Override
     public String getHelpText(CommandSender sender) {
 
         FileConfiguration messages = plugin.getMessageConfig();
@@ -88,7 +86,6 @@ public class UnfriendAll implements LandlordCommand {
 
     }
 
-    @Override
     public String[] getTriggers() {
         final List<String> triggers = plugin.getMessageConfig().getStringList("commands.unfriendAll.triggers");
         return triggers.toArray(new String[triggers.size()]);

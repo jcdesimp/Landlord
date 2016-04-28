@@ -23,7 +23,6 @@ public class Info implements LandlordCommand {
         this.plugin = plugin;
     }
 
-    @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
 
         FileConfiguration messages = plugin.getMessageConfig();
@@ -73,7 +72,6 @@ public class Info implements LandlordCommand {
         return true;
     }
 
-    @Override
     public String getHelpText(CommandSender sender) {
 
         if (!sender.hasPermission("landlord.player.info")) {   // make sure player has permission to do this command
@@ -89,7 +87,6 @@ public class Info implements LandlordCommand {
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
     }
 
-    @Override
     public String[] getTriggers() {
         final List<String> triggers = plugin.getMessageConfig().getStringList("commands.info.triggers");
         return triggers.toArray(new String[triggers.size()]);
