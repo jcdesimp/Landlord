@@ -31,7 +31,6 @@ public class ListPlayer implements LandlordCommand {
      * @param label  the actual command/alias that was entered.
      * @return Boolean of success
      */
-    @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
 
         FileConfiguration messages = plugin.getMessageConfig();
@@ -128,7 +127,6 @@ public class ListPlayer implements LandlordCommand {
         return true;
     }
 
-    @Override
     public String getHelpText(CommandSender sender) {
 
         if (!sender.hasPermission("landlord.admin.list")) {   // Don't bother showing command help if player can't do it
@@ -145,7 +143,6 @@ public class ListPlayer implements LandlordCommand {
 
     }
 
-    @Override
     public String[] getTriggers() {
         final List<String> triggers = plugin.getMessageConfig().getStringList("commands.listPlayer.triggers");
         return triggers.toArray(new String[triggers.size()]);

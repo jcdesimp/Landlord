@@ -27,7 +27,6 @@ public class Reload implements LandlordCommand {
      * @param label  exact command (or alias) run
      * @return boolean of success
      */
-    @Override
     public boolean execute(CommandSender sender, String[] args, String label) {
 
         FileConfiguration messages = plugin.getMessageConfig();
@@ -44,7 +43,6 @@ public class Reload implements LandlordCommand {
         return true;
     }
 
-    @Override
     public String getHelpText(CommandSender sender) {
 
         if (!sender.hasPermission("landlord.admin.list")) {
@@ -60,7 +58,6 @@ public class Reload implements LandlordCommand {
         return Utils.helpString(usage, desc, getTriggers()[0].toLowerCase());
     }
 
-    @Override
     public String[] getTriggers() {
         final List<String> triggers = plugin.getMessageConfig().getStringList("commands.reload.triggers");
         return triggers.toArray(new String[triggers.size()]);
