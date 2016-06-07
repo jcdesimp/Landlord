@@ -190,7 +190,7 @@ $RECYCLE.BIN/
 *.iml
 
 # User-specific stuff:
-.idea/*
+.idea/
 
 # Gradle:
 
