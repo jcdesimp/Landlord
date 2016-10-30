@@ -68,7 +68,7 @@ public class LandList implements LandlordCommand {
             }
 
             List<OwnedLand> myLand = plugin.getDatabase().find(OwnedLand.class).where().eq("ownerName", player.getUniqueId().toString()).findList();
-            if (myLand.size() == 0) {
+            if (myLand.isEmpty()) {
                 player.sendMessage(ChatColor.YELLOW + noLand);
             } else {
                 String header = ChatColor.DARK_GREEN + " | " + outputHeader + " |\n";
@@ -88,31 +88,32 @@ public class LandList implements LandlordCommand {
                     return true;
                 }
 
+				StringBuilder pMsg = new StringBuilder();
                 //String pMsg = ChatColor.DARK_GREEN + "--- " + ChatColor.YELLOW + ownedLandString + ChatColor.DARK_GREEN + " ---" + ChatColor.YELLOW + " Page " + pageNumber + ChatColor.DARK_GREEN + " ---\n" + header;
-                String pMsg = (ChatColor.DARK_GREEN + "--- " + ChatColor.YELLOW + ownedLandString + ChatColor.DARK_GREEN + " --- " + ChatColor.YELLOW + pageNum)
-                        .replace("#{pageNum}", pageNumber + "")
-                        + ChatColor.DARK_GREEN + " ---\n" + header;
+				pMsg.append(ChatColor.DARK_GREEN).append("--- ").append(ChatColor.YELLOW).append(ownedLandString.replace("#{pageNum}", pageNumber + ""))
+						.append(ChatColor.DARK_GREEN).append(" --- ").append(ChatColor.YELLOW).append(pageNum.replace("#{pageNum}", pageNumber + ""))
+						.append(ChatColor.DARK_GREEN).append(" ---\n")
+						.append(header);
 
 
                 if (pageNumber == numPages) {
                     for (int i = (numPerPage * pageNumber - numPerPage); i < landList.size(); i++) {
-                        pMsg += landList.get(i);
+                        pMsg.append(landList.get(i));
                     }
-                    pMsg += ChatColor.DARK_GREEN + "------------------------------";
+                    pMsg.append(ChatColor.DARK_GREEN).append("------------------------------");
                 } else {
                     for (int i = (numPerPage * pageNumber - numPerPage); i < (numPerPage * pageNumber); i++) {
-                        pMsg += landList.get(i);
+                        pMsg.append(landList.get(i));
                     }
                     //pMsg += ChatColor.DARK_GREEN + "--- do" + ChatColor.YELLOW + " /" + label + " list " + (pageNumber + 1) + ChatColor.DARK_GREEN + " for next page ---";
 
-                    pMsg += ChatColor.DARK_GREEN + "--- " + ChatColor.YELLOW + nextPageString
-                            .replace("#{label}", "/" + label)
-                            .replace("#{cmd}", args[0])
-                            .replace("#{pageNumber}", "" + (pageNumber + 1))
-                            + ChatColor.DARK_GREEN + " ---";
+                    pMsg.append(ChatColor.DARK_GREEN).append("--- ").append(ChatColor.YELLOW).append(nextPageString
+							.replace("#{label}", "/" + label)
+							.replace("#{cmd}", args[0])
+							.replace("#{pageNumber}", "" + (pageNumber + 1))).append(ChatColor.DARK_GREEN).append(" ---");
                 }
 
-                player.sendMessage(pMsg);
+                player.sendMessage(pMsg.toString());
             }
 
         }

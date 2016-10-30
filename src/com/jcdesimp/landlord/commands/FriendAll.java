@@ -57,8 +57,9 @@ public class FriendAll implements LandlordCommand {
             }
 
             if (pLand.size() > 0) {
+				Friend f = Friend.friendFromOfflinePlayer(possible);
                 for (OwnedLand l : pLand) {
-                    l.addFriend(Friend.friendFromOfflinePlayer(getOfflinePlayer(args[1])));
+                    l.addFriend(f);
                 }
 
                 plugin.getDatabase().save(pLand);
