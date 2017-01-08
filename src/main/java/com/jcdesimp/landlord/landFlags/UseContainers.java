@@ -4,6 +4,7 @@ import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.landManagement.Landflag;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,6 +14,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * File created by jcdesimp on 4/16/14.
@@ -25,6 +28,8 @@ public class UseContainers extends Landflag {
   * class with landlord's flagManager!!!
   **********************
   */
+
+ private Set<String> blockAccess;
 
     /**
      * Constructor needs to be defined and properly call super()
@@ -39,6 +44,12 @@ public class UseContainers extends Landflag {
                 plugin.getMessageConfig().getString("flags.useContainers.deniedTitle"),      //Text shown in manager for denied permission
                 plugin.getMessageConfig().getString("flags.useContainers.deniedText")       //Desciption in manager for denied permission (ex: Regular players <desc>)
         );
+        blockAccess = new HashSet<>();
+        blockAccess.addAll(Arrays.asList("CHEST", "TRAPPED_CHEST", "BURNING_FURNACE", "FURNACE", "ANVIL", "DROPPER", "DISPENSER", "HOPPER", "BREWING_STAND", "SOIL", "BEACON", "JUKEBOX", "CAULDRON"));
+
+        for (DyeColor color : DyeColor.values()) {
+            blockAccess.add(color.toString() + "_SHULKER_BOX");
+        }
     }
 
 
@@ -69,17 +80,16 @@ public class UseContainers extends Landflag {
     @EventHandler(priority = EventPriority.HIGH)
     public void useContainer(PlayerInteractEvent event) {
 
-        String[] blockAccess = {"CHEST", "TRAPPED_CHEST", "BURNING_FURNACE", "FURNACE", "ANVIL", "DROPPER", "DISPENSER", "HOPPER", "BREWING_STAND", "SOIL", "BEACON", "JUKEBOX", "CAULDRON"};
-
         if (!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))) {
             return;
         }
         //System.out.println(event.getAction().toString());
         //System.out.println(event.getClickedBlock().getType().toString());
         //System.out.println(event.getItem());
-        if (!Arrays.asList(blockAccess).contains(event.getClickedBlock().getType().toString())) {
+        if (!blockAccess.contains(event.getClickedBlock().getType().toString())) {
             return;
         }
+
         OwnedLand land = OwnedLand.getApplicableLand(event.getClickedBlock().getLocation());
         if (land == null) {
             return;
