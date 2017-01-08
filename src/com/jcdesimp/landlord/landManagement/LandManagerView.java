@@ -209,7 +209,9 @@ public class LandManagerView implements Listener {
             if (Landlord.getInstance().getConfig().getBoolean("options.soundEffects", true)) {
                 player.playSound(player.getLocation(), Sound.BLOCK_LAVA_EXTINGUISH, 10, 10);
             }
-            mLand.highlightLand(player, Effect.LAVADRIP);
+            if(plugin.getConfig().getBoolean("options.particleEffects")){
+                mLand.highlightLand(player, Effect.LAVADRIP);
+            }
             //InventoryCloseEvent.getHandlerList().unregister(this);
             Landlord.getInstance().getManageViewManager().NoCloseDeactivateView(player);
             HandlerList.unregisterAll(this);
