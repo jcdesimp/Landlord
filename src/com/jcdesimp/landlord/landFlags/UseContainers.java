@@ -69,7 +69,12 @@ public class UseContainers extends Landflag {
     @EventHandler(priority = EventPriority.HIGH)
     public void useContainer(PlayerInteractEvent event) {
 
-        String[] blockAccess = {"CHEST", "TRAPPED_CHEST", "BURNING_FURNACE", "FURNACE", "ANVIL", "DROPPER", "DISPENSER", "HOPPER", "BREWING_STAND", "SOIL", "BEACON", "JUKEBOX", "CAULDRON"};
+        String[] blockAccess = {"CHEST", "TRAPPED_CHEST", "BURNING_FURNACE", "FURNACE", "ANVIL", "DROPPER",
+        						"DISPENSER", "HOPPER", "BREWING_STAND", "SOIL", "BEACON", "JUKEBOX", "CAULDRON",
+        						"RED_SHULKER_BOX", "YELLOW_SHULKER_BOX", "BLUE_SHULKER_BOX", "GREEN_SHULKER_BOX",
+        						"BLACK_SHULKER_BOX", "WHITE_SHULKER_BOX", "BROWN_SHULKER_BOX", "ORANGE_SHULKER_BOX",
+        						"CYAN_SHULKER_BOX", "PURPLE_SHULKER_BOX", "GRAY_SHULKER_BOX", "LIGHT_BLUE_SHULKER_BOX",
+        						"PINK_SHULKER_BOX", "LIME_SHULKER_BOX", "MAGENTA_SHULKER_BOX", "SILVER_SHULKER_BOX"};
 
         if (!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))) {
             return;
