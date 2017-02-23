@@ -76,7 +76,9 @@ public class HarmAnimals extends Landflag {
     public void animalDamage(EntityDamageByEntityEvent event) {
         //String[] safeAnimals = {"OCELOT","WOLF","HORSE","COW","PIG","MUSHROOM_COW","SHEEP","CHICKEN"};
         EntityType[] safeAnimals = {EntityType.OCELOT, EntityType.WOLF, EntityType.HORSE, EntityType.COW, EntityType.PIG,
-                EntityType.MUSHROOM_COW, EntityType.SHEEP, EntityType.CHICKEN, EntityType.RABBIT};
+                					EntityType.MUSHROOM_COW, EntityType.SHEEP, EntityType.CHICKEN, EntityType.RABBIT, EntityType.LLAMA,
+                					EntityType.DONKEY, EntityType.MULE, EntityType.POLAR_BEAR, EntityType.SKELETON_HORSE, EntityType.ZOMBIE_HORSE,
+                					EntityType.SNOWMAN, EntityType.IRON_GOLEM, EntityType.VILLAGER, EntityType.SQUID};
         org.bukkit.entity.Entity victim = event.getEntity();
         if (!Arrays.asList(safeAnimals).contains(victim.getType())) {
             return;
