@@ -14,6 +14,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * File created by jcdesimp on 4/16/14.
@@ -32,6 +34,9 @@ public class HarmAnimals extends Landflag {
   ************************************************************
   */
 
+
+ private Set<EntityType> safeAnimals;
+
     /*
      * Constructor needs to be defined and properly call super()
      */
@@ -45,6 +50,13 @@ public class HarmAnimals extends Landflag {
                 plugin.getMessageConfig().getString("flags.harmAnimals.deniedTitle"),      //Text shown in manager for denied permission
                 plugin.getMessageConfig().getString("flags.harmAnimals.deniedText")       //Desciption in manager for denied permission (ex: Regular players <desc>)
         );
+        safeAnimals = new HashSet<>();
+        safeAnimals.addAll(Arrays.asList(
+                EntityType.OCELOT, EntityType.WOLF, EntityType.HORSE, EntityType.COW, EntityType.PIG,
+                EntityType.MUSHROOM_COW, EntityType.SHEEP, EntityType.CHICKEN, EntityType.RABBIT, EntityType.LLAMA,
+                EntityType.DONKEY, EntityType.MULE, EntityType.POLAR_BEAR, EntityType.SKELETON_HORSE, EntityType.ZOMBIE_HORSE,
+                EntityType.SNOWMAN, EntityType.IRON_GOLEM, EntityType.VILLAGER, EntityType.SQUID
+        ));
     }
 
 
@@ -74,11 +86,8 @@ public class HarmAnimals extends Landflag {
      */
     @EventHandler(priority = EventPriority.HIGH)
     public void animalDamage(EntityDamageByEntityEvent event) {
-        //String[] safeAnimals = {"OCELOT","WOLF","HORSE","COW","PIG","MUSHROOM_COW","SHEEP","CHICKEN"};
-        EntityType[] safeAnimals = {EntityType.OCELOT, EntityType.WOLF, EntityType.HORSE, EntityType.COW, EntityType.PIG,
-                EntityType.MUSHROOM_COW, EntityType.SHEEP, EntityType.CHICKEN, EntityType.RABBIT};
         org.bukkit.entity.Entity victim = event.getEntity();
-        if (!Arrays.asList(safeAnimals).contains(victim.getType())) {
+        if (!safeAnimals.contains(victim.getType())) {
             return;
         }
 
