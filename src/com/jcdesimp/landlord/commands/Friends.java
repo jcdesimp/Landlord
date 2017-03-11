@@ -6,7 +6,7 @@ import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
-import org.bukkit.Effect;
+import org.bukkit.Particle;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -61,7 +61,7 @@ public class Friends implements LandlordCommand {
 //                //player.sendMessage(ChatColor.YELLOW+"Viewing friends of someone else's land.");
 //            }
             if (plugin.getConfig().getBoolean("options.particleEffects", true)) {     //conf
-                land.highlightLand(player, Effect.HEART, 3);
+                land.highlightLand(player, Particle.HEART, 3);
             }
             //check if page number is valid
             int pageNumber = 1;
