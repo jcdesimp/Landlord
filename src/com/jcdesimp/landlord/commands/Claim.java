@@ -4,7 +4,7 @@ import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
-import org.bukkit.Effect;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -142,7 +142,7 @@ public class Claim implements LandlordCommand {
                 }
             }
             Landlord.getInstance().getDatabase().save(land);
-            land.highlightLand(player, Effect.HAPPY_VILLAGER);
+            land.highlightLand(player, Particle.HAPPY_VILLAGER);
             sender.sendMessage(
                     ChatColor.GREEN + success
                             .replace("#{chunkCoords}", "(" + currChunk.getX() + ", " + currChunk.getZ() + ")")
