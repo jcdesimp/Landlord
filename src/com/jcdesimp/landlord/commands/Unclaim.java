@@ -4,7 +4,7 @@ import com.jcdesimp.landlord.Landlord;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
-import org.bukkit.Effect;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -135,7 +135,7 @@ public class Unclaim implements LandlordCommand {
                 player.sendMessage(ChatColor.YELLOW + unclaimOther.replace("#{player}", getOfflinePlayer(dbLand.ownerUUID()).getName()));
             }
             plugin.getDatabase().delete(dbLand);
-            dbLand.highlightLand(player, Effect.WITCH_MAGIC);
+            dbLand.highlightLand(player, Particle.SPELL_WITCH);
 
             sender.sendMessage(
                     ChatColor.YELLOW + unclaimed
