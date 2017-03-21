@@ -142,7 +142,7 @@ public class Claim implements LandlordCommand {
                 }
             }
             Landlord.getInstance().getDatabase().save(land);
-            land.highlightLand(player, Particle.HAPPY_VILLAGER);
+            land.highlightLand(player, Particle.VILLAGER_HAPPY);
             sender.sendMessage(
                     ChatColor.GREEN + success
                             .replace("#{chunkCoords}", "(" + currChunk.getX() + ", " + currChunk.getZ() + ")")
