@@ -5,7 +5,7 @@ import com.jcdesimp.landlord.persistantData.Friend;
 import com.jcdesimp.landlord.persistantData.OwnedLand;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
-import org.bukkit.Effect;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -76,7 +76,7 @@ public class Unfriend implements LandlordCommand {
                 return true;
             }
             if (plugin.getConfig().getBoolean("options.particleEffects", true)) { //conf
-                land.highlightLand(player, Effect.VILLAGER_THUNDERCLOUD, 2);
+                land.highlightLand(player, Particle.VILLAGER_ANGRY, 2);
             }
             plugin.getDatabase().save(land);
             if (plugin.getConfig().getBoolean("options.soundEffects", true)) { //conf
